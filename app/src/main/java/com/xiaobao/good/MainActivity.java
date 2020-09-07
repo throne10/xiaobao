@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     @BindView(R.id.t1)
     TextView t1;
     private static final String TAG = "X_MainActivity";
-    String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
