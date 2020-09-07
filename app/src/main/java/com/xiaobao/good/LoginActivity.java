@@ -1,7 +1,6 @@
 package com.xiaobao.good;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +13,6 @@ import com.xiaobao.good.common.CommonUtils;
 import com.xiaobao.good.common.StringUtils;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
-import com.xiaobao.good.retrofit.interfaces.LoginInterface;
 import com.xiaobao.good.retrofit.result.UserInfoData;
 
 import java.util.HashMap;
@@ -23,7 +21,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -86,15 +83,10 @@ public class LoginActivity extends AppCompatActivity {
     private void doLogin(String name, String pwd) {
 
         try {
-            Retrofit.Builder builder = RetrofitUtils.getBuilderInstance();
-
-            LoginInterface login = builder.build().create(LoginInterface.class);
-
             Map map = new HashMap<String, String>(2);
-
             map.put("loginName", name);
             map.put("loginPwd", pwd);
-            Call<UserInfoData> call = login.login(name, pwd);
+            Call<UserInfoData> call = RetrofitUtils.getService().login(name, pwd);
             call.enqueue(new Callback<UserInfoData>() {
                 @Override
                 public void onResponse(Call<UserInfoData> call, Response<UserInfoData> response) {

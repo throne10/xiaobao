@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.xiaobao.good.db.AbstractAppDatabase;
-import com.xiaobao.good.http.HttpUtils;
+import com.xiaobao.good.retrofit.RetrofitUtils;
 
 public class InitApplication extends Application {
     private static Context context;
@@ -14,7 +14,7 @@ public class InitApplication extends Application {
         super.onCreate();
         context = this.getApplicationContext();
         AbstractAppDatabase.initDb(context);
-        HttpUtils.initHttp();
+        RetrofitUtils.initHttp();
     }
 
     public static Context getContext() {

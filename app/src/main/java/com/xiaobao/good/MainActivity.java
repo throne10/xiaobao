@@ -10,9 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.xiaobao.good.db.AbstractAppDatabase;
 import com.xiaobao.good.db.TestBean;
 import com.xiaobao.good.db.dao.TestDao;
-import com.xiaobao.good.http.HttpUtils;
-import com.xiaobao.good.http.bean.Clients;
 import com.xiaobao.good.log.LogUtil;
+import com.xiaobao.good.retrofit.RetrofitUtils;
+import com.xiaobao.good.retrofit.result.Clients;
 
 import java.io.IOException;
 import java.util.List;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             EasyPermissions.requestPermissions(this, "应用需要权限，请允许", 0, perms);
         }
 
-        Call<Clients> mResponseBody = HttpUtils.getService().getClients("4");
+        Call<Clients> mResponseBody = RetrofitUtils.getService().getClients("4");
         mResponseBody.enqueue(new Callback<Clients>() {
             //请求成功时回调
             @Override
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
         new Thread(() -> {
             try {
-                Call<Clients> clients = HttpUtils.getService().getClients("4");
+                Call<Clients> clients = RetrofitUtils.getService().getClients("4");
                 Response<Clients> clientsResponse = clients.execute();
                 LogUtil.i(TAG, clientsResponse.body().getData().getClients() + "");
             } catch (IOException e) {

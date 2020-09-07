@@ -1,4 +1,4 @@
-package com.xiaobao.good.http.bean;
+package com.xiaobao.good.retrofit.result;
 
 import java.util.List;
 
