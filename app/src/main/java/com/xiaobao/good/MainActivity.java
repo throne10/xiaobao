@@ -2,6 +2,7 @@ package com.xiaobao.good;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,23 +14,33 @@ import com.xiaobao.good.db.dao.TestDao;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.Clients;
+import com.xiaobao.good.retrofit.result.WechatRecord;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+    private static final String TAG = "X_MainActivity";
     @BindView(R.id.t1)
     TextView t1;
-    private static final String TAG = "X_MainActivity";
     String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET};
 
+    /**
+     * 部分框架例子写法
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +55,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         String ss = testDao.getAll() + "";
 
         t1.setText(ss);
-
+        //日志
         LogUtil.i(TAG, ss);
 
+        //权限请求操作
         if (EasyPermissions.hasPermissions(this, perms)) {
             //拥有权限进行操作
         } else {
@@ -81,6 +93,24 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             }
         }).start();
 
+
+        File file = new File(Environment.getExternalStorageDirectory() + "/Download/2.png");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+        builder.addFormDataPart("imgFile", file.getName(), requestBody);
+        MultipartBody body = builder.build();//调用即可```
+        Call<WechatRecord> wechatRecord = RetrofitUtils.getService().getWechatRecord(body);
+
+
+        new Thread(() -> {
+            try {
+                Response<WechatRecord> clientsResponse = wechatRecord.execute();
+                LogUtil.i(TAG, clientsResponse.body().getWords_result() + "");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     @Override
