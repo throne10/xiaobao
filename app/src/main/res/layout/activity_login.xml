@@ -52,10 +52,11 @@
 
         <EditText
             android:id="@+id/tv_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iv_username"
+            android:background="@android:color/transparent"
             android:hint="请输入用户名"
             android:textColor="@color/color_text_white"
             android:textColorHint="@color/color_text_white" />
@@ -83,15 +84,16 @@
             android:src="@mipmap/mima" />
 
         <EditText
-
             android:id="@+id/tv_pwd"
 
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
 
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+
             android:layout_centerVertical="true"
-
             android:layout_toRightOf="@id/iv_pwd"
+
+            android:background="@android:color/transparent"
             android:hint="请输入密码"
             android:textColor="@color/color_text_white"
             android:textColorHint="@color/color_text_white" />
@@ -106,6 +108,7 @@
 
 
     <Button
+        android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -130,8 +133,8 @@
         android:layout_marginBottom="64dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/password"
-        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintEnd_toEndOf="@+id/tv_pwd"
+        app:layout_constraintStart_toStartOf="@+id/tv_pwd"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
 
