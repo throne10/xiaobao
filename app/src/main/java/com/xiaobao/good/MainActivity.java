@@ -14,6 +14,7 @@ import com.xiaobao.good.http.HttpUtils;
 import com.xiaobao.good.http.bean.Clients;
 import com.xiaobao.good.log.LogUtil;
 
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -70,7 +71,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             }
         });
 
-
+        try {
+            Response<Clients> clientsResponse = mResponseBody.execute();
+            LogUtil.i(TAG, clientsResponse.body().getData().getClients() + "");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

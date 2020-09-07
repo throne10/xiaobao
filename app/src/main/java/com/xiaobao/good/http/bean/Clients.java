@@ -51,12 +51,6 @@ public class Clients {
                     '}';
         }
 
-        /**
-         * clients : [{"age":23,"client_address":"宝山","client_area":null,"client_birthday":871315200000,"client_car":"是","client_cname":null,"client_email":null,"client_house":"是","client_id":38,"client_idcard":"28746637183737","client_income":25,"client_job":"商人","client_keep":null,"client_label":"旅游","client_marriage":"未婚","client_name":"张三","client_origin":null,"client_phone":"177373627222","client_sex":"男","client_type":"P","employee_id":4,"employee_name":"员工1"},{"age":37,"client_address":"上海市宝山区爱辉路","client_area":null,"client_birthday":429465600000,"client_car":"是","client_cname":null,"client_email":null,"client_house":"是","client_id":31,"client_idcard":"15563862562839","client_income":30,"client_job":"博主","client_keep":null,"client_label":"旅游","client_marriage":"已婚","client_name":"李斯","client_origin":null,"client_phone":"18655377368","client_sex":"男","client_type":"P","employee_id":4,"employee_name":"员工1"}]
-         * totalNum : 6
-         * curMonthNum : 1
-         * latestRecords : {"client":{"age":23,"client_address":"宝山","client_area":null,"client_birthday":871315200000,"client_car":"是","client_cname":null,"client_email":null,"client_house":"是","client_id":38,"client_idcard":"28746637183737","client_income":25,"client_job":"商人","client_keep":null,"client_label":"旅游","client_marriage":"未婚","client_name":"张三","client_origin":null,"client_phone":"177373627222","client_sex":"男","client_type":"P","employee_id":4,"employee_name":null},"client_id":38,"employee":{"employee_id":4,"employee_login":"001","employee_name":"员工1","employee_phone":null,"employee_pwd":null,"leader_id":24,"role":1},"employee_id":4,"img_file":null,"purpose":"展业","sign_address":"上海市宝山区陆翔路111号绿地正大乐城B1层","visit_id":96,"visit_time":"2020-09-01 10:02","voices":[{"analyze":true,"visit_id":96,"voice_comment":"测试","voice_content":null,"voice_file":"96_2f703bfaf7e347068d1808a7c976f6b4_lfasr.wav","voice_id":50,"voice_task":"2f703bfaf7e347068d1808a7c976f6b4","voice_time":1599021209000},{"analyze":true,"visit_id":96,"voice_comment":null,"voice_content":null,"voice_file":"96_efb32b8cb0134109b7152ba149eb9a7e_voiceFile.mp3","voice_id":49,"voice_task":"efb32b8cb0134109b7152ba149eb9a7e","voice_time":1598927164000}],"wechat_content":null}
-         */
 
         private int totalNum;
         private int curMonthNum;
@@ -113,19 +107,6 @@ public class Clients {
                         '}';
             }
 
-            /**
-             * client : {"age":23,"client_address":"宝山","client_area":null,"client_birthday":871315200000,"client_car":"是","client_cname":null,"client_email":null,"client_house":"是","client_id":38,"client_idcard":"28746637183737","client_income":25,"client_job":"商人","client_keep":null,"client_label":"旅游","client_marriage":"未婚","client_name":"张三","client_origin":null,"client_phone":"177373627222","client_sex":"男","client_type":"P","employee_id":4,"employee_name":null}
-             * client_id : 38
-             * employee : {"employee_id":4,"employee_login":"001","employee_name":"员工1","employee_phone":null,"employee_pwd":null,"leader_id":24,"role":1}
-             * employee_id : 4
-             * img_file : null
-             * purpose : 展业
-             * sign_address : 上海市宝山区陆翔路111号绿地正大乐城B1层
-             * visit_id : 96
-             * visit_time : 2020-09-01 10:02
-             * voices : [{"analyze":true,"visit_id":96,"voice_comment":"测试","voice_content":null,"voice_file":"96_2f703bfaf7e347068d1808a7c976f6b4_lfasr.wav","voice_id":50,"voice_task":"2f703bfaf7e347068d1808a7c976f6b4","voice_time":1599021209000},{"analyze":true,"visit_id":96,"voice_comment":null,"voice_content":null,"voice_file":"96_efb32b8cb0134109b7152ba149eb9a7e_voiceFile.mp3","voice_id":49,"voice_task":"efb32b8cb0134109b7152ba149eb9a7e","voice_time":1598927164000}]
-             * wechat_content : null
-             */
 
             private ClientBean client;
             private int client_id;
@@ -256,30 +237,6 @@ public class Clients {
                             '}';
                 }
 
-                /**
-                 * age : 23
-                 * client_address : 宝山
-                 * client_area : null
-                 * client_birthday : 871315200000
-                 * client_car : 是
-                 * client_cname : null
-                 * client_email : null
-                 * client_house : 是
-                 * client_id : 38
-                 * client_idcard : 28746637183737
-                 * client_income : 25
-                 * client_job : 商人
-                 * client_keep : null
-                 * client_label : 旅游
-                 * client_marriage : 未婚
-                 * client_name : 张三
-                 * client_origin : null
-                 * client_phone : 177373627222
-                 * client_sex : 男
-                 * client_type : P
-                 * employee_id : 4
-                 * employee_name : null
-                 */
 
                 private int age;
                 private String client_address;
