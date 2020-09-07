@@ -71,12 +71,16 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             }
         });
 
-        try {
-            Response<Clients> clientsResponse = mResponseBody.execute();
-            LogUtil.i(TAG, clientsResponse.body().getData().getClients() + "");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new Thread(() -> {
+            try {
+                Call<Clients> clients = HttpUtils.getService().getClients("4");
+                Response<Clients> clientsResponse = clients.execute();
+                LogUtil.i(TAG, clientsResponse.body().getData().getClients() + "");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
     }
 
     @Override
