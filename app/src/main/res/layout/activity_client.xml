@@ -31,7 +31,7 @@
         android:layout_height="0.5dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:background="#ffffff" />
+        android:background="@mipmap/bg_crossline" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -43,576 +43,576 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <EditText
-                android:id="@+id/et_name"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/tv_name"
-                android:background="@mipmap/bg_edit_short"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="姓  名"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <EditText
-                android:id="@+id/et_phone"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/tv_phone"
-                android:background="@mipmap/bg_edit_short"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:layout_height="50dp">
 
-            <TextView
-                android:id="@+id/tv_phone"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="手机号码"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/et_name"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/tv_name"
+                    android:background="@mipmap/bg_edit_short"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="姓  名"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
+            </RelativeLayout>
 
-            <EditText
-                android:id="@+id/et_client_tag"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/tv_client_tag"
-                android:background="@mipmap/bg_edit_short"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:layout_height="50dp">
 
-            <TextView
-                android:id="@+id/tv_client_tag"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="客户标签"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/et_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_toEndOf="@+id/tv_phone"
+                    android:background="@mipmap/bg_edit_short"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_phone"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="手机号码"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
+            </RelativeLayout>
 
-            <CheckBox
-                android:id="@+id/cb_male"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/tv_sex"
-                android:background="@mipmap/ic_unselected" />
-
-            <CheckBox
-                android:id="@+id/cb_female"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/tv_male"
-                android:background="@mipmap/ic_unselected" />
-
-            <TextView
-                android:id="@+id/tv_male"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/cb_male"
-                android:text="男"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_sex"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="性  别"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_female"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/cb_female"
-                android:text="女"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <EditText
-                android:id="@+id/et_idCard"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/tv_idCard"
-                android:background="@mipmap/bg_edit_short"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:layout_height="50dp">
 
-            <TextView
-                android:id="@+id/tv_idCard"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="身份证号"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/et_client_tag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_toEndOf="@+id/tv_client_tag"
+                    android:background="@mipmap/bg_edit_short"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_client_tag"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="客户标签"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/et_birth"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/tv_birth"
-                android:background="@mipmap/bg_edit_short"
-                android:gravity="center"
-                android:text="2000-10-01"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:layout_height="50dp">
 
-            <TextView
-                android:id="@+id/tv_birth"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="出生年月"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <CheckBox
+                    android:id="@+id/cb_male"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/tv_sex"
+                    android:background="@mipmap/ic_unselected" />
 
-        </RelativeLayout>
+                <CheckBox
+                    android:id="@+id/cb_female"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/tv_male"
+                    android:background="@mipmap/ic_unselected" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
+                <TextView
+                    android:id="@+id/tv_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/cb_male"
+                    android:text="男"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/et_income"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/tv_income"
-                android:background="@mipmap/bg_edit_short"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_sex"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="性  别"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tv_income"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="年收入"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/cb_female"
+                    android:text="女"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <CheckBox
-                android:id="@+id/cb_married"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/tv_marriage"
-                android:background="@mipmap/ic_unselected" />
-
-            <CheckBox
-                android:id="@+id/cb_unmarried"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/tv_married"
-                android:background="@mipmap/ic_unselected" />
-
-            <TextView
-                android:id="@+id/tv_married"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/cb_married"
-                android:text="已婚"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_marriage"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="婚  姻"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_unmarried"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/cb_unmarried"
-                android:text="未婚"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <CheckBox
-                android:id="@+id/cb_house_yes"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/tv_house"
-                android:background="@mipmap/ic_unselected" />
-
-            <CheckBox
-                android:id="@+id/cb_house_no"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/tv_house_yse"
-                android:background="@mipmap/ic_unselected" />
-
-            <TextView
-                android:id="@+id/tv_house_yse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/cb_house_yes"
-                android:text="是"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_house"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="是否购房"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_house_no"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/cb_house_no"
-                android:text="否"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <CheckBox
-                android:id="@+id/cb_car_yes"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/tv_car"
-                android:background="@mipmap/ic_unselected" />
-
-            <CheckBox
-                android:id="@+id/cb_car_no"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/tv_car_yse"
-                android:background="@mipmap/ic_unselected" />
-
-            <TextView
-                android:id="@+id/tv_car_yse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/cb_car_yes"
-                android:text="是"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_car"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="是否购车"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_car_no"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/cb_car_no"
-                android:text="否"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <EditText
-                android:id="@+id/et_address"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@+id/tv_address"
-                android:background="@mipmap/bg_edit_short"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:layout_height="50dp">
 
-            <TextView
-                android:id="@+id/tv_address"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="详细地址"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/et_idCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_toEndOf="@+id/tv_idCard"
+                    android:background="@mipmap/bg_edit_short"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_idCard"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="身份证号"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
+            </RelativeLayout>
 
-            <CheckBox
-                android:id="@+id/cb_level_p"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/tv_level"
-                android:background="@mipmap/ic_unselected" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
 
-            <CheckBox
-                android:id="@+id/cb_level_a"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/tv_level_p"
-                android:background="@mipmap/ic_unselected" />
+                <TextView
+                    android:id="@+id/et_birth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_toEndOf="@+id/tv_birth"
+                    android:background="@mipmap/bg_edit_short"
+                    android:gravity="center"
+                    android:text="2000-10-01"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-            <CheckBox
-                android:id="@+id/cb_level_c"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/tv_level_a"
-                android:background="@mipmap/ic_unselected" />
+                <TextView
+                    android:id="@+id/tv_birth"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="出生年月"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tv_level"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="等  级"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <EditText
+                    android:id="@+id/et_income"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/tv_income"
+                    android:background="@mipmap/bg_edit_short"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_income"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="年收入"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <CheckBox
+                    android:id="@+id/cb_married"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/tv_marriage"
+                    android:background="@mipmap/ic_unselected" />
+
+                <CheckBox
+                    android:id="@+id/cb_unmarried"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/tv_married"
+                    android:background="@mipmap/ic_unselected" />
+
+                <TextView
+                    android:id="@+id/tv_married"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/cb_married"
+                    android:text="已婚"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_marriage"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="婚  姻"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_unmarried"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/cb_unmarried"
+                    android:text="未婚"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <CheckBox
+                    android:id="@+id/cb_house_yes"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/tv_house"
+                    android:background="@mipmap/ic_unselected" />
+
+                <CheckBox
+                    android:id="@+id/cb_house_no"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/tv_house_yes"
+                    android:background="@mipmap/ic_unselected" />
+
+                <TextView
+                    android:id="@+id/tv_house_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/cb_house_yes"
+                    android:text="是"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_house"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="是否购房"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_house_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/cb_house_no"
+                    android:text="否"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <CheckBox
+                    android:id="@+id/cb_car_yes"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/tv_car"
+                    android:background="@mipmap/ic_unselected" />
+
+                <CheckBox
+                    android:id="@+id/cb_car_no"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/tv_car_yes"
+                    android:background="@mipmap/ic_unselected" />
+
+                <TextView
+                    android:id="@+id/tv_car_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/cb_car_yes"
+                    android:text="是"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_car"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="是否购车"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_car_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/cb_car_no"
+                    android:text="否"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <EditText
+                    android:id="@+id/et_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_toEndOf="@+id/tv_address"
+                    android:background="@mipmap/bg_edit_short"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="详细地址"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <CheckBox
+                    android:id="@+id/cb_level_p"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/tv_level"
+                    android:background="@mipmap/ic_unselected" />
+
+                <CheckBox
+                    android:id="@+id/cb_level_a"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/tv_level_p"
+                    android:background="@mipmap/ic_unselected" />
+
+                <CheckBox
+                    android:id="@+id/cb_level_c"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/tv_level_a"
+                    android:background="@mipmap/ic_unselected" />
+
+                <TextView
+                    android:id="@+id/tv_level"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="等  级"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
 
-            <TextView
-                android:id="@+id/tv_level_a"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/cb_level_a"
-                android:text="A"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_level_a"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/cb_level_a"
+                    android:text="A"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tv_level_p"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/cb_level_p"
-                android:text="P"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_level_p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/cb_level_p"
+                    android:text="P"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
 
-            <TextView
-                android:id="@+id/tv_level_c"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/cb_level_c"
-                android:text="C"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_level_c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/cb_level_c"
+                    android:text="C"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
 
-            <EditText
-                android:id="@+id/et_job"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/tv_job"
-                android:background="@mipmap/bg_edit_short"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/et_job"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/tv_job"
+                    android:background="@mipmap/bg_edit_short"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tv_job"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:gravity="end|center_vertical"
-                android:text="职  业"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_job"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="end|center_vertical"
+                    android:text="职  业"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
 
-            <TextView
-                android:id="@+id/tv_cancel"
-                android:layout_width="120dp"
-                android:layout_height="40dp"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="40dp"
-                android:background="@mipmap/bg_btn_canel" />
+                <TextView
+                    android:id="@+id/tv_cancel"
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="40dp"
+                    android:background="@mipmap/bg_btn_canel" />
 
-            <TextView
-                android:id="@+id/tv_save"
-                android:layout_width="120dp"
-                android:layout_height="40dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="40dp"
-                android:layout_toEndOf="@+id/tv_cancel"
-                android:background="@mipmap/bg_btn_save" />
+                <TextView
+                    android:id="@+id/tv_save"
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="40dp"
+                    android:layout_toEndOf="@+id/tv_cancel"
+                    android:background="@mipmap/bg_btn_save" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 
