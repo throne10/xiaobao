@@ -24,8 +24,14 @@
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
         <activity
-            android:name=".WechatRecordActivity"
-            android:label="Wechat"></activity>
+            android:name=".wechat.WechatRecordActivity"
+            android:label="Wechat">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".sign.SignInActivity"
             android:label="sign"></activity>

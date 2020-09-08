@@ -51,5 +51,4 @@ public class SignInActivity extends Activity {
         Log.i(TAG, "result>>>" + result);
     }
 
-    ;
 }
