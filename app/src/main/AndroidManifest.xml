@@ -38,7 +38,9 @@
 
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
-        <activity android:name=".CropperActivity">
+        <activity
+            android:name=".WechatRecordActivity"
+            android:label="Wechat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

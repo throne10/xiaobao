@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.xiaobao.good.CropperActivity">
+
+    <ImageView
+        android:id="@+id/result_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/bg_main"
+        android:scaleType="centerInside" />
+
+
+    <Button
+        android:id="@+id/bt_back"
+        android:layout_width="65dp"
+        android:layout_height="40dp"
+        android:background="@mipmap/back" />
+
+
+    <Button
+        android:id="@+id/bt_add_img"
+        android:layout_width="65dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:text="添加图片" />
+
+</RelativeLayout>
