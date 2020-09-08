@@ -36,7 +36,7 @@ public class UserInfoData {
                 '}';
     }
 
-    class LoginUserData {
+    public class LoginUserData {
 
         @SerializedName("employee")
         private String employee;

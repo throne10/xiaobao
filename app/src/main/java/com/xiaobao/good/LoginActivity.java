@@ -10,10 +10,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.xiaobao.good.common.CommonUtils;
+import com.xiaobao.good.common.Constants;
 import com.xiaobao.good.common.StringUtils;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.UserInfoData;
+import com.xiaobao.good.sp.UserSp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,7 +97,28 @@ public class LoginActivity extends AppCompatActivity {
 
                     UserInfoData userInfoData = response.body();
 
-                    LogUtil.i(TAG, userInfoData.toString());
+
+                    if (userInfoData != null) {
+                        if (Constants.LOGIN_SUCC.equals(userInfoData.getCode())) {
+
+                            try {
+                                /**
+                                 * 登录成功。保存到本地
+                                 */
+                                UserSp.getInstances().saveUser(userInfoData.getData());
+
+                                UserInfoData.LoginUserData loginUserData = UserSp.getInstances().getUser();
+                                LogUtil.i(TAG, "read from sp:" + loginUserData.toString());
+
+
+
+
+                            } catch (Exception e) {
+                                LogUtil.e(TAG, "read from sp e:" + e);
+                            }
+
+                        }
+                    }
 
 
                 }

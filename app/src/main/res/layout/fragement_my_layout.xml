@@ -9,33 +9,89 @@
 
     <ImageView
 
-        android:layout_width="50dp"
-
-        android:layout_height="50dp"
-        android:background="@drawable/shape"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@mipmap/my_head_icon" />
 
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="20dp"
-        android:text="姓名"
+        android:text="王绵杰"
         android:textColor="@color/color_text_white"
         android:textSize="30sp" />
 
-    <View
-
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/color_yellow" />
+
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:src="@mipmap/my_line" />
 
     <LinearLayout
         android:layout_width="match_parent"
+
+
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+
         android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_man"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/man" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/iv_man"
+                android:layout_marginTop="50dp"
+                android:gravity="center"
+                android:text="个人信息"
+                android:textColor="@color/color_text_white"
+                android:textSize="20dp" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_sys"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/system" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_sys"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="50dp"
+                android:gravity="center"
+                android:text="设置"
+                android:textColor="@color/color_text_white"
+                android:textSize="20dp" />
+
+        </RelativeLayout>
 
 
     </LinearLayout>
