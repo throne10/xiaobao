@@ -133,7 +133,7 @@ public class WechatRecordActivity extends Activity {
                 e.printStackTrace();
             }
             LogUtil.i(TAG, file + "");
-//            getChatString(file);
+            getChatString(file);
         } else if (resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }
