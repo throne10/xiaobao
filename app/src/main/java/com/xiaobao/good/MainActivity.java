@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private static final String TAG = "X_MainActivity";
     @BindView(R.id.t1)
     TextView t1;
-    String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET};
+    String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.INTERNET, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
 
     /**
      * 部分框架例子写法
