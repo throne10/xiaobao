@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "29.0.visit_time"
+    buildToolsVersion "29.0.1"
     defaultConfig {
         applicationId "com.xiaobao.good"
         minSdkVersion 23
