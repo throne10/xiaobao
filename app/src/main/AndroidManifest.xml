@@ -15,56 +15,41 @@
         <activity
             android:name=".LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
 
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainActivity"></activity>
 
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
         <activity
             android:name=".WechatRecordActivity"
-            android:label="Wechat">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="Wechat"></activity>
         <activity
             android:name=".sign.SignInActivity"
-            android:label="sign">
+            android:label="sign"></activity>
+        <activity
+            android:name="com.xiaobao.good.ClientActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.xiaobao.good.ClientActivity" />
 
         <!-- 声明service组件 -->
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" >
-        </service>
-
-        <!-- AK鉴权 -->
-        <!-- meta-data需要写在application中 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="PlRG1GOvnamtUad5WnYQ4FDzAM7GIUjV" />
+
+        <!-- AK鉴权 -->
+        <!-- meta-data需要写在application中 -->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"></service>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

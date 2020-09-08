@@ -1,5 +1,6 @@
 package com.xiaobao.good.retrofit.result;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class Clients {
@@ -208,7 +209,7 @@ public class Clients {
                 this.voices = voices;
             }
 
-            public static class ClientBean {
+            public static class ClientBean implements Serializable {
                 @Override
                 public String toString() {
                     return "ClientBean{" +
