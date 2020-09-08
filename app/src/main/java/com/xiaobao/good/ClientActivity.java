@@ -6,16 +6,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.xiaobao.good.common.DateUtil;
 import com.xiaobao.good.common.StringUtils;
+import com.xiaobao.good.log.LogUtil;
+import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.Clients;
+
+import java.util.Date;
 
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ClientActivity extends AppCompatActivity {
+
+    private static final String TAG = "Client_CA";
 
     @OnClick(R.id.iv_back)
     public void ivBack() {
@@ -206,18 +217,55 @@ public class ClientActivity extends AppCompatActivity {
 
     @OnClick(R.id.tv_cancel)
     public void cancel(TextView tvCancel) {
-        Toast.makeText(getApplicationContext(), cacheClientBean.toString(), Toast.LENGTH_LONG)
-                .show();
-        tvCancel.setText("点击取消");
+        finish();
     }
 
     @OnClick(R.id.tv_save)
     public void save(TextView tvSave) {
-        tvSave.setText("点击保存");
+        try {
+            String clientInfo = gson.toJson(cacheClientBean);
+
+            Call<Clients> call;
+            if (intentClientBean == null) {
+                call = RetrofitUtils.getService().postClient(clientInfo);
+            } else {
+                call = RetrofitUtils.getService().putClient(clientInfo);
+            }
+            call.enqueue(
+                    new Callback<Clients>() {
+                        @Override
+                        public void onResponse(Call<Clients> call, Response<Clients> response) {
+                            if (intentClientBean == null) {
+                                Toast.makeText(
+                                                getApplicationContext(),
+                                                "添加客户成功",
+                                                Toast.LENGTH_SHORT)
+                                        .show();
+                            } else {
+                                Toast.makeText(
+                                                getApplicationContext(),
+                                                "修改客户成功",
+                                                Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                            LogUtil.i(TAG, "response > " + response.body().getData() + "");
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Clients> call, Throwable t) {
+
+                            LogUtil.i(TAG, "fail re:" + t.getMessage());
+                        }
+                    });
+        } catch (Exception e) {
+            LogUtil.i(TAG, "save client info e:" + e);
+        }
     }
 
     private Clients.DataBean.LatestRecordsBean.ClientBean intentClientBean;
     private Clients.DataBean.LatestRecordsBean.ClientBean cacheClientBean;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,13 +273,15 @@ public class ClientActivity extends AppCompatActivity {
         setContentView(R.layout.activity_client);
         ButterKnife.bind(this);
 
+        gson = new Gson();
         cacheClientBean = new Clients.DataBean.LatestRecordsBean.ClientBean();
-        intentClientBean =
-                (Clients.DataBean.LatestRecordsBean.ClientBean)
-                        getIntent().getSerializableExtra("ClientBean");
-        if (intentClientBean == null) {
+        String strClientBean = getIntent().getStringExtra("ClientBean");
+        if (StringUtils.isEmpty(strClientBean)) {
             tvTitle.setText("新增客户");
         } else {
+            intentClientBean =
+                    gson.fromJson(
+                            strClientBean, Clients.DataBean.LatestRecordsBean.ClientBean.class);
             tvTitle.setText("信息修改");
             initClientInfo();
         }
@@ -239,6 +289,40 @@ public class ClientActivity extends AppCompatActivity {
 
     /** 有客户信息传递过来时，显示已有的客户信息 */
     private void initClientInfo() {
-        // TODO init intent client info
+        etName.setText(intentClientBean.getClient_name());
+        etPhone.setText(intentClientBean.getClient_phone());
+        etTag.setText(intentClientBean.getClient_label());
+        if ("男".equals(intentClientBean.getClient_sex())) {
+            checkMale();
+        } else if ("女".equals(intentClientBean.getClient_sex())) {
+            checkFemale();
+        }
+        etIdCard.setText(intentClientBean.getClient_idcard());
+        tvBirth.setText(DateUtil.DateToStringYMD(new Date(intentClientBean.getClient_birthday())));
+        etIncome.setText(String.valueOf(intentClientBean.getClient_income()));
+        if ("已婚".equals(intentClientBean.getClient_marriage())) {
+            selectMarried();
+        } else if ("未婚".equals(intentClientBean.getClient_marriage())) {
+            selectUnmarried();
+        }
+        if ("是".equals(intentClientBean.getClient_house())) {
+            selectHouseYes();
+        } else if ("否".equals(intentClientBean.getClient_house())) {
+            selectHouseNo();
+        }
+        if ("是".equals(intentClientBean.getClient_car())) {
+            selectCarYes();
+        } else if ("否".equals(intentClientBean.getClient_car())) {
+            selectCarNo();
+        }
+        etAddress.setText(intentClientBean.getClient_address());
+        if ("P".equals(intentClientBean.getClient_type())) {
+            selectLevelP();
+        } else if ("A".equals(intentClientBean.getClient_type())) {
+            selectLevelA();
+        } else if ("C".equals(intentClientBean.getClient_type())) {
+            selectLevelC();
+        }
+        etJob.setText(intentClientBean.getClient_job());
     }
 }
