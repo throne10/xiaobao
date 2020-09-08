@@ -5,6 +5,7 @@ import com.xiaobao.good.retrofit.result.UserInfoData;
 import com.xiaobao.good.retrofit.result.WechatRecord;
 
 import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -32,4 +33,7 @@ public interface HttpInterface {
 
     @DELETE("client")
     Call<Clients> deleteClient(@Query("client_id") int id); // 删除客户信息
+
+    @POST("wechat")
+    Call<ResponseBody> uploadWechat(@Query("visit_id") int visitId, @Query("wechatContent") String weChatContent);//微信上报
 }

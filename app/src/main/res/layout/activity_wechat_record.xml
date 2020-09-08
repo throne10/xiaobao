@@ -21,10 +21,30 @@
 
     <Button
         android:id="@+id/bt_add_img"
-        android:layout_width="65dp"
-        android:layout_height="40dp"
+        android:layout_width="35dp"
+        android:layout_height="25dp"
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"
-        android:text="添加图片" />
+        android:background="@mipmap/picture_icon" />
 
+    <Button
+        android:id="@+id/bt_commit"
+        android:layout_width="65dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/record_btn_selector"
+        android:text="提交" />
+
+    <ListView
+        android:id="@+id/lv_chats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginVertical="70dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:divider="#A9A9A9"
+        android:dividerHeight="1dp" />
 </RelativeLayout>
