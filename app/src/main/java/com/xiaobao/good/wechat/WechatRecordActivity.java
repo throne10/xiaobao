@@ -14,11 +14,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
 import com.xiaobao.good.R;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.WechatRecord;
+import com.xiaobao.good.sign.Visit;
+import com.xiaobao.good.sign.VisitResult;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -26,9 +29,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -55,6 +60,13 @@ public class WechatRecordActivity extends Activity {
     Button btCommit;
     private Context context;
 
+    private int visitId;
+    private StringBuffer b = null;
+    private StringBuffer bTemp = null;
+    private List<String> allChat = new ArrayList<>();
+    private List<String> tempChat = new ArrayList<>();
+    private int giveVisitId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +74,33 @@ public class WechatRecordActivity extends Activity {
         context = this;
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        giveVisitId = getIntent().getIntExtra("visitId", 0);
+        LogUtil.i(TAG, "giveVisitId>>>>" + giveVisitId);
+        if (giveVisitId != 0) {
+            Call<WeChatResult> bodyCall = RetrofitUtils.getService().getWechats(giveVisitId);
+            bodyCall.enqueue(new Callback<WeChatResult>() {
+                @Override
+                public void onResponse(Call<WeChatResult> call, Response<WeChatResult> response) {
+                    if (response.isSuccessful()) {
+                        LogUtil.i(TAG, "Wechats>>>>" + response.body().getData());
+                        String[] s = response.body().getData().split("<br>");
+                        List<String> strings = Arrays.asList(s);
+                        EventBus.getDefault().post(strings);
+                    } else {
+                        Toast.makeText(context, "请求微信聊天记录失败。", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<WeChatResult> call, Throwable t) {
+                    Toast.makeText(context, "请求微信聊天记录失败。", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            });
+        }
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(List<String> result) {
@@ -71,7 +109,18 @@ public class WechatRecordActivity extends Activity {
         if (result.isEmpty()) {
             Toast.makeText(this, "请求失败，请检查网络后重试。", Toast.LENGTH_LONG).show();
         } else {
-            lvChats.setAdapter(new ChatListAdapter(result));
+            allChat.addAll(result);
+            lvChats.setAdapter(new ChatListAdapter(allChat));
+            b = new StringBuffer();
+            for (String s : allChat) {
+                b.append(s).append("<br>");
+            }
+            if (giveVisitId != 0) {
+                bTemp = new StringBuffer();
+                for (String s : tempChat) {
+                    bTemp.append(s).append("<br>");
+                }
+            }
         }
     }
 
@@ -82,30 +131,74 @@ public class WechatRecordActivity extends Activity {
                 Crop.pickImage(this);
                 break;
             case R.id.bt_commit:
-                commitWechatRecords();
+                if (b != null) {
+                    if (giveVisitId != 0) {
+                        append();
+                    } else {
+                        visit();
+                    }
+                } else {
+                    Toast.makeText(context, "请先添加微信聊天内容后提交。", Toast.LENGTH_LONG).show();
+                }
                 break;
         }
     }
 
-    private void commitWechatRecords() {
-        Call<ResponseBody> responseBodyCall = RetrofitUtils.getService().uploadWechat(1, "visit_time");
-        responseBodyCall.enqueue(new Callback<ResponseBody>() {
+    private void append() {
+        Call<ResponseBody> weChatResultCall = RetrofitUtils.getService().appendWechats(giveVisitId, bTemp.toString());
+        weChatResultCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                LogUtil.i(TAG, "commitWechatRecords response>>>" + response.code());
                 if (response.isSuccessful()) {
-                    Toast.makeText(context, "上传成功", Toast.LENGTH_LONG).show();
+                    try {
+                        LogUtil.i(TAG, "appendWechats>>" + response.body().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(context, "追加微信聊天记录成功。", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(context, "上传失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "追加微信聊天记录失败。", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(context, "上传失败，请检查网络后重试。", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "追加微信聊天记录失败!", Toast.LENGTH_LONG).show();
             }
         });
     }
+
+    private void visit() {
+        if (visitId == 0) {
+            Visit visit = new Visit();
+            visit.setSign_address("");
+            visit.setClient_id(38);
+            visit.setEmployee_id(4);
+            visit.setPurpose("微信聊天");
+            visit.setWechat_content(b.toString());
+            String s = new Gson().toJson(visit);
+            LogUtil.i(TAG, "toJson>>>" + s);
+            Call<VisitResult> visitResultCall = RetrofitUtils.getService().visit(visit);
+            visitResultCall.enqueue(new Callback<VisitResult>() {
+                @Override
+                public void onResponse(Call<VisitResult> call, Response<VisitResult> response) {
+                    if (response.isSuccessful()) {
+                        visitId = response.body().getData();
+                        LogUtil.i(TAG, response.body().getData() + "");
+                        Toast.makeText(context, "添加微信聊天记录成功。", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, "添加微信聊天记录失败。", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<VisitResult> call, Throwable t) {
+                    Toast.makeText(context, "添加微信聊天记录失败。", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent result) {
@@ -170,6 +263,7 @@ public class WechatRecordActivity extends Activity {
                         lsChat.add(wordsResultBean.getWords());
                     }
                 }
+                tempChat.addAll(lsChat);
                 EventBus.getDefault().post(lsChat);
             } catch (Exception e) {
                 e.printStackTrace();

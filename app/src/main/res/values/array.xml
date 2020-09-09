@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="purpose">
+        <item>展业</item>
+        <item>递送保单</item>
+        <item>送礼品</item>
+    </string-array>
+</resources>

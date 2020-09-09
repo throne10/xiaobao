@@ -3,6 +3,10 @@ package com.xiaobao.good.retrofit.interfaces;
 import com.xiaobao.good.retrofit.result.Clients;
 import com.xiaobao.good.retrofit.result.UserInfoData;
 import com.xiaobao.good.retrofit.result.WechatRecord;
+import com.xiaobao.good.schedule.VisitRecords;
+import com.xiaobao.good.sign.Visit;
+import com.xiaobao.good.sign.VisitResult;
+import com.xiaobao.good.wechat.WeChatResult;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -35,5 +39,16 @@ public interface HttpInterface {
     Call<Clients> deleteClient(@Query("client_id") int id); // 删除客户信息
 
     @POST("wechat")
-    Call<ResponseBody> uploadWechat(@Query("visit_id") int visitId, @Query("wechatContent") String weChatContent);//微信上报
+    Call<ResponseBody> appendWechats(@Query("visit_id") int visitId, @Query("wechatContent") String weChatContent);//追加微信上报
+
+    @GET("visit")
+    Call<VisitRecords> getVisit(@Query("employeeId") int employeeId); // 修改客户信息
+
+
+    @POST("visit")
+    Call<VisitResult> visit(@Body Visit visit); // 新增拜訪
+
+    @GET("wechat")
+    Call<WeChatResult> getWechats(@Query("visit_id") int visit_id); // 获取微信聊天
+
 }
