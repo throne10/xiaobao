@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg"
+    tools:context=".BaseActivity">
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/iv_client"
+            android:layout_width="45dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="150dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:src="@mipmap/costum_unselected" />
+
+        <ImageView
+            android:id="@+id/iv_mine"
+            android:layout_width="45dp"
+            android:layout_height="20dp"
+            android:layout_toEndOf="@+id/iv_client"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:src="@mipmap/mine_unselected" />
+
+        <TextView
+            android:id="@+id/tv_client"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/iv_client"
+            android:layout_alignStart="@+id/iv_client"
+            android:layout_below="@+id/iv_client"
+            android:gravity="center"
+            android:text="客户"
+            android:textColor="@color/color_text_white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_mine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/iv_mine"
+            android:layout_alignStart="@+id/iv_mine"
+            android:layout_below="@+id/iv_client"
+            android:gravity="center"
+            android:text="我的"
+            android:textColor="@color/color_text_white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</RelativeLayout>

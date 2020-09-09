@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/base"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg"
+    android:orientation="vertical"
+    android:paddingEnd="20dp"
+    android:paddingStart="20dp">
+
+    <ImageView
+        android:id="@+id/iv_add"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_gravity="right"
+        android:padding="10dp"
+        android:src="@mipmap/ic_add" />
+
+    <RelativeLayout
+        android:id="@+id/rl_visit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/tv_visit_count_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="客户拜访次数:"
+            android:textColor="@color/color_text_white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_visit_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_visit_count_label"
+            android:layout_toEndOf="@+id/tv_visit_count_label"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:text="66"
+            android:textColor="@color/color_text_white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/tv_m_visit_count_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_m_visit_count"
+            android:layout_toStartOf="@+id/tv_m_visit_count"
+            android:gravity="center"
+            android:text="本月拜访次数:"
+            android:textColor="@color/color_text_white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_m_visit_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:text="22"
+            android:textColor="@color/color_text_white"
+            android:textSize="24sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/tv_last_visit_client"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/client_bg_edit"
+            android:paddingBottom="2dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="2dp"
+            android:text="新闻"
+            android:textColor="@color/color_text_white"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/iv_calendar"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBottom="@+id/tv_last_visit_time"
+            android:layout_alignEnd="@+id/tv_last_visit_time"
+            android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/tv_last_visit_time"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/icon_calendar" />
+
+        <TextView
+            android:id="@+id/tv_last_visit_time"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/client_bg_edit"
+            android:paddingBottom="2dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="2dp"
+            android:text="2020年9月9日22:24"
+            android:textColor="@color/color_text_white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_last_visit_time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_last_visit_time"
+            android:layout_alignStart="@+id/tv_last_visit_time"
+            android:text="拜访时间"
+            android:textColor="@color/color_text_white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_last_visit_client_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_last_visit_client"
+            android:text="最近拜访客户"
+            android:textColor="@color/color_text_white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/et_visit_target"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/client_bg_edit"
+            android:paddingBottom="2dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="2dp"
+            android:text="展业"
+            android:textColor="@color/color_text_white"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/et_visit_address"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/client_bg_edit"
+            android:paddingBottom="2dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="2dp"
+            android:text="上海市宝山区"
+            android:textColor="@color/color_text_white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_last_visit_address_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/et_visit_address"
+            android:layout_alignStart="@+id/et_visit_address"
+            android:text="拜访目的"
+            android:textColor="@color/color_text_white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_visit_target_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/et_visit_target"
+            android:text="拜访地点"
+            android:textColor="@color/color_text_white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+</LinearLayout>
