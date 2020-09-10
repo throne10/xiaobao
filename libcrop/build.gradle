@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'signing'
+//apply from: '../.publishing/sonatype.gradle'
+
+archivesBaseName = 'android-crop'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "29.0.1"
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 26
+
+        testApplicationId 'com.soundcloud.android.crop.test'
+        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:support-annotations:23.0.1'
+    api 'com.squareup:fest-android:1.0.7'
+    api 'org.mockito:mockito-core:1.9.5'
+    api 'com.google.dexmaker:dexmaker:1.0'
+    api 'com.google.dexmaker:dexmaker-mockito:1.0'
+}
+
