@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private void init() {
         putAssetsToSDCard("test.aiff", aiffPath);
         putAssetsToSDCard("test.wav", wavPath);
-        startConvert(aiffPath);
+        startConvert(wavPath);
     }
 
     private void startConvert(final String sourcePath) {
