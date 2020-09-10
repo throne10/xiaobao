@@ -1,4 +1,4 @@
-package com.xiaobao.good.ui.main;
+package com.xiaobao.good.ui;
 
 import androidx.lifecycle.ViewModel;
 

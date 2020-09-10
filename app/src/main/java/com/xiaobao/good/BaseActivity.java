@@ -5,10 +5,9 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.xiaobao.good.ui.ClientFragment;
+
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.xiaobao.good.ui.main.ClientFragment;
-
 import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
@@ -70,7 +69,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
         ButterKnife.bind(this);
-        mClientFragment = new ClientFragment();
         mClientFragment = new ClientFragment();
         if (savedInstanceState == null) {
             getSupportFragmentManager()

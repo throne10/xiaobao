@@ -72,7 +72,7 @@
         android:layout_height="60dp"
         android:gravity="center_vertical">
 
-        <EditText
+        <TextView
             android:id="@+id/tv_last_visit_client"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -137,8 +137,8 @@
         android:layout_height="60dp"
         android:gravity="center_vertical">
 
-        <EditText
-            android:id="@+id/et_visit_target"
+        <TextView
+            android:id="@+id/tv_visit_target"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -151,8 +151,8 @@
             android:textColor="@color/color_text_white"
             android:textSize="12sp" />
 
-        <EditText
-            android:id="@+id/et_visit_address"
+        <TextView
+            android:id="@+id/tv_visit_address"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -170,9 +170,9 @@
             android:id="@+id/tv_last_visit_address_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/et_visit_address"
-            android:layout_alignStart="@+id/et_visit_address"
-            android:text="拜访目的"
+            android:layout_above="@+id/tv_visit_address"
+            android:layout_alignStart="@+id/tv_visit_address"
+            android:text="拜访地址"
             android:textColor="@color/color_text_white"
             android:textSize="14sp" />
 
@@ -180,10 +180,22 @@
             android:id="@+id/tv_visit_target_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/et_visit_target"
-            android:text="拜访地点"
+            android:layout_above="@+id/tv_visit_target"
+            android:text="拜访目的"
             android:textColor="@color/color_text_white"
             android:textSize="14sp" />
     </RelativeLayout>
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>
