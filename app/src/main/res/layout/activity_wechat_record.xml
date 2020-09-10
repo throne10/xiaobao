@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.xiaobao.good.CropperActivity">
+    tools:context="com.xiaobao.good.MainActivity">
 
     <ImageView
         android:id="@+id/result_image"

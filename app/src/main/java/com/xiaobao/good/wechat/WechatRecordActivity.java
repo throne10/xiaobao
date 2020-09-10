@@ -53,6 +53,13 @@ public class WechatRecordActivity extends Activity {
     Button btAddImg;
     @BindView(R.id.bt_back)
     Button btBack;
+
+    @OnClick(R.id.bt_back)
+    public void back() {
+        finish();
+    }
+
+
     @BindView(R.id.lv_chats)
     ListView lvChats;
 
@@ -77,6 +84,7 @@ public class WechatRecordActivity extends Activity {
         giveVisitId = getIntent().getIntExtra("visitId", 0);
         LogUtil.i(TAG, "giveVisitId>>>>" + giveVisitId);
         if (giveVisitId != 0) {
+            btCommit.setText("追加");
             Call<WeChatResult> bodyCall = RetrofitUtils.getService().getWechats(giveVisitId);
             bodyCall.enqueue(new Callback<WeChatResult>() {
                 @Override
@@ -116,9 +124,11 @@ public class WechatRecordActivity extends Activity {
                 b.append(s).append("<br>");
             }
             if (giveVisitId != 0) {
-                bTemp = new StringBuffer();
-                for (String s : tempChat) {
-                    bTemp.append(s).append("<br>");
+                if(!tempChat.isEmpty()) {
+                    bTemp = new StringBuffer();
+                    for (String s : tempChat) {
+                        bTemp.append(s).append("<br>");
+                    }
                 }
             }
         }
@@ -131,15 +141,21 @@ public class WechatRecordActivity extends Activity {
                 Crop.pickImage(this);
                 break;
             case R.id.bt_commit:
-                if (b != null) {
-                    if (giveVisitId != 0) {
+
+                if (giveVisitId != 0) {
+                    if (bTemp != null) {
                         append();
                     } else {
-                        visit();
+                        Toast.makeText(context, "请先追加微信聊天内容后提交。", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(context, "请先添加微信聊天内容后提交。", Toast.LENGTH_LONG).show();
+                    if (b != null) {
+                        visit();
+                    } else {
+                        Toast.makeText(context, "请先添加微信聊天内容后提交。", Toast.LENGTH_LONG).show();
+                    }
                 }
+
                 break;
         }
     }
