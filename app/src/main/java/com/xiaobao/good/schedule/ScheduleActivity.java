@@ -71,11 +71,20 @@ public class ScheduleActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        getVisitRecords();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
         context = this;
         ButterKnife.bind(this);
+    }
+
+    private void getVisitRecords() {
         Call<VisitRecords> visitRecordsCall = RetrofitUtils.getService().getVisit(4);
 
         visitRecordsCall.enqueue(new Callback<VisitRecords>() {
@@ -93,7 +102,5 @@ public class ScheduleActivity extends Activity {
 
             }
         });
-
-
     }
 }
