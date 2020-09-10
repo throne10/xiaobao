@@ -2,9 +2,12 @@ package com.xiaobao.good;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Toast;
@@ -20,25 +23,37 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jaygoo.library.converter.Mp3Converter;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class AudioRecordActivity extends Activity {
 
+    private static String TAG = "AudioRecordActivity";
+
     private RecordItem recordItem = new RecordItem();
+
+    private MediaPlayer mMediaPlayer;
+    private File newFile;
 
     @BindView(R.id.record_audio_chronometer_time)
     public Chronometer chronometer;
 
 
-    @BindView(R.id.bt_begin_or_pause)
-    public Button begin_pause;
+    @BindView(R.id.bt_pause_play)
+    public Button pause_play;
 
 
-    @BindView(R.id.bt_stop)
-    public Button stop;
+    @BindView(R.id.bt_stop_record)
+    public Button stop_record;
 
 
     @BindView(R.id.bt_play)
@@ -48,36 +63,124 @@ public class AudioRecordActivity extends Activity {
     @BindView(R.id.bt_upload)
     public Button upload;
 
-    @OnClick(R.id.bt_begin_or_pause)
-    public void beginOrPauseClick() {
+    @OnClick(R.id.bt_pause_play)
+    public void pauseClick() {
 
-        if (Status.IDEL == nowStus) {
-            /**
-             * 开始录音
-             */
-            nowStus = Status.RECORDING;
-            chronometer.setBase(SystemClock.elapsedRealtime());
-            chronometer.start();
-            begin_pause.setText("暂停");
-            doNewRecord();
+        if (Status.PLAYING != nowStus) {
+            toast("当前未在播放");
+            return;
+        }
 
-        } else if (Status.RECORDING == nowStus) {
-            chronometer.stop();
-            nowStus = Status.PAUSE;
+        if (mMediaPlayer != null) {
+            mMediaPlayer.pause();
 
-            doRecordPause();
+            nowStus = Status.PAUSE_PLAYING;
 
-
-        } else if (Status.PAUSE == nowStus) {
-            chronometer.start();
-            begin_pause.setText("录音");
-            nowStus = Status.RECORDING;
-
-            doAddRecord();
         }
 
     }
 
+    @OnClick(R.id.bt_play)
+    public void playClick() {
+
+        if (Status.RECORDING == nowStus) {
+            toast("录音未停止");
+            return;
+
+        }
+
+        if (Status.RECORD_STOP == nowStus) {
+
+            mMediaPlayer = new MediaPlayer();
+
+            try {
+                mMediaPlayer.setDataSource(newFile.getPath());
+                mMediaPlayer.prepare();
+
+                nowStus = Status.PLAYING;
+                mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        mMediaPlayer.start();
+                    }
+                });
+            } catch (IOException e) {
+                Log.e(TAG, "prepare() failed");
+            }
+        } else if (Status.PAUSE_PLAYING == nowStus) {
+
+            if (mMediaPlayer != null) {
+                mMediaPlayer.start();
+            }
+        }
+
+    }
+
+
+    @OnClick(R.id.bt_stop_record)
+    public void stopRecord() {
+
+        if (nowStus != Status.RECORDING) {
+            toast("未开始录音");
+            return;
+        }
+
+        chronometer.stop();
+
+        nowStus = Status.RECORD_STOP;
+
+        doRecordStop();
+    }
+
+
+    @OnClick(R.id.bt_upload)
+    public void uploadRecord() {
+
+        if (nowStus == Status.RECORDING) {
+            toast("未停止录音");
+            return;
+        }
+
+        if (mMediaPlayer != null) {
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.stop();
+            }
+        }
+
+        /**
+         * 上传录音
+         */
+
+//        http://ineutech.com:60003/xiaobao/api/uploadVoice
+
+
+        RequestBody requestFile = RequestBody.create(MediaType.parse("audio/*"), newFile);
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("imageFile", newFile.getName(), requestFile);
+
+
+//
+//        String descriptionString = "This is a description";
+//        RequestBody description =
+//                RequestBody.create(
+//                        MediaType.parse("multipart/form-data"), descriptionString);
+//
+//        Call<ResponseBody> call = service.upload(description, body);
+//        call.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call,
+//                                   Response<ResponseBody> response) {
+//                System.out.println("success");
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                t.printStackTrace();
+//            }
+    }
+
+
+    @Deprecated
     private void doRecordPause() {
 
         Intent intent = new Intent(this, RecordingService.class);
@@ -100,6 +203,9 @@ public class AudioRecordActivity extends Activity {
 
     private void doNewRecord() {
 
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
+
         recordItem.setFileName(System.currentTimeMillis() + "");
 
         recordItem.setRootFilePath(Environment.getExternalStorageDirectory() + "/SoundRecorder/" + recordItem.getFileName());
@@ -107,10 +213,14 @@ public class AudioRecordActivity extends Activity {
          * 建立一个临时文件夹
          */
         File folder = new File(recordItem.getRootFilePath());
+
+        Log.i(TAG, "root file :" + folder);
         if (folder.exists()) {
             folder.delete();
         }
-        folder.mkdir();
+        folder.mkdirs();
+
+        Log.i(TAG, "root file :" + folder.exists());
 
         Intent intent = new Intent(this, RecordingService.class);
 
@@ -120,6 +230,7 @@ public class AudioRecordActivity extends Activity {
         startService(intent);
 
     }
+
 
     private void doAddRecord() {
 
@@ -135,42 +246,6 @@ public class AudioRecordActivity extends Activity {
     }
 
 
-    @OnClick(R.id.bt_stop)
-    public void stopRecord() {
-
-        if (nowStus == Status.IDEL) {
-            toast("未开始录音");
-            return;
-        }
-
-        chronometer.stop();
-
-        nowStus = Status.IDEL;
-        begin_pause.setText("录音");
-
-        doRecordStop();
-    }
-
-    @OnClick(R.id.bt_play)
-    public void playRecord() {
-
-        if (nowStus != Status.IDEL) {
-            toast("未停止录音");
-            return;
-        }
-
-    }
-
-
-    @OnClick(R.id.bt_upload)
-    public void uploadRecord() {
-
-        if (nowStus != Status.IDEL) {
-            toast("未停止录音");
-            return;
-        }
-    }
-
     private void toast(String msg) {
 
         Toast.makeText(AudioRecordActivity.this, msg, Toast.LENGTH_SHORT).show();
@@ -178,7 +253,7 @@ public class AudioRecordActivity extends Activity {
 
 
     public enum Status {
-        IDEL, RECORDING, PAUSE;
+        PLAYING, PAUSE_PLAYING, RECORDING, RECORDING_PAUSE, RECORD_STOP, UPLOADING;
     }
 
 
@@ -193,7 +268,9 @@ public class AudioRecordActivity extends Activity {
 
         EventBus.getDefault().register(this);
 
-        nowStus = Status.IDEL;
+        nowStus = Status.RECORDING;//默认进入后开始录音
+
+        doNewRecord();
 
 
     }
@@ -212,10 +289,56 @@ public class AudioRecordActivity extends Activity {
             Toast.makeText(this, "正在保存录音", Toast.LENGTH_LONG).show();
             //文件合并
 
+            newFile = new File(event.getRootFilePath(), event.getFileName() + ".amr");
 
-//            CommonUtils.amrFileAppend();
+            File mp3File = new File(event.getRootFilePath(), event.getFileName() + ".mp3");
+            File root = new File(event.getRootFilePath());
 
+            List<File> listv = new ArrayList<>();
+
+            for (int i = 1; i <= event.getFileCount(); i++) {
+                File child = new File(root, event.getFileName() + "_" + i + ".amr");
+
+                listv.add(child);
+            }
+
+
+            CommonUtils.amrFileAppend(newFile, listv);
+
+
+            CommonUtils.deleteFiles(listv);
+
+
+            //please set your file
+            Mp3Converter.init(44100, 1, 0, 44100, 96, 7);
+            fileSize = newFile.length();
+            new Thread(() -> Mp3Converter.convertMp3(newFile.getPath(), mp3File.getPath())).start();
+
+            handler.postDelayed(runnable, 500);
         }
+
+
     }
+
+    long fileSize;
+    long bytes = 0;
+
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            bytes = Mp3Converter.getConvertBytes();
+            float progress = (100f * bytes / fileSize);
+            if (bytes == -1) {
+                progress = 100;
+            }
+            Log.i(TAG, "convert progress: " + progress);
+            if (handler != null && progress < 100) {
+                handler.postDelayed(this, 1000);
+            } else {
+                Log.i(TAG, "!!!");
+            }
+        }
+    };
 
 }

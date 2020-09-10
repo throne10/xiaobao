@@ -70,15 +70,17 @@ public class RecordingService extends Service {
 
     @Override
     public void onDestroy() {
-//        if (mRecorder != null) {
-//            stopRecording();
-//        }
+        if (mRecorder != null) {
+            stopRecording();
+        }
         super.onDestroy();
     }
 
     public void startRecording(RecordItem item) {
 
         this.item = item;
+
+        Log.i(LOG_TAG, "item :" + item.toString());
         setFileNameAndPath();
 
         mRecorder = new MediaRecorder();

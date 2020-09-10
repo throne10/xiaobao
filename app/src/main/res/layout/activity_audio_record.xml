@@ -121,18 +121,18 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/bt_begin_or_pause"
+            android:id="@+id/bt_pause_play"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="50dp"
             android:layout_weight="1"
             android:background="@drawable/button"
-            android:text="录音"
+            android:text="暂停"
             android:textColor="@color/color_text_white" />
 
 
         <Button
-            android:id="@+id/bt_stop"
+            android:id="@+id/bt_stop_record"
             android:layout_width="0dp"
 
             android:layout_height="wrap_content"

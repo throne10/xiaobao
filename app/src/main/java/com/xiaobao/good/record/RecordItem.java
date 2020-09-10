@@ -81,4 +81,14 @@ public class RecordItem implements Parcelable {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "RecordItem{" +
+                "fileName='" + fileName + '\'' +
+                ", fileCount=" + fileCount +
+                ", rootFilePath='" + rootFilePath + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

@@ -93,4 +93,19 @@ public class CommonUtils {
 
     }
 
+    public static void deleteFiles(List<File> list) {
+
+
+        for (File f : list) {
+
+            try {
+                if (f != null && f.exists()) {
+                    f.delete();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
