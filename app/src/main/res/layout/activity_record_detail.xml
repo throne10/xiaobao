@@ -48,7 +48,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="云端录音"
-            android:textColor="#ffffff"
+            android:textColor="@color/color_yellow"
             android:textSize="20sp" />
 
         <TextView
