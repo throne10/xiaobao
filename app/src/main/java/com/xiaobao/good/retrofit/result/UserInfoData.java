@@ -38,8 +38,8 @@ public class UserInfoData {
 
     public class LoginUserData {
 
-        @SerializedName("employee")
-        private String employee;
+        @SerializedName("employee_id")
+        private int employee_id;
 
         @SerializedName("employee_login")
         private String employee_login;
@@ -58,12 +58,12 @@ public class UserInfoData {
         @SerializedName("role")
         private String role;
 
-        public String getEmployee() {
-            return employee;
+        public int getEmployee_id() {
+            return employee_id;
         }
 
-        public void setEmployee(String employee) {
-            this.employee = employee;
+        public void setEmployee_id(int employee_id) {
+            this.employee_id = employee_id;
         }
 
         public String getEmployee_login() {
@@ -117,7 +117,7 @@ public class UserInfoData {
         @Override
         public String toString() {
             return "LoginUserData{" +
-                    "employee='" + employee + '\'' +
+                    "employee_id='" + employee_id + '\'' +
                     ", employee_login='" + employee_login + '\'' +
                     ", employee_name='" + employee_name + '\'' +
                     ", employee_phone='" + employee_phone + '\'' +

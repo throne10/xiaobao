@@ -7,19 +7,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.xiaobao.good.ClientActivity;
 import com.xiaobao.good.R;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.Clients;
+import com.xiaobao.good.schedule.ScheduleActivity;
 import com.xiaobao.good.ui.recycler.model.ItemClient;
 import com.xiaobao.good.ui.recycler.provider.ItemClientProvider;
+import com.xiaobao.good.widget.SwipeRecyclerView;
 import com.xiaobao.good.widget.recyclerview.LoadMoreFooterModel;
 import com.xiaobao.good.widget.recyclerview.LoadMoreFooterViewHolderProvider;
 import com.xiaobao.good.widget.recyclerview.OnClickByViewIdListener;
 import com.xiaobao.good.widget.recyclerview.RecyclerAdapter;
-import com.xiaobao.good.widget.SwipeRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +44,8 @@ public class ClientFragment extends Fragment
         implements LoadMoreFooterModel.LoadMoreListener,
                 OnClickByViewIdListener,
                 SwipeRefreshLayout.OnRefreshListener,
-                SwipeRecyclerView.OnRightClickListener {
+                SwipeRecyclerView.OnRightClickListener,
+                SwipeRecyclerView.OnItemClickListener {
 
     private static final String TAG = "fragment_CF";
 
@@ -129,6 +133,7 @@ public class ClientFragment extends Fragment
         mAdapter.setOnClickByViewIdListener(this);
         srlRefresh.setOnRefreshListener(this);
         rvRecyclerView.setRightClickListener(this);
+        rvRecyclerView.setItemListener(this);
     }
 
     private void getClients() {
@@ -224,8 +229,20 @@ public class ClientFragment extends Fragment
                     // 请求成功时回调
                     @Override
                     public void onResponse(Call<Clients> call, Response<Clients> response) {
-                        LogUtil.i(TAG, response.body().getData() + "");
-                        getClients();
+                        try {
+                            LogUtil.d(TAG, response.body().getData().toString() + "");
+                        } catch (Exception e) {
+                            LogUtil.e(TAG, "deleteClient Exception : " + e.toString());
+                        }
+                        if (response.isSuccessful()) {
+                            getClients();
+                        } else {
+                            Toast.makeText(
+                                            getActivity(),
+                                            "删除失败：" + response.message(),
+                                            Toast.LENGTH_SHORT)
+                                    .show();
+                        }
                     }
 
                     // 请求失败时候的回调
@@ -234,5 +251,14 @@ public class ClientFragment extends Fragment
                         LogUtil.i(TAG, "连接失败");
                     }
                 });
+    }
+
+    @Override
+    public void onItemClick(int position, String id) {
+        LogUtil.d(TAG, "onItemClick:" + position);
+        Intent intent = new Intent(getActivity(), ScheduleActivity.class);
+        Gson gson = new Gson();
+        intent.putExtra("ClientBean", gson.toJson(dataBean.getClients().get(position)));
+        getActivity().startActivity(intent);
     }
 }

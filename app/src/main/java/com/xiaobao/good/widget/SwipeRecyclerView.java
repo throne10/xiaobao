@@ -14,6 +14,7 @@ import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.xiaobao.good.R;
+import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.widget.recyclerview.RecyclerViewHolder;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class SwipeRecyclerView extends RecyclerView {
 
-    private static final String TAG = "RecycleView";
+    private static final String TAG = "Client_SRV";
     private int maxLength, mTouchSlop;
     private int xDown, yDown, xMove, yMove;
     /** 当前选中的item索引（这个很重要） */
@@ -44,10 +45,17 @@ public class SwipeRecyclerView extends RecyclerView {
     private Context mContext;
 
     /** 删除的监听事件 */
+    private OnItemClickListener mItemListener;
+
+    /** 删除的监听事件 */
     private OnRightClickListener mRightListener;
 
     public void setRightClickListener(OnRightClickListener listener) {
         this.mRightListener = listener;
+    }
+
+    public void setItemListener(OnItemClickListener mItemListener) {
+        this.mItemListener = mItemListener;
     }
 
     public SwipeRecyclerView(Context context) {
@@ -123,11 +131,13 @@ public class SwipeRecyclerView extends RecyclerView {
                                 if (mRightListener != null) {
                                     // 删除
                                     mRightListener.onRightClick(curSelectPosition, "");
+                                    scrollRight(mCurItemLayout, 0 - mMoveWidth);
+                                    mMoveWidth = 0;
                                 }
                             });
 
                     // 这里将删除按钮的宽度设为可以移动的距离
-                    mHiddenWidth = mLlHidden.getWidth();
+                    mHiddenWidth = mItemDelete.getWidth();
                 }
                 break;
 
@@ -158,8 +168,18 @@ public class SwipeRecyclerView extends RecyclerView {
                 break;
             case MotionEvent.ACTION_UP: // 手抬起时
                 int scrollX = mCurItemLayout.getScrollX();
-
-                if (mHiddenWidth > mMoveWidth) {
+                LogUtil.d(
+                        TAG,
+                        "xMove:"
+                                + xMove
+                                + ",xDown:"
+                                + xDown
+                                + ",Math.abs(xMove - xDown):"
+                                + Math.abs(xMove - xDown));
+                if (Math.abs(xMove - xDown) <= 10) {
+                    LogUtil.d(TAG, "onItemClick");
+                    mItemListener.onItemClick(curSelectPosition, "");
+                } else if (mHiddenWidth > mMoveWidth) {
                     int toX = (mHiddenWidth - mMoveWidth);
                     if (scrollX > mHiddenWidth / 2) { // 超过一半长度时松开，则自动滑到左侧
                         scrollLeft(mCurItemLayout, toX);
@@ -199,5 +219,9 @@ public class SwipeRecyclerView extends RecyclerView {
 
     public interface OnRightClickListener {
         void onRightClick(int position, String id);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position, String id);
     }
 }

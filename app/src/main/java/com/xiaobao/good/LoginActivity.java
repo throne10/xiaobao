@@ -110,9 +110,6 @@ public class LoginActivity extends AppCompatActivity {
                                 UserInfoData.LoginUserData loginUserData = UserSp.getInstances().getUser();
                                 LogUtil.i(TAG, "read from sp:" + loginUserData.toString());
 
-
-
-
                             } catch (Exception e) {
                                 LogUtil.e(TAG, "read from sp e:" + e);
                             }

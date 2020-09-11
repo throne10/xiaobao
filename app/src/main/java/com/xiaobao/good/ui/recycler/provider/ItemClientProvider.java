@@ -42,14 +42,5 @@ public class ItemClientProvider extends ViewHolderProvider<ItemClient, RecyclerV
         } else if ("C".equalsIgnoreCase(type)) {
             tvType.setTextColor(Color.GREEN);
         }
-        viewHolder
-                .getConvertView()
-                .setOnClickListener(
-                        view -> {
-                            Intent intent = new Intent(context, ScheduleActivity.class);
-                            Gson gson = new Gson();
-                            intent.putExtra("ClientBean", gson.toJson(itemClient.clientsBean));
-                            context.startActivity(intent);
-                        });
     }
 }

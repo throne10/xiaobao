@@ -9,15 +9,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.gson.Gson;
 import com.xiaobao.good.common.DateUtil;
 import com.xiaobao.good.common.StringUtils;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.Clients;
+import com.xiaobao.good.retrofit.result.UserInfoData;
+import com.xiaobao.good.sp.UserSp;
 import com.xiaobao.good.widget.CalendarView;
 
 import java.io.IOException;
@@ -27,6 +26,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -245,7 +246,8 @@ public class ClientActivity extends AppCompatActivity {
             call.enqueue(
                     new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        public void onResponse(
+                                Call<ResponseBody> call, Response<ResponseBody> response) {
                             try {
                                 LogUtil.d(TAG, "response : " + response.body().string());
                             } catch (IOException e) {
@@ -254,23 +256,23 @@ public class ClientActivity extends AppCompatActivity {
                             if (response.isSuccessful()) {
                                 if (intentClientBean == null) {
                                     Toast.makeText(
-                                            getApplicationContext(),
-                                            "添加客户成功",
-                                            Toast.LENGTH_SHORT)
+                                                    getApplicationContext(),
+                                                    "添加客户成功",
+                                                    Toast.LENGTH_SHORT)
                                             .show();
                                 } else {
                                     Toast.makeText(
-                                            getApplicationContext(),
-                                            "修改客户成功",
-                                            Toast.LENGTH_SHORT)
+                                                    getApplicationContext(),
+                                                    "修改客户成功",
+                                                    Toast.LENGTH_SHORT)
                                             .show();
                                 }
                                 finish();
                             } else {
                                 Toast.makeText(
-                                        getApplicationContext(),
-                                        "接口请求失败",
-                                        Toast.LENGTH_SHORT)
+                                                getApplicationContext(),
+                                                "接口请求失败",
+                                                Toast.LENGTH_SHORT)
                                         .show();
                                 finish();
                             }
@@ -297,8 +299,14 @@ public class ClientActivity extends AppCompatActivity {
         setContentView(R.layout.activity_client);
         ButterKnife.bind(this);
 
+        UserInfoData.LoginUserData loginUserData = UserSp.getInstances().getUser();
+
         gson = new Gson();
         cacheClientBean = new Clients.DataBean.ClientsBean();
+        cacheClientBean.setEmployee_id(4);
+        if (loginUserData != null && loginUserData.getEmployee_id() != 0) {
+            cacheClientBean.setEmployee_id(loginUserData.getEmployee_id());
+        }
         String strClientBean = getIntent().getStringExtra("ClientBean");
         if (StringUtils.isEmpty(strClientBean)) {
             tvTitle.setText("新增客户");
@@ -309,9 +317,7 @@ public class ClientActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * 有客户信息传递过来时，显示已有的客户信息
-     */
+    /** 有客户信息传递过来时，显示已有的客户信息 */
     private void initClientInfo() {
         etName.setText(intentClientBean.getClient_name());
         etPhone.setText(intentClientBean.getClient_phone());
@@ -350,9 +356,9 @@ public class ClientActivity extends AppCompatActivity {
         etJob.setText(intentClientBean.getClient_job());
     }
 
-    private String year = "2000";
-    private String month = "10";
-    private String day = "1";
+    private int year = 2000;
+    private int month = 10;
+    private int day = 1;
     private long birthdayLong;
 
     public void myCalendar() {
@@ -375,32 +381,88 @@ public class ClientActivity extends AppCompatActivity {
         // 定义滚动选择器的数据项（年月日的）
         ArrayList<String> gradeYear = new ArrayList<>();
         ArrayList<String> gradeMonth = new ArrayList<>();
-        ArrayList<String> gradeDay = new ArrayList<>();
+        ArrayList<String> gradeDay28 = new ArrayList<>();
+        ArrayList<String> gradeDay29 = new ArrayList<>();
+        ArrayList<String> gradeDay30 = new ArrayList<>();
+        ArrayList<String> gradeDay31 = new ArrayList<>();
 
         // 为数据项赋值
-        int thisYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(new java.util.Date()));
+        int thisYear = Integer.parseInt(new SimpleDateFormat("YYYY").format(new java.util.Date()));
         for (int i = 1980; i <= thisYear; i++) // 从1980到今年
-            gradeYear.add(i + "");
+        gradeYear.add(i + "");
         for (int i = 1; i <= 12; i++) // 1月到12月
-            gradeMonth.add(i + "");
+        gradeMonth.add(i + "");
+        for (int i = 1; i <= 28; i++) // 1日到28日
+        gradeDay28.add(i + "");
+        for (int i = 1; i <= 29; i++) // 1日到29日
+        gradeDay29.add(i + "");
+        for (int i = 1; i <= 30; i++) // 1日到30日
+        gradeDay30.add(i + "");
         for (int i = 1; i <= 31; i++) // 1日到31日
-            gradeDay.add(i + "");
+        gradeDay31.add(i + "");
 
         // 为滚动选择器设置数据
         calendarView1.setData(gradeYear);
         calendarView2.setData(gradeMonth);
-        calendarView3.setData(gradeDay);
+        calendarView3.setData(gradeDay31);
 
         // 滚动选择事件
-        calendarView1.setOnSelectListener(data -> year = data);
-        calendarView2.setOnSelectListener(data -> month = data);
-        calendarView3.setOnSelectListener(data -> day = data);
+        calendarView1.setOnSelectListener(
+                data -> {
+                    if (StringUtils.isNumeric(data)) {
+                        year = Integer.parseInt(data);
+                        if (month == 2) {
+                            if (year % 4 == 0) {
+                                calendarView3.setData(gradeDay29);
+                            } else {
+                                calendarView3.setData(gradeDay28);
+                            }
+                        }
+                    }
+                });
+        calendarView2.setOnSelectListener(
+                data -> {
+                    if (StringUtils.isNumeric(data)) {
+                        month = Integer.parseInt(data);
+                        if (month == 2) {
+                            if (year % 4 == 0) {
+                                calendarView3.setData(gradeDay29);
+                            } else {
+                                calendarView3.setData(gradeDay28);
+                            }
+                        } else if (month == 1
+                                || month == 3
+                                || month == 5
+                                || month == 7
+                                || month == 8
+                                || month == 10
+                                || month == 12) {
+                            calendarView3.setData(gradeDay31);
+                        } else {
+                            calendarView3.setData(gradeDay30);
+                        }
+                    }
+                });
+        calendarView3.setOnSelectListener(
+                data -> {
+                    if (StringUtils.isNumeric(data)) {
+                        day = Integer.parseInt(data);
+                    }
+                });
 
         // 对话框的确定按钮
         builder.setPositiveButton(
                 "确定",
                 (dialog, which) -> {
-                    tvBirth.setText(year + "-" + month + "-" + day);
+                    String m = "" + month;
+                    if (month < 10) {
+                        m = "0" + month;
+                    }
+                    String d = "" + day;
+                    if (day < 10) {
+                        d = "0" + month;
+                    }
+                    tvBirth.setText(year + "-" + m + "-" + d);
                     birthDayToLong();
                 });
         // 对话框的取消按钮
@@ -411,7 +473,7 @@ public class ClientActivity extends AppCompatActivity {
 
     private void birthDayToLong() {
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
-        calendar.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+        calendar.set(year, month, day);
         birthdayLong = calendar.getTimeInMillis();
         cacheClientBean.setClient_birthday(birthdayLong);
     }
