@@ -50,8 +50,7 @@ public class RecordingService extends Service {
             notifyRecordActivity("stop");
         } else if (intent.hasExtra("pause")) {
             Log.i(LOG_TAG, "pause");
-
-            stopRecording();
+            pauseRecord();
             notifyRecordActivity("pause");
         }
 
@@ -77,7 +76,7 @@ public class RecordingService extends Service {
         this.item = item;
         audioRecorder.setMp3Path(item.getRootFilePath());
         Log.i(LOG_TAG, "item :" + item.toString());
-        setFileNameAndPath();
+        mFileName = item.getFileName() + ".pcm";
         try {
             if (audioRecorder.getStatus() == AudioRecorder.Status.STATUS_NO_READY) {
                 //初始化录音
@@ -91,9 +90,9 @@ public class RecordingService extends Service {
 
     }
 
-    public void setFileNameAndPath() {
-        mFileName = item.getFileName() + ".pcm";
-        Log.i(LOG_TAG, "file name :" + mFileName);
+
+    public void pauseRecord() {
+        audioRecorder.pauseRecord();
     }
 
     public void stopRecording() {
