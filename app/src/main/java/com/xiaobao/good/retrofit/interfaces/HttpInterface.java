@@ -32,10 +32,10 @@ public interface HttpInterface {
     Call<WechatRecord> getWechatRecord(@Body MultipartBody imgs); // 获取微信聊天记录
 
     @POST("client")
-    Call<Clients.DataBean.ClientsBean> postClient(@Body Clients.DataBean.ClientsBean clientInfo); // 新增客户信息
+    Call<ResponseBody> postClient(@Body Clients.DataBean.ClientsBean clientInfo); // 新增客户信息
 
     @PUT("client")
-    Call<Clients.DataBean.ClientsBean> putClient(@Body Clients.DataBean.ClientsBean clientInfo); // 修改客户信息
+    Call<ResponseBody> putClient(@Body Clients.DataBean.ClientsBean clientInfo); // 修改客户信息
 
     @DELETE("client")
     Call<Clients> deleteClient(@Query("client_id") int id); // 删除客户信息

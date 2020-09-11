@@ -651,6 +651,34 @@ public class Clients {
             private int employee_id;
             private String employee_name;
 
+            @Override
+            public String toString() {
+                return "ClientsBean{" +
+                        "age=" + age +
+                        ", client_address='" + client_address + '\'' +
+                        ", client_area=" + client_area +
+                        ", client_birthday=" + client_birthday +
+                        ", client_car='" + client_car + '\'' +
+                        ", client_cname=" + client_cname +
+                        ", client_email=" + client_email +
+                        ", client_house='" + client_house + '\'' +
+                        ", client_id=" + client_id +
+                        ", client_idcard='" + client_idcard + '\'' +
+                        ", client_income=" + client_income +
+                        ", client_job='" + client_job + '\'' +
+                        ", client_keep=" + client_keep +
+                        ", client_label='" + client_label + '\'' +
+                        ", client_marriage='" + client_marriage + '\'' +
+                        ", client_name='" + client_name + '\'' +
+                        ", client_origin=" + client_origin +
+                        ", client_phone='" + client_phone + '\'' +
+                        ", client_sex='" + client_sex + '\'' +
+                        ", client_type='" + client_type + '\'' +
+                        ", employee_id=" + employee_id +
+                        ", employee_name='" + employee_name + '\'' +
+                        '}';
+            }
+
             public int getAge() {
                 return age;
             }

@@ -9,6 +9,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.gson.Gson;
 import com.xiaobao.good.common.DateUtil;
 import com.xiaobao.good.common.StringUtils;
@@ -17,18 +20,18 @@ import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.Clients;
 import com.xiaobao.good.widget.CalendarView;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -232,35 +235,49 @@ public class ClientActivity extends AppCompatActivity {
     @OnClick(R.id.tv_save)
     public void save(TextView tvSave) {
         try {
-            Call<Clients.DataBean.ClientsBean> call;
+            Call<ResponseBody> call;
+            LogUtil.d(TAG, "cacheClientBean : " + cacheClientBean);
             if (intentClientBean == null) {
                 call = RetrofitUtils.getService().postClient(cacheClientBean);
             } else {
                 call = RetrofitUtils.getService().putClient(cacheClientBean);
             }
             call.enqueue(
-                    new Callback<Clients.DataBean.ClientsBean>() {
+                    new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<Clients.DataBean.ClientsBean> call, Response<Clients.DataBean.ClientsBean> response) {
-                            LogUtil.d(TAG, "response : " + response.message());
-                            if (intentClientBean == null) {
-                                Toast.makeText(
-                                                getApplicationContext(),
-                                                "添加客户成功",
-                                                Toast.LENGTH_SHORT)
-                                        .show();
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            try {
+                                LogUtil.d(TAG, "response : " + response.body().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (response.isSuccessful()) {
+                                if (intentClientBean == null) {
+                                    Toast.makeText(
+                                            getApplicationContext(),
+                                            "添加客户成功",
+                                            Toast.LENGTH_SHORT)
+                                            .show();
+                                } else {
+                                    Toast.makeText(
+                                            getApplicationContext(),
+                                            "修改客户成功",
+                                            Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                                finish();
                             } else {
                                 Toast.makeText(
-                                                getApplicationContext(),
-                                                "修改客户成功",
-                                                Toast.LENGTH_SHORT)
+                                        getApplicationContext(),
+                                        "接口请求失败",
+                                        Toast.LENGTH_SHORT)
                                         .show();
+                                finish();
                             }
-                            finish();
                         }
 
                         @Override
-                        public void onFailure(Call<Clients.DataBean.ClientsBean> call, Throwable t) {
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                             LogUtil.i(TAG, "fail re:" + t.getMessage());
                         }
@@ -292,7 +309,9 @@ public class ClientActivity extends AppCompatActivity {
         }
     }
 
-    /** 有客户信息传递过来时，显示已有的客户信息 */
+    /**
+     * 有客户信息传递过来时，显示已有的客户信息
+     */
     private void initClientInfo() {
         etName.setText(intentClientBean.getClient_name());
         etPhone.setText(intentClientBean.getClient_phone());
@@ -361,11 +380,11 @@ public class ClientActivity extends AppCompatActivity {
         // 为数据项赋值
         int thisYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(new java.util.Date()));
         for (int i = 1980; i <= thisYear; i++) // 从1980到今年
-        gradeYear.add(i + "");
+            gradeYear.add(i + "");
         for (int i = 1; i <= 12; i++) // 1月到12月
-        gradeMonth.add(i + "");
+            gradeMonth.add(i + "");
         for (int i = 1; i <= 31; i++) // 1日到31日
-        gradeDay.add(i + "");
+            gradeDay.add(i + "");
 
         // 为滚动选择器设置数据
         calendarView1.setData(gradeYear);
