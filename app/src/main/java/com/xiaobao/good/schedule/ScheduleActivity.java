@@ -8,9 +8,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
 import com.xiaobao.good.R;
+import com.xiaobao.good.common.StringUtils;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
+import com.xiaobao.good.retrofit.result.Clients;
 import com.xiaobao.good.sign.SignInActivity;
 import com.xiaobao.good.wechat.WechatRecordActivity;
 
@@ -27,12 +30,16 @@ import retrofit2.Response;
 public class ScheduleActivity extends Activity {
     @BindView(R.id.lv_time_line)
     ListView listTimeLine;
+
     @BindView(R.id.bt_add_schedule)
     Button btAddSchedule;
+
     @BindView(R.id.iv_wechat)
     ImageView ivWechat;
+
     @BindView(R.id.bt_back)
     Button btBack;
+
     private Context context;
     private String TAG = "X_ScheduleActivity";
     private List<VisitRecords.DataBean.RecordsBean> recordsBeans;
@@ -40,12 +47,9 @@ public class ScheduleActivity extends Activity {
     @OnItemClick(R.id.lv_time_line)
     public void timeLineClick(int p) {
         VisitRecords.DataBean.RecordsBean s = recordsBeans.get(p);
-        if (s.getPurpose().equals("展业")) {
-        }
-        if (s.getPurpose().equals("送礼品")) {
-        }
-        if (s.getPurpose().equals("递送保单")) {
-        }
+        if (s.getPurpose().equals("展业")) {}
+        if (s.getPurpose().equals("送礼品")) {}
+        if (s.getPurpose().equals("递送保单")) {}
         if (s.getPurpose().equals("微信聊天")) {
             Intent i = new Intent(context, WechatRecordActivity.class);
             i.putExtra("visitId", s.getVisit_id());
@@ -70,9 +74,16 @@ public class ScheduleActivity extends Activity {
         context.startActivity(i);
     }
 
+    private Clients.DataBean.ClientsBean intentClient;
+
     @Override
     protected void onResume() {
         super.onResume();
+        Gson gson = new Gson();
+        String strClientBean = getIntent().getStringExtra("ClientBean");
+        if (StringUtils.isNotEmpty(strClientBean)) {
+            intentClient = gson.fromJson(strClientBean, Clients.DataBean.ClientsBean.class);
+        }
         getVisitRecords();
     }
 
@@ -87,20 +98,20 @@ public class ScheduleActivity extends Activity {
     private void getVisitRecords() {
         Call<VisitRecords> visitRecordsCall = RetrofitUtils.getService().getVisit(4);
 
-        visitRecordsCall.enqueue(new Callback<VisitRecords>() {
-            @Override
-            public void onResponse(Call<VisitRecords> call, Response<VisitRecords> response) {
-                if (response.isSuccessful()) {
-                    recordsBeans = response.body().getData().getRecords();
-                    LogUtil.i(TAG, "recordsBeans>>>>" + recordsBeans);
-                    listTimeLine.setAdapter(new TimeLineAdapter(recordsBeans));
-                }
-            }
+        visitRecordsCall.enqueue(
+                new Callback<VisitRecords>() {
+                    @Override
+                    public void onResponse(
+                            Call<VisitRecords> call, Response<VisitRecords> response) {
+                        if (response.isSuccessful()) {
+                            recordsBeans = response.body().getData().getRecords();
+                            LogUtil.i(TAG, "recordsBeans>>>>" + recordsBeans);
+                            listTimeLine.setAdapter(new TimeLineAdapter(recordsBeans));
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<VisitRecords> call, Throwable t) {
-
-            }
-        });
+                    @Override
+                    public void onFailure(Call<VisitRecords> call, Throwable t) {}
+                });
     }
 }

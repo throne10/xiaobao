@@ -19,14 +19,15 @@ import com.xiaobao.good.widget.recyclerview.LoadMoreFooterModel;
 import com.xiaobao.good.widget.recyclerview.LoadMoreFooterViewHolderProvider;
 import com.xiaobao.good.widget.recyclerview.OnClickByViewIdListener;
 import com.xiaobao.good.widget.recyclerview.RecyclerAdapter;
+import com.xiaobao.good.widget.SwipeRecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +40,8 @@ import retrofit2.Response;
 public class ClientFragment extends Fragment
         implements LoadMoreFooterModel.LoadMoreListener,
                 OnClickByViewIdListener,
-                SwipeRefreshLayout.OnRefreshListener {
+                SwipeRefreshLayout.OnRefreshListener,
+                SwipeRecyclerView.OnRightClickListener {
 
     private static final String TAG = "fragment_CF";
 
@@ -72,7 +74,7 @@ public class ClientFragment extends Fragment
     SwipeRefreshLayout srlRefresh;
 
     @BindView(R.id.recyclerView)
-    RecyclerView rvRecyclerView;
+    SwipeRecyclerView rvRecyclerView;
 
     private Unbinder unbinder;
     private RecyclerAdapter mAdapter;
@@ -86,6 +88,7 @@ public class ClientFragment extends Fragment
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
+        LogUtil.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.client_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -99,11 +102,11 @@ public class ClientFragment extends Fragment
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+        LogUtil.d(TAG, "onViewCreated");
         initViews();
         registerModel();
         initEvent();
+        getClients();
     }
 
     private void initViews() {
@@ -125,6 +128,7 @@ public class ClientFragment extends Fragment
         mLoadMoreFooterModel.setLoadMoreListener(this);
         mAdapter.setOnClickByViewIdListener(this);
         srlRefresh.setOnRefreshListener(this);
+        rvRecyclerView.setRightClickListener(this);
     }
 
     private void getClients() {
@@ -134,12 +138,13 @@ public class ClientFragment extends Fragment
                     // 请求成功时回调
                     @Override
                     public void onResponse(Call<Clients> call, Response<Clients> response) {
+                        LogUtil.i(TAG, response.body().getData() + "");
                         mAdapter.clearData();
+                        itemList = null;
+                        itemList = new ArrayList<>();
                         dataBean = response.body().getData();
                         dataFilter();
                         initData();
-                        // 请求处理,输出结果
-                        LogUtil.i(TAG, response.body().getData() + "");
                     }
 
                     // 请求失败时候的回调
@@ -152,6 +157,8 @@ public class ClientFragment extends Fragment
 
     private void initData() {
         Clients.DataBean.LatestRecordsBean client = dataBean.getLatestRecords();
+        tvVisitCount.setText(String.valueOf(dataBean.getTotalNum()));
+        tvMouthVisitCount.setText(String.valueOf(dataBean.getCurMonthNum()));
         tvLastVisitClient.setText(client.getClient().getClient_name());
         tvLastVisitTime.setText(client.getVisit_time());
         tvVisitTarget.setText(client.getPurpose());
@@ -184,6 +191,7 @@ public class ClientFragment extends Fragment
                                 mAdapter.addData(itemList);
                                 mAdapter.addFooter(mLoadMoreFooterModel);
                             }
+                            srlRefresh.setRefreshing(false);
                         });
     }
 
@@ -202,5 +210,29 @@ public class ClientFragment extends Fragment
     @Override
     public void onRefresh() {
         getClients();
+    }
+
+    @Override
+    public void onRightClick(int position, String id) {
+        deleteItem(dataBean.getClients().get(position));
+    }
+
+    public void deleteItem(Clients.DataBean.ClientsBean bean) {
+        Call<Clients> mResponseBody = RetrofitUtils.getService().deleteClient(bean.getClient_id());
+        mResponseBody.enqueue(
+                new Callback<Clients>() {
+                    // 请求成功时回调
+                    @Override
+                    public void onResponse(Call<Clients> call, Response<Clients> response) {
+                        LogUtil.i(TAG, response.body().getData() + "");
+                        getClients();
+                    }
+
+                    // 请求失败时候的回调
+                    @Override
+                    public void onFailure(Call<Clients> call, Throwable throwable) {
+                        LogUtil.i(TAG, "连接失败");
+                    }
+                });
     }
 }

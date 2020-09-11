@@ -46,6 +46,10 @@ public class BaseActivity extends AppCompatActivity {
         ivClient.setImageDrawable(costumSelected);
         tvMine.setTextColor(colorWhite);
         ivMine.setImageDrawable(mineUnselected);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, mClientFragment)
+                .commitNow();
     }
 
     @BindView(R.id.tv_mine)
@@ -71,10 +75,7 @@ public class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mClientFragment = new ClientFragment();
         if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, mClientFragment)
-                    .commitNow();
+            selectClient();
         }
     }
 }

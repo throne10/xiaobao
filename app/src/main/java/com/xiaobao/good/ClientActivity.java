@@ -2,6 +2,9 @@ package com.xiaobao.good;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,9 +15,15 @@ import com.xiaobao.good.common.StringUtils;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.Clients;
+import com.xiaobao.good.widget.CalendarView;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,12 +97,12 @@ public class ClientActivity extends AppCompatActivity {
         cacheClientBean.setClient_idcard(s.toString());
     }
 
-    @BindView(R.id.tv_birth)
+    @BindView(R.id.et_birth)
     TextView tvBirth;
 
-    @OnClick(R.id.tv_birth)
+    @OnClick(R.id.et_birth)
     public void selectBirthDay() {
-        // TODO select date
+        myCalendar();
     }
 
     @BindView(R.id.et_income)
@@ -224,7 +233,7 @@ public class ClientActivity extends AppCompatActivity {
     public void save(TextView tvSave) {
         try {
             String clientInfo = gson.toJson(cacheClientBean);
-
+            LogUtil.d(TAG, "clientInfo : " + clientInfo);
             Call<Clients> call;
             if (intentClientBean == null) {
                 call = RetrofitUtils.getService().postClient(clientInfo);
@@ -235,6 +244,7 @@ public class ClientActivity extends AppCompatActivity {
                     new Callback<Clients>() {
                         @Override
                         public void onResponse(Call<Clients> call, Response<Clients> response) {
+                            LogUtil.d(TAG, "response : " + response.message());
                             if (intentClientBean == null) {
                                 Toast.makeText(
                                                 getApplicationContext(),
@@ -248,7 +258,6 @@ public class ClientActivity extends AppCompatActivity {
                                                 Toast.LENGTH_SHORT)
                                         .show();
                             }
-                            LogUtil.i(TAG, "response > " + response.body().getData() + "");
                             finish();
                         }
 
@@ -263,8 +272,8 @@ public class ClientActivity extends AppCompatActivity {
         }
     }
 
-    private Clients.DataBean.LatestRecordsBean.ClientBean intentClientBean;
-    private Clients.DataBean.LatestRecordsBean.ClientBean cacheClientBean;
+    private Clients.DataBean.ClientsBean intentClientBean;
+    private Clients.DataBean.ClientsBean cacheClientBean;
     private Gson gson;
 
     @Override
@@ -274,14 +283,12 @@ public class ClientActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         gson = new Gson();
-        cacheClientBean = new Clients.DataBean.LatestRecordsBean.ClientBean();
+        cacheClientBean = new Clients.DataBean.ClientsBean();
         String strClientBean = getIntent().getStringExtra("ClientBean");
         if (StringUtils.isEmpty(strClientBean)) {
             tvTitle.setText("新增客户");
         } else {
-            intentClientBean =
-                    gson.fromJson(
-                            strClientBean, Clients.DataBean.LatestRecordsBean.ClientBean.class);
+            intentClientBean = gson.fromJson(strClientBean, Clients.DataBean.ClientsBean.class);
             tvTitle.setText("信息修改");
             initClientInfo();
         }
@@ -324,5 +331,71 @@ public class ClientActivity extends AppCompatActivity {
             selectLevelC();
         }
         etJob.setText(intentClientBean.getClient_job());
+    }
+
+    private String year = "2000";
+    private String month = "10";
+    private String day = "1";
+    private long birthdayLong;
+
+    public void myCalendar() {
+        // 初始化对话框             R.style.CalendarDialog 是自定义的弹框主题，在styles设置
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CalendarDialog);
+        // 初始化自定义布局参数
+        LayoutInflater layoutInflater = getLayoutInflater();
+        // 绑定布局
+        View customLayout =
+                layoutInflater.inflate(
+                        R.layout.view_slide_calendar, (ViewGroup) findViewById(R.id.customDialog));
+        // 为对话框设置视图
+        builder.setView(customLayout);
+
+        // 加载年月日的三个 CalendarView 的 id
+        CalendarView calendarView1 = (CalendarView) customLayout.findViewById(R.id.year);
+        CalendarView calendarView2 = (CalendarView) customLayout.findViewById(R.id.month);
+        CalendarView calendarView3 = (CalendarView) customLayout.findViewById(R.id.day);
+
+        // 定义滚动选择器的数据项（年月日的）
+        ArrayList<String> gradeYear = new ArrayList<>();
+        ArrayList<String> gradeMonth = new ArrayList<>();
+        ArrayList<String> gradeDay = new ArrayList<>();
+
+        // 为数据项赋值
+        int thisYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(new java.util.Date()));
+        for (int i = 1980; i <= thisYear; i++) // 从1980到今年
+        gradeYear.add(i + "");
+        for (int i = 1; i <= 12; i++) // 1月到12月
+        gradeMonth.add(i + "");
+        for (int i = 1; i <= 31; i++) // 1日到31日
+        gradeDay.add(i + "");
+
+        // 为滚动选择器设置数据
+        calendarView1.setData(gradeYear);
+        calendarView2.setData(gradeMonth);
+        calendarView3.setData(gradeDay);
+
+        // 滚动选择事件
+        calendarView1.setOnSelectListener(data -> year = data);
+        calendarView2.setOnSelectListener(data -> month = data);
+        calendarView3.setOnSelectListener(data -> day = data);
+
+        // 对话框的确定按钮
+        builder.setPositiveButton(
+                "确定",
+                (dialog, which) -> {
+                    tvBirth.setText(year + "-" + month + "-" + day);
+                    birthDayToLong();
+                });
+        // 对话框的取消按钮
+        builder.setNegativeButton("取消", null);
+        // 显示对话框
+        builder.show();
+    }
+
+    private void birthDayToLong() {
+        Calendar calendar = Calendar.getInstance(Locale.CHINA);
+        calendar.set(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+        birthdayLong = calendar.getTimeInMillis();
+        cacheClientBean.setClient_birthday(birthdayLong);
     }
 }

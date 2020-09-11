@@ -2,8 +2,10 @@ package com.xiaobao.good.ui.recycler.provider;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
+import android.graphics.Color;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.xiaobao.good.R;
 import com.xiaobao.good.schedule.ScheduleActivity;
 import com.xiaobao.good.ui.recycler.model.ItemClient;
@@ -30,11 +32,23 @@ public class ItemClientProvider extends ViewHolderProvider<ItemClient, RecyclerV
     public void onBindViewHolder(
             ItemClient itemClient, RecyclerViewHolder viewHolder, int position) {
         viewHolder.setTVText(R.id.tv_name, itemClient.clientsBean.getClient_name());
+        String type = itemClient.clientsBean.getClient_type();
+        viewHolder.setTVText(R.id.tv_type, type);
+        TextView tvType = viewHolder.getViewById(R.id.tv_type);
+        if ("A".equalsIgnoreCase(type)) {
+            tvType.setTextColor(Color.BLUE);
+        } else if ("P".equalsIgnoreCase(type)) {
+            tvType.setTextColor(Color.YELLOW);
+        } else if ("C".equalsIgnoreCase(type)) {
+            tvType.setTextColor(Color.GREEN);
+        }
         viewHolder
                 .getConvertView()
                 .setOnClickListener(
                         view -> {
                             Intent intent = new Intent(context, ScheduleActivity.class);
+                            Gson gson = new Gson();
+                            intent.putExtra("ClientBean", gson.toJson(itemClient.clientsBean));
                             context.startActivity(intent);
                         });
     }

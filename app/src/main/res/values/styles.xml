@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CalendarDialog" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
 </resources>
