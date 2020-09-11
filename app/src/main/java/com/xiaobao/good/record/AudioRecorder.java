@@ -265,6 +265,12 @@ public class AudioRecorder {
         }
     }
 
+    /**
+     * 可支持多文件合并，暂停录音，但现在应该不需要，只读文件0
+     *
+     * @param filePaths
+     */
+
     private void PCMFilesToMp3ile(final List<String> filePaths) {
         new Thread(new Runnable() {
             @Override
@@ -274,26 +280,23 @@ public class AudioRecorder {
                 Log.i("AudioRecorder", "pcmName>>>" + pcmName + "   mp3file>>>" + mp3file);
                 Mp3Converter.init(44100, 1, 1, 22050, 128 * 1024, 0);
                 new Thread(() -> Mp3Converter.convertMp3(pcmName, mp3file)).start();
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        while (true) {
-                            long bytes = Mp3Converter.getConvertBytes();
-                            Log.i("AudioRecorder", "convert bytes>>>" + bytes);
-                            if (bytes == -1) {
-                                Log.i("AudioRecorder", "convert progress100");
-                                clearFiles(filePaths);
-                                RecordItem item = new RecordItem();
-                                item.setStatus("finish");
-                                EventBus.getDefault().post(
-                                        item);
-                                break;
-                            }
-                            try {
-                                Thread.sleep(1000L);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                Runnable runnable = () -> {
+                    while (true) {
+                        long bytes = Mp3Converter.getConvertBytes();
+                        Log.i("AudioRecorder", "convert bytes>>>" + bytes);
+                        if (bytes == -1) {
+                            Log.i("AudioRecorder", "convert progress 100");
+                            clearFiles(filePaths);
+                            RecordItem item = new RecordItem();
+                            item.setStatus("finish");
+                            EventBus.getDefault().post(
+                                    item);
+                            break;
+                        }
+                        try {
+                            Thread.sleep(1000L);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
                 };
