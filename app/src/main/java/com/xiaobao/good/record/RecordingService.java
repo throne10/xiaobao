@@ -2,16 +2,11 @@ package com.xiaobao.good.record;
 
 import android.app.Service;
 import android.content.Intent;
-import android.media.MediaRecorder;
-import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.TimerTask;
 
 /**
  * 录音的 Service
@@ -19,16 +14,17 @@ import java.util.TimerTask;
 
 public class RecordingService extends Service {
 
-    private static final String LOG_TAG = "RecordingService";
+    private static final String LOG_TAG = "X_RecordingService";
 
     private String mFileName = null;
     private String mFilePath = null;
 
-    private MediaRecorder mRecorder = null;
+//    private MediaRecorder mRecorder = null;
+
+    private AudioRecorder audioRecorder;
 
     private long mStartingTimeMillis = 0;
     private long mElapsedMillis = 0;
-    private TimerTask mIncrementTimerTask = null;
 
     private RecordItem item;
 
@@ -40,6 +36,7 @@ public class RecordingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        audioRecorder = AudioRecorder.getInstance();
     }
 
     @Override
@@ -70,69 +67,45 @@ public class RecordingService extends Service {
 
     @Override
     public void onDestroy() {
-        if (mRecorder != null) {
-            stopRecording();
+        if (audioRecorder != null) {
+            audioRecorder.release();
         }
         super.onDestroy();
     }
 
     public void startRecording(RecordItem item) {
-
         this.item = item;
-
+        audioRecorder.setMp3Path(item.getRootFilePath());
         Log.i(LOG_TAG, "item :" + item.toString());
         setFileNameAndPath();
-
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
-        mRecorder.setOutputFile(mFilePath);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        mRecorder.setAudioChannels(1);
-        mRecorder.setAudioSamplingRate(44100);
-        mRecorder.setAudioEncodingBitRate(192000);
-
         try {
-            mRecorder.prepare();
-            mRecorder.start();
-            mStartingTimeMillis = System.currentTimeMillis();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
+            if (audioRecorder.getStatus() == AudioRecorder.Status.STATUS_NO_READY) {
+                //初始化录音
+                audioRecorder.createDefaultAudio(mFileName);
+                audioRecorder.startRecord(null);
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+        mStartingTimeMillis = System.currentTimeMillis();
+
     }
 
     public void setFileNameAndPath() {
-        int count = 0;
-        File f;
-
-        do {
-            count++;
-            mFileName = item.getFileName() + "_" + item.getFileCount() + ".amr";
-            mFilePath = item.getRootFilePath();
-            mFilePath += ("/" + mFileName);
-            f = new File(mFilePath);
-
-            Log.i(LOG_TAG, "file path :" + mFilePath);
-
-        } while (f.exists() && !f.isDirectory());
+        mFileName = item.getFileName() + ".pcm";
+        Log.i(LOG_TAG, "file name :" + mFileName);
     }
 
     public void stopRecording() {
-        mRecorder.stop();
+        audioRecorder.stopRecord();
         mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
-        mRecorder.release();
 
         getSharedPreferences("sp_name_audio", MODE_PRIVATE)
                 .edit()
                 .putString("audio_path", mFilePath)
                 .putLong("elpased", mElapsedMillis)
                 .apply();
-        if (mIncrementTimerTask != null) {
-            mIncrementTimerTask.cancel();
-            mIncrementTimerTask = null;
-        }
 
-        mRecorder = null;
     }
 
 }

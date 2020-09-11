@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Button;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.xiaobao.good.common.CommonUtils;
 import com.xiaobao.good.record.RecordItem;
 import com.xiaobao.good.record.RecordingService;
 
@@ -24,20 +22,17 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jaygoo.library.converter.Mp3Converter;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class AudioRecordActivity extends Activity {
 
-    private static String TAG = "AudioRecordActivity";
+    private static String TAG = "X_AudioRecordActivity";
 
     private RecordItem recordItem = new RecordItem();
 
@@ -288,57 +283,11 @@ public class AudioRecordActivity extends Activity {
         if ("stop".equals(event.getStatus())) {
             Toast.makeText(this, "正在保存录音", Toast.LENGTH_LONG).show();
             //文件合并
-
-            newFile = new File(event.getRootFilePath(), event.getFileName() + ".amr");
-
-            File mp3File = new File(event.getRootFilePath(), event.getFileName() + ".mp3");
-            File root = new File(event.getRootFilePath());
-
-            List<File> listv = new ArrayList<>();
-
-            for (int i = 1; i <= event.getFileCount(); i++) {
-                File child = new File(root, event.getFileName() + "_" + i + ".amr");
-
-                listv.add(child);
-            }
-
-
-            CommonUtils.amrFileAppend(newFile, listv);
-
-
-            CommonUtils.deleteFiles(listv);
-
-
-            //please set your file
-            Mp3Converter.init(44100, 1, 0, 44100, 96, 7);
-            fileSize = newFile.length();
-            new Thread(() -> Mp3Converter.convertMp3(newFile.getPath(), mp3File.getPath())).start();
-
-            handler.postDelayed(runnable, 500);
         }
-
+        if ("finish".equals(event.getStatus())) {
+            Toast.makeText(this, "文件保存完成>>>>" + recordItem.getRootFilePath() + "/" + recordItem.getFileName() + ".mp3", Toast.LENGTH_LONG).show();
+        }
 
     }
-
-    long fileSize;
-    long bytes = 0;
-
-    Handler handler = new Handler();
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            bytes = Mp3Converter.getConvertBytes();
-            float progress = (100f * bytes / fileSize);
-            if (bytes == -1) {
-                progress = 100;
-            }
-            Log.i(TAG, "convert progress: " + progress);
-            if (handler != null && progress < 100) {
-                handler.postDelayed(this, 1000);
-            } else {
-                Log.i(TAG, "!!!");
-            }
-        }
-    };
 
 }
