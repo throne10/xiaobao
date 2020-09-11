@@ -9,7 +9,6 @@ import com.xiaobao.good.sign.VisitResult;
 import com.xiaobao.good.wechat.WeChatResult;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -33,10 +32,10 @@ public interface HttpInterface {
     Call<WechatRecord> getWechatRecord(@Body MultipartBody imgs); // 获取微信聊天记录
 
     @POST("client")
-    Call<Clients> postClient(@Query("clientInfo") String clientInfo); // 新增客户信息
+    Call<Clients.DataBean.ClientsBean> postClient(@Body Clients.DataBean.ClientsBean clientInfo); // 新增客户信息
 
     @PUT("client")
-    Call<Clients> putClient(@Query("clientInfo") String clientInfo); // 修改客户信息
+    Call<Clients.DataBean.ClientsBean> putClient(@Body Clients.DataBean.ClientsBean clientInfo); // 修改客户信息
 
     @DELETE("client")
     Call<Clients> deleteClient(@Query("client_id") int id); // 删除客户信息

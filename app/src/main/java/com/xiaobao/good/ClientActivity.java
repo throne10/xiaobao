@@ -232,18 +232,16 @@ public class ClientActivity extends AppCompatActivity {
     @OnClick(R.id.tv_save)
     public void save(TextView tvSave) {
         try {
-            String clientInfo = gson.toJson(cacheClientBean);
-            LogUtil.d(TAG, "clientInfo : " + clientInfo);
-            Call<Clients> call;
+            Call<Clients.DataBean.ClientsBean> call;
             if (intentClientBean == null) {
-                call = RetrofitUtils.getService().postClient(clientInfo);
+                call = RetrofitUtils.getService().postClient(cacheClientBean);
             } else {
-                call = RetrofitUtils.getService().putClient(clientInfo);
+                call = RetrofitUtils.getService().putClient(cacheClientBean);
             }
             call.enqueue(
-                    new Callback<Clients>() {
+                    new Callback<Clients.DataBean.ClientsBean>() {
                         @Override
-                        public void onResponse(Call<Clients> call, Response<Clients> response) {
+                        public void onResponse(Call<Clients.DataBean.ClientsBean> call, Response<Clients.DataBean.ClientsBean> response) {
                             LogUtil.d(TAG, "response : " + response.message());
                             if (intentClientBean == null) {
                                 Toast.makeText(
@@ -262,7 +260,7 @@ public class ClientActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<Clients> call, Throwable t) {
+                        public void onFailure(Call<Clients.DataBean.ClientsBean> call, Throwable t) {
 
                             LogUtil.i(TAG, "fail re:" + t.getMessage());
                         }
