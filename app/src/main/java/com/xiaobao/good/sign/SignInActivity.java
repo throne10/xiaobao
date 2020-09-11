@@ -43,6 +43,7 @@ public class SignInActivity extends Activity {
     private boolean isSign = false;
     private String purpose = "展业";
     private int visitId;
+    private String name = "unknown";
 
     @OnClick(R.id.bt_back)
     public void back() {
@@ -96,6 +97,7 @@ public class SignInActivity extends Activity {
             Intent i = new Intent(context, AudioRecordActivity.class);
             i.putExtra("location", addr);
             i.putExtra("visitId", visitId);
+            i.putExtra("name", name);
             context.startActivity(i);
             if (StringUtils.isEmpty(addr)) {
                 Toast.makeText(context, "定位失败，请查看gps是否打开", Toast.LENGTH_LONG).show();
@@ -110,7 +112,7 @@ public class SignInActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign);
         context = this;
-
+        name = getIntent().getStringExtra("name");
         EventBus.getDefault().register(this);
 
         ButterKnife.bind(this);

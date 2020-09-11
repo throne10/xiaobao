@@ -40,11 +40,13 @@
                 android:textSize="20sp" />
 
             <Button
+                android:id="@+id/bt_name"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:layout_below="@id/tv_client"
                 android:background="@drawable/button_empty"
                 android:gravity="center_vertical"
+                android:layout_centerInParent="true"
                 android:text="新闻"
                 android:textColor="@color/color_text_white"
                 android:textSize="20sp" />
@@ -80,9 +82,11 @@
                     android:id="@+id/tv_location_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="当前位置"
+                    android:layout_centerInParent="true"
+                    android:lines="1"
+                    android:text="当前位置当前位置当前位置当前位置当前位置当前位置当前位置当前位置当前位置"
                     android:textColor="@color/color_text_white"
-                    android:textSize="20sp" />
+                    android:textSize="14sp" />
 
                 <ImageView
                     android:layout_width="30dp"
