@@ -1,10 +1,12 @@
 package com.xiaobao.good;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -34,6 +36,9 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
     private TextView tv_online_record;
     private TextView tv_local_record;
 
+    ImageView iv_back;
+    ImageView iv_add;
+
     /**
      * 选中选项卡颜色
      */
@@ -44,12 +49,14 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
     private int deselectTextColor = Color.parseColor("#ffffff");
     private VisitRecords.DataBean.RecordsBean recordsBean;
 
+    private int visit_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_record_detail);
+
 
         //初始化Fragment数组
         pager = (ViewPager) this.findViewById(R.id.pager);
@@ -58,13 +65,18 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
         tv_online_record = this.findViewById(R.id.tv_online_record);
         tv_local_record = this.findViewById(R.id.tv_local_record);
 
+        iv_back = this.findViewById(R.id.iv_back);
+        iv_add = this.findViewById(R.id.iv_add);
+
+        iv_add.setOnClickListener(this);
+        iv_back.setOnClickListener(this);
         tv_online_record.setOnClickListener(this);
         tv_local_record.setOnClickListener(this);
         String s = getIntent().getStringExtra("date");
+        visit_id = getIntent().getIntExtra("visitId", -1);
 
         recordsBean = new Gson().fromJson(s, VisitRecords.DataBean.RecordsBean.class);
 
-        Log.i(TAG, "recordsBean>>>" + recordsBean.getVoices().get(0).getVoice_file());
         initViewPager(0);
 
 
@@ -116,6 +128,17 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
         RecordDetailItem recordDetailItem;
 
 
+        if (recordsBean != null) {
+            List<VisitRecords.DataBean.RecordsBean.VoicesBean> voicesList = recordsBean.getVoices();
+            for (VisitRecords.DataBean.RecordsBean.VoicesBean v : voicesList) {
+                recordDetailItem = new RecordDetailItem();
+                recordDetailItem.setType("0");
+                recordDetailItem.setFilePath("http://ineutech.com:60003/xiaobaovisit/visit_voice/" + v.getVoice_file());
+                recordDetailItem.setExtra(v.getVoice_id() + "");
+                itemList.add(recordDetailItem);
+            }
+        }
+
         for (RecordHistoryBean r : listBean) {
 
             recordDetailItem = new RecordDetailItem();
@@ -123,9 +146,7 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
             recordDetailItem.setFile_elpased(r.getFile_elpased());
             recordDetailItem.setType(r.getCloud() + "");
 
-            if (recordDetailItem.getType().equals("0")) {
-                itemList.add(recordDetailItem);
-            } else {
+            if (recordDetailItem.getType().equals("1")) {
                 itemList2.add(recordDetailItem);
             }
 
@@ -166,6 +187,16 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
             this.pager.setCurrentItem(0);
         } else if (id == R.id.tv_local_record) {
             this.pager.setCurrentItem(1);
+        } else if (id == R.id.iv_back) {
+            finish();
+        } else if (id == R.id.iv_add) {
+            try {
+                Intent intent = new Intent(AudioRecordDetailActivity.this, AudioRecordActivity.class);
+                intent.putExtra("visitId", visit_id);
+                startActivity(intent);
+            } catch (Exception e) {
+                Log.i(TAG, "add e:" + e);
+            }
         }
     }
 
