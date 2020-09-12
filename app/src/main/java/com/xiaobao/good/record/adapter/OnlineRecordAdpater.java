@@ -69,6 +69,8 @@ public class OnlineRecordAdpater extends BaseAdapter {
             holder.text = (TextView) convertView.findViewById(R.id.tv_record_name);
             holder.seekbar = (SeekBar) convertView.findViewById(R.id.seekbar);
 
+            holder.seekbar.setEnabled(false);
+
             holder.detailOrUpload = (Button) convertView.findViewById(R.id.bt_detail_or_upload);
             holder.play = (Button) convertView.findViewById(R.id.bt_play);
 
