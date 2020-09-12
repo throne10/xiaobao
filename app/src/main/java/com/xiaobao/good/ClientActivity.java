@@ -12,12 +12,15 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.xiaobao.good.common.DateUtil;
 import com.xiaobao.good.common.StringUtils;
+import com.xiaobao.good.common.eventbus.ClientUpdate;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.Clients;
 import com.xiaobao.good.retrofit.result.UserInfoData;
 import com.xiaobao.good.sp.UserSp;
 import com.xiaobao.good.widget.CalendarView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -225,7 +228,7 @@ public class ClientActivity extends AppCompatActivity {
 
     @OnTextChanged(value = R.id.et_job, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     void afterJobChanged(Editable s) {
-        cacheClientBean.setClient_address(s.toString());
+        cacheClientBean.setClient_job(s.toString());
     }
 
     @OnClick(R.id.tv_cancel)
@@ -267,6 +270,15 @@ public class ClientActivity extends AppCompatActivity {
                                                     Toast.LENGTH_SHORT)
                                             .show();
                                 }
+                                try {
+                                    Gson gson = new Gson();
+                                    String cacheClineStr = gson.toJson(cacheClientBean);
+                                    ClientUpdate clientUpdate =
+                                            new ClientUpdate(true, cacheClineStr);
+                                    EventBus.getDefault().post(clientUpdate);
+                                } catch (Exception e) {
+                                    LogUtil.e(TAG, "post clientUpdate e > " + e.toString());
+                                }
                                 finish();
                             } else {
                                 Toast.makeText(
@@ -304,7 +316,7 @@ public class ClientActivity extends AppCompatActivity {
         gson = new Gson();
         cacheClientBean = new Clients.DataBean.ClientsBean();
         cacheClientBean.setEmployee_id(4);
-        if (loginUserData != null && loginUserData.getEmployee_id() != 0) {
+        if (loginUserData != null) {
             cacheClientBean.setEmployee_id(loginUserData.getEmployee_id());
         }
         String strClientBean = getIntent().getStringExtra("ClientBean");
@@ -319,6 +331,14 @@ public class ClientActivity extends AppCompatActivity {
 
     /** 有客户信息传递过来时，显示已有的客户信息 */
     private void initClientInfo() {
+        cacheClientBean.setAge(intentClientBean.getAge());
+        cacheClientBean.setEmployee_name(intentClientBean.getEmployee_name());
+        cacheClientBean.setClient_id(intentClientBean.getClient_id());
+        cacheClientBean.setClient_origin(intentClientBean.getClient_origin());
+        cacheClientBean.setClient_cname(intentClientBean.getClient_cname());
+        cacheClientBean.setClient_keep(intentClientBean.getClient_keep());
+        cacheClientBean.setClient_area(intentClientBean.getClient_area());
+        cacheClientBean.setClient_email(intentClientBean.getClient_email());
         etName.setText(intentClientBean.getClient_name());
         etPhone.setText(intentClientBean.getClient_phone());
         etTag.setText(intentClientBean.getClient_label());

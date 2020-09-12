@@ -58,6 +58,7 @@
             android:layout_toRightOf="@id/iv_username"
             android:background="@android:color/transparent"
             android:hint="请输入用户名"
+            android:text="111"
             android:textColor="@color/color_text_white"
             android:textColorHint="@color/color_text_white" />
     </RelativeLayout>
@@ -85,16 +86,13 @@
 
         <EditText
             android:id="@+id/tv_pwd"
-
             android:layout_width="match_parent"
-
             android:layout_height="30dp"
-
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/iv_pwd"
-
             android:background="@android:color/transparent"
             android:hint="请输入密码"
+            android:text="123"
             android:textColor="@color/color_text_white"
             android:textColorHint="@color/color_text_white" />
     </RelativeLayout>

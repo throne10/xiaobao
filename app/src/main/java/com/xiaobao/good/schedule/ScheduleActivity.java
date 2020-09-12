@@ -13,13 +13,19 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xiaobao.good.AudioRecordDetailActivity;
+import com.xiaobao.good.ClientActivity;
 import com.xiaobao.good.R;
 import com.xiaobao.good.common.StringUtils;
+import com.xiaobao.good.common.eventbus.ClientUpdate;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.Clients;
 import com.xiaobao.good.sign.SignInActivity;
 import com.xiaobao.good.wechat.WechatRecordActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -32,6 +38,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ScheduleActivity extends Activity {
+
+    @OnClick(R.id.iv_head_img)
+    public void clickHead() {
+        if (StringUtils.isNotEmpty(strClientBean)) {
+            Intent intent = new Intent(getApplicationContext(), ClientActivity.class);
+            LogUtil.d(TAG, "clickHead ClientBean > " + strClientBean);
+            intent.putExtra("ClientBean", strClientBean);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "获取客户信息失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @BindView(R.id.lv_time_line)
     ListView listTimeLine;
 
@@ -61,7 +80,6 @@ public class ScheduleActivity extends Activity {
 
     @BindView(R.id.tv_client_label)
     TextView tvClientLabel;
-
 
     private Context context;
     private String TAG = "X_ScheduleActivity";
@@ -113,12 +131,16 @@ public class ScheduleActivity extends Activity {
     }
 
     private Clients.DataBean.ClientsBean intentClient;
+    private String strClientBean;
 
     @Override
     protected void onResume() {
         super.onResume();
+        initData();
+    }
+
+    private void initData() {
         Gson gson = new Gson();
-        String strClientBean = getIntent().getStringExtra("ClientBean");
         if (StringUtils.isNotEmpty(strClientBean)) {
             intentClient = gson.fromJson(strClientBean, Clients.DataBean.ClientsBean.class);
         }
@@ -136,10 +158,28 @@ public class ScheduleActivity extends Activity {
         setContentView(R.layout.activity_schedule);
         context = this;
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+        strClientBean = getIntent().getStringExtra("ClientBean");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onEvent(ClientUpdate clientUpdate) {
+        if (clientUpdate != null && clientUpdate.isUpdate()) {
+            strClientBean = clientUpdate.getClientInfo();
+            LogUtil.d(TAG, "strClientBean > " + strClientBean);
+        }
     }
 
     private void getVisitRecords() {
-        Call<VisitRecords> visitRecordsCall = RetrofitUtils.getService().getVisit(intentClient.getEmployee_id(), intentClient.getClient_id());
+        Call<VisitRecords> visitRecordsCall =
+                RetrofitUtils.getService()
+                        .getVisit(intentClient.getEmployee_id(), intentClient.getClient_id());
 
         visitRecordsCall.enqueue(
                 new Callback<VisitRecords>() {

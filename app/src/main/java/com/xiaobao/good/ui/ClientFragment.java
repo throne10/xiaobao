@@ -12,10 +12,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.xiaobao.good.ClientActivity;
 import com.xiaobao.good.R;
+import com.xiaobao.good.common.eventbus.ClientUpdate;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.Clients;
+import com.xiaobao.good.retrofit.result.UserInfoData;
 import com.xiaobao.good.schedule.ScheduleActivity;
+import com.xiaobao.good.sp.UserSp;
 import com.xiaobao.good.ui.recycler.model.ItemClient;
 import com.xiaobao.good.ui.recycler.provider.ItemClientProvider;
 import com.xiaobao.good.widget.SwipeRecyclerView;
@@ -23,6 +26,10 @@ import com.xiaobao.good.widget.recyclerview.LoadMoreFooterModel;
 import com.xiaobao.good.widget.recyclerview.LoadMoreFooterViewHolderProvider;
 import com.xiaobao.good.widget.recyclerview.OnClickByViewIdListener;
 import com.xiaobao.good.widget.recyclerview.RecyclerAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +102,7 @@ public class ClientFragment extends Fragment
         LogUtil.d(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.client_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
         return view;
     }
 
@@ -102,6 +110,7 @@ public class ClientFragment extends Fragment
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -137,7 +146,14 @@ public class ClientFragment extends Fragment
     }
 
     private void getClients() {
-        Call<Clients> mResponseBody = RetrofitUtils.getService().getClients("4");
+        UserInfoData.LoginUserData userInfoData = UserSp.getInstances().getUser();
+        LogUtil.d(TAG, "userInfoData > " + userInfoData.toString());
+        String employedId = "4";
+        if (userInfoData != null && userInfoData.getEmployee_id() != 0) {
+            employedId = String.valueOf(userInfoData.getEmployee_id());
+        }
+        LogUtil.d(TAG, "employedId > " + employedId);
+        Call<Clients> mResponseBody = RetrofitUtils.getService().getClients(employedId);
         mResponseBody.enqueue(
                 new Callback<Clients>() {
                     // 请求成功时回调
@@ -161,13 +177,17 @@ public class ClientFragment extends Fragment
     }
 
     private void initData() {
-        Clients.DataBean.LatestRecordsBean client = dataBean.getLatestRecords();
-        tvVisitCount.setText(String.valueOf(dataBean.getTotalNum()));
-        tvMouthVisitCount.setText(String.valueOf(dataBean.getCurMonthNum()));
-        tvLastVisitClient.setText(client.getClient().getClient_name());
-        tvLastVisitTime.setText(client.getVisit_time());
-        tvVisitTarget.setText(client.getPurpose());
-        tvVisitAddress.setText(client.getSign_address());
+        try {
+            Clients.DataBean.LatestRecordsBean client = dataBean.getLatestRecords();
+            tvVisitCount.setText(String.valueOf(dataBean.getTotalNum()));
+            tvMouthVisitCount.setText(String.valueOf(dataBean.getCurMonthNum()));
+            tvLastVisitClient.setText(client.getClient().getClient_name());
+            tvLastVisitTime.setText(client.getVisit_time());
+            tvVisitTarget.setText(client.getPurpose());
+            tvVisitAddress.setText(client.getSign_address());
+        } catch (Exception e) {
+            LogUtil.e(TAG, "initData e > " + e.toString());
+        }
     }
 
     private List<ItemClient> itemList;
@@ -187,15 +207,9 @@ public class ClientFragment extends Fragment
         getActivity()
                 .runOnUiThread(
                         () -> {
-                            if (itemList.size() < 10) {
-                                hasMore = false;
-                                mAdapter.addData(itemList);
-                                mAdapter.removeFooter(mLoadMoreFooterModel);
-                            } else if (itemList.size() >= 10) {
-                                hasMore = true;
-                                mAdapter.addData(itemList);
-                                mAdapter.addFooter(mLoadMoreFooterModel);
-                            }
+                            hasMore = false;
+                            mAdapter.addData(itemList);
+                            mAdapter.removeFooter(mLoadMoreFooterModel);
                             srlRefresh.setRefreshing(false);
                         });
     }
@@ -205,6 +219,13 @@ public class ClientFragment extends Fragment
         LogUtil.d(TAG, "onLoadMore hasMore : " + hasMore);
         if (hasMore) {
             mLoadMoreFooterModel.canLoadMore();
+            getClients();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onEvent(ClientUpdate clientUpdate) {
+        if (clientUpdate != null && clientUpdate.isUpdate()) {
             getClients();
         }
     }
@@ -255,10 +276,11 @@ public class ClientFragment extends Fragment
 
     @Override
     public void onItemClick(int position, String id) {
-        LogUtil.d(TAG, "onItemClick:" + position);
         Intent intent = new Intent(getActivity(), ScheduleActivity.class);
         Gson gson = new Gson();
-        intent.putExtra("ClientBean", gson.toJson(dataBean.getClients().get(position)));
+        String clientsBean = gson.toJson(dataBean.getClients().get(position));
+        LogUtil.d(TAG, "onItemClick ClientBean > " + clientsBean);
+        intent.putExtra("ClientBean", clientsBean);
         getActivity().startActivity(intent);
     }
 }

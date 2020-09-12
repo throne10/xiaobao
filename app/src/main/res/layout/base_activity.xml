@@ -9,11 +9,13 @@
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_bottom">
 
     </FrameLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
