@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -277,15 +278,14 @@ public class ClientActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     LogUtil.e(TAG, "post clientUpdate e > " + e.toString());
                                 }
-                                finish();
                             } else {
                                 Toast.makeText(
                                                 getApplicationContext(),
                                                 "接口请求失败",
                                                 Toast.LENGTH_SHORT)
                                         .show();
-                                finish();
                             }
+                            finish();
                         }
 
                         @Override
@@ -377,11 +377,10 @@ public class ClientActivity extends AppCompatActivity {
     private int year = 1980;
     private int month = 1;
     private int day = 1;
-    private long birthdayLong;
 
     public void myCalendar() {
         // 初始化对话框
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CalendarDialog);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog_Alert);
         // 初始化自定义布局参数
         LayoutInflater layoutInflater = getLayoutInflater();
         // 绑定布局
@@ -395,6 +394,8 @@ public class ClientActivity extends AppCompatActivity {
         CalendarView calendarView1 = (CalendarView) customLayout.findViewById(R.id.year);
         CalendarView calendarView2 = (CalendarView) customLayout.findViewById(R.id.month);
         CalendarView calendarView3 = (CalendarView) customLayout.findViewById(R.id.day);
+        RelativeLayout rlPositive = customLayout.findViewById(R.id.rl_dialog_positive);
+        RelativeLayout rlNegative = customLayout.findViewById(R.id.rl_dialog_negative);
 
         // 定义滚动选择器的数据项（年月日的）
         ArrayList<String> gradeYear = new ArrayList<>();
@@ -426,6 +427,37 @@ public class ClientActivity extends AppCompatActivity {
         calendarView1.setSelected(0);
         calendarView2.setSelected(0);
         calendarView3.setSelected(0);
+        String bStr = tvBirth.getText().toString();
+        if (StringUtils.isNotEmpty(bStr)) {
+            String[] split = bStr.split("-");
+            try {
+                calendarView1.setSelected(gradeYear.indexOf(split[0]));
+                year = Integer.parseInt(split[0]);
+                month = Integer.parseInt(split[1]);
+                calendarView2.setSelected(month - 1);
+                if (month == 2) {
+                    if (year % 4 == 0) {
+                        calendarView3.setData(gradeDay29);
+                    } else {
+                        calendarView3.setData(gradeDay28);
+                    }
+                } else if (month == 1
+                        || month == 3
+                        || month == 5
+                        || month == 7
+                        || month == 8
+                        || month == 10
+                        || month == 12) {
+                    calendarView3.setData(gradeDay31);
+                } else {
+                    calendarView3.setData(gradeDay30);
+                }
+                day = Integer.parseInt(split[2]);
+                calendarView3.setSelected(day - 1);
+            } catch (Exception e) {
+                LogUtil.e(TAG, "BirthSplit e > " + e.toString());
+            }
+        }
 
         // 滚动选择事件
         calendarView1.setOnSelectListener(
@@ -439,6 +471,7 @@ public class ClientActivity extends AppCompatActivity {
                                 calendarView3.setData(gradeDay28);
                             }
                         }
+                        calendarView3.setSelected(0);
                     }
                 });
         calendarView2.setOnSelectListener(
@@ -462,6 +495,7 @@ public class ClientActivity extends AppCompatActivity {
                         } else {
                             calendarView3.setData(gradeDay30);
                         }
+                        calendarView3.setSelected(0);
                     }
                 });
         calendarView3.setOnSelectListener(
@@ -491,14 +525,14 @@ public class ClientActivity extends AppCompatActivity {
         // 对话框的取消按钮
         builder.setNegativeButton("取消", null);
         // 显示对话框
+
         builder.show();
     }
 
     private void birthDayToLong(String birthDayStr) {
         Date date = DateUtil.StringToDate(birthDayStr, "yyyy-MM-dd");
         if (date != null) {
-            birthdayLong = date.getTime();
-            cacheClientBean.setClient_birthday(birthdayLong);
+            cacheClientBean.setClient_birthday(date.getTime());
         }
     }
 }
