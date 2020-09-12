@@ -115,17 +115,21 @@ public class AudioRecordActivity extends Activity {
     @OnClick(R.id.bt_play)
     public void playClick() {
 
+        Log.i(TAG, "click play :" + newFile.getPath() + ",,stauts :" + nowStus);
+
         if (Status.RECORDING == nowStus) {
             toast("录音未停止");
             return;
 
         }
 
-        if (Status.RECORD_STOP == nowStus) {
+        if (Status.RECORD_STOP == nowStus || Status.MP3DONE == nowStus) {
 
             mMediaPlayer = new MediaPlayer();
 
             try {
+
+                Log.i(TAG, "play :" + newFile.getPath());
                 mMediaPlayer.setDataSource(newFile.getPath());
                 mMediaPlayer.prepare();
 
@@ -223,7 +227,7 @@ public class AudioRecordActivity extends Activity {
                          */
 
                         RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
-                        testDao.updateCloudStatus(1, file.getPath());
+                        testDao.updateCloudStatus(0, file.getPath());
 
 
                         toast("提交成功");
@@ -333,19 +337,24 @@ public class AudioRecordActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_record);
         ButterKnife.bind(this);
-        String addr = getIntent().getStringExtra("location");
-        visitId = getIntent().getIntExtra("visitId", -1);
-        String name = getIntent().getStringExtra("name");
-//        if (StringUtils.isNotEmpty(addr)) {
-//            try {
-//                addr = addr.substring(addr.indexOf("省") + 1);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-        tvLocationData.setText(addr);
-        Log.i("yxd123", name);
-        btName.setText(name);
+
+        try {
+            String addr = "";
+            if (getIntent().hasExtra("location")) {
+
+                addr = getIntent().getStringExtra("location");
+            }
+
+            visitId = getIntent().getIntExtra("visitId", -1);
+
+            String name = getIntent().getStringExtra("name");
+
+            tvLocationData.setText(addr);
+            Log.i("yxd123", name);
+            btName.setText(name);
+        } catch (Exception e) {
+            Log.i(TAG, "oncreate e:" + e);
+        }
         EventBus.getDefault().
 
                 register(this);
@@ -380,7 +389,7 @@ public class AudioRecordActivity extends Activity {
                 RecordHistoryBean recordHistoryBean = new RecordHistoryBean();
 
                 recordHistoryBean.setClient_id(visitId);
-                recordHistoryBean.setCloud(0);
+                recordHistoryBean.setCloud(1);
                 recordHistoryBean.setFile_elpased(recordItem.getElpased());
 
 

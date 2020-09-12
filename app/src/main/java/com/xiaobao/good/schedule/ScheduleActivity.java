@@ -90,16 +90,29 @@ public class ScheduleActivity extends Activity {
         VisitRecords.DataBean.RecordsBean s = recordsBeans.get(p);
         if (s.getPurpose().equals("展业")) {
             Intent i = new Intent(context, AudioRecordDetailActivity.class);
-            i.putExtra("date",new Gson().toJson(recordsBeans.get(p)));
+            i.putExtra("visitId", s.getVisit_id());
+            i.putExtra("name", intentClient.getClient_name());
+
+
+            i.putExtra("date", new Gson().toJson(recordsBeans.get(p)));
             context.startActivity(i);
         }
         if (s.getPurpose().equals("送礼品")) {
+
             Intent i = new Intent(context, AudioRecordDetailActivity.class);
+            i.putExtra("name", intentClient.getClient_name());
+
+            i.putExtra("visitId", s.getVisit_id());
+
             i.putExtra("date", new Gson().toJson(recordsBeans.get(p)));
             context.startActivity(i);
         }
         if (s.getPurpose().equals("递送保单")) {
             Intent i = new Intent(context, AudioRecordDetailActivity.class);
+            i.putExtra("name", intentClient.getClient_name());
+
+            i.putExtra("visitId", s.getVisit_id());
+
             i.putExtra("date", new Gson().toJson(recordsBeans.get(p)));
             context.startActivity(i);
         }
