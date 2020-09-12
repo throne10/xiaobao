@@ -112,7 +112,10 @@ public class OnlineRecordAdpater extends BaseAdapter {
                          * 详情
                          */
 
+
                         Intent intent = new Intent(context, AudioRecordContentActivity.class);
+
+                        intent.putExtra("voiceId", Integer.parseInt(recordDetailItem.getExtra()));
                         /**
                          *传参
                          */
