@@ -84,10 +84,8 @@ public class AudioRecordActivity extends Activity {
 
     @OnClick(R.id.iv_back)
     public void back() {
-        if (nowStus == Status.RECORDING) {
+        if (!nowStus.can_be_close) {
             Toast.makeText(this, "请先处理完录音再退出！", Toast.LENGTH_LONG).show();
-        } else if (nowStus == Status.RECORD_STOP) {
-            Toast.makeText(this, "录音转码中请稍等！", Toast.LENGTH_LONG).show();
         } else {
             finish();
         }
@@ -98,17 +96,21 @@ public class AudioRecordActivity extends Activity {
     @OnClick(R.id.bt_pause_play)
     public void pauseClick() {
 
-
-        if (Status.PLAYING != nowStus) {
-            toast("当前未在播放");
+        if (Status.PAUSE_PLAYING == nowStus) {
+            toast("已经停止播放");
             return;
         }
 
-        if (mMediaPlayer != null) {
-            mMediaPlayer.pause();
 
-            nowStus = Status.PAUSE_PLAYING;
+        if (Status.PLAYING == nowStus) {
+            if (mMediaPlayer != null) {
+                mMediaPlayer.pause();
+                nowStus = Status.PAUSE_PLAYING;
 
+            }
+        } else {
+            toast("当前未在播放");
+            return;
         }
 
     }
@@ -116,15 +118,15 @@ public class AudioRecordActivity extends Activity {
     @OnClick(R.id.bt_play)
     public void playClick() {
 
-        Log.i(TAG, "click play :" + newFile.getPath() + ",,stauts :" + nowStus);
-
-        if (Status.RECORDING == nowStus) {
-            toast("录音未停止");
+        if (Status.PLAYING == nowStus) {
+            toast("正在播放");
             return;
-
         }
 
-        if (Status.RECORD_STOP == nowStus || Status.MP3DONE == nowStus) {
+        Log.i(TAG, "click play :" + newFile.getPath() + ",,stauts :" + nowStus);
+
+
+        if (Status.MP3DONE == nowStus) {
 
             mMediaPlayer = new MediaPlayer();
 
@@ -140,6 +142,15 @@ public class AudioRecordActivity extends Activity {
                     public void onPrepared(MediaPlayer mp) {
                         mMediaPlayer.start();
                     }
+
+                });
+
+                mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mMediaPlayer.release();
+                        nowStus = Status.MP3DONE;
+                    }
                 });
             } catch (IOException e) {
                 Log.e(TAG, "prepare() failed");
@@ -148,6 +159,14 @@ public class AudioRecordActivity extends Activity {
 
             if (mMediaPlayer != null) {
                 mMediaPlayer.start();
+                nowStus = Status.PLAYING;
+            }
+        } else {
+
+            if (Status.RECORDING == nowStus) {
+                toast("录音未停止");
+            } else if (Status.UPLOADING == nowStus) {
+                toast("正在提交，请稍等");
             }
         }
 
@@ -157,26 +176,48 @@ public class AudioRecordActivity extends Activity {
     @OnClick(R.id.bt_stop_record)
     public void stopRecord() {
 
-        if (nowStus != Status.RECORDING) {
-            toast("未开始录音");
+        if (Status.RECORD_STOP == nowStus) {
+            toast("已经停止录音");
             return;
         }
 
-        chronometer.stop();
+        if (nowStus == Status.RECORDING) {
 
-        nowStus = Status.RECORD_STOP;
+            chronometer.stop();
 
-        doRecordStop();
+            nowStus = Status.RECORD_STOP;
+
+            doRecordStop();
+        } else {
+            toast("未开始录音");
+            return;
+        }
     }
 
 
     @OnClick(R.id.bt_upload)
     public void uploadRecord() {
 
+        if (Status.UPLOADING == nowStus) {
+            toast("正在提交");
+            return;
+        }
+
         if (nowStus == Status.RECORDING) {
             toast("未停止录音");
             return;
         }
+
+        boolean re = false;
+        if (nowStus == Status.MP3DONE || nowStus == Status.PAUSE_PLAYING || nowStus == Status.PAUSE_PLAYING) {
+            re = true;
+        }
+
+        if (!re) {
+            toast("当前状态不能提交");
+            return;
+        }
+
 
         if (mMediaPlayer != null) {
             if (mMediaPlayer.isPlaying()) {
@@ -184,6 +225,7 @@ public class AudioRecordActivity extends Activity {
             }
         }
 
+
         /**
          * 上传录音
          */
@@ -191,13 +233,17 @@ public class AudioRecordActivity extends Activity {
         /**
          * 上传录音
          */
+
+        nowStus = Status.UPLOADING;
         MyAlertDialog myAlertDialog = new MyAlertDialog(this);
         myAlertDialog.setTitle("是否上传到云端");
+
 
         myAlertDialog.setCancelable(false);
         myAlertDialog.setPositiveButton("否", view -> {
 
             myAlertDialog.dismiss();
+            nowStus = Status.MP3DONE;
         });
         myAlertDialog.setNegativeButton("上传", view -> {
 
@@ -237,6 +283,8 @@ public class AudioRecordActivity extends Activity {
                         toast("上传失败");
                     }
 
+                    nowStus = Status.MP3DONE;
+
                 }
 
                 @Override
@@ -245,6 +293,8 @@ public class AudioRecordActivity extends Activity {
                         myAlertDialog.dismiss();
                     }
                     toast("上传失败");
+                    nowStus = Status.MP3DONE;
+
 
                 }
             });
@@ -253,17 +303,6 @@ public class AudioRecordActivity extends Activity {
 
     }
 
-
-    @Deprecated
-    private void doRecordPause() {
-
-        Intent intent = new Intent(this, RecordingService.class);
-
-        intent.putExtra("pause", true);
-
-        startService(intent);
-
-    }
 
     private void doRecordStop() {
 
@@ -327,19 +366,18 @@ public class AudioRecordActivity extends Activity {
 
 
     public enum Status {
-        PLAYING("播放"),
-        PAUSE_PLAYING("播放暂停"),
-        RECORDING("录音中"),
-        RECORDING_PAUSE("录音暂停"),
-        RECORD_STOP("录音停止"),
-        MP3DONE("MP3转码"),
-        UPLOADING("上传");
+        PLAYING(true),
+        PAUSE_PLAYING(true),
+        RECORDING(false),
+        RECORD_STOP(false),
+        MP3DONE(true),
+        UPLOADING(false);
 
 
-        String describe;
+        boolean can_be_close;
 
-        Status(String desribe) {
-            this.describe = desribe;
+        Status(boolean can_be_close) {
+            this.can_be_close = can_be_close;
         }
     }
 
