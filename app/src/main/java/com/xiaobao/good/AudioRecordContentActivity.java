@@ -13,6 +13,7 @@ import com.xiaobao.good.retrofit.result.VoiceContent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,6 +24,11 @@ public class AudioRecordContentActivity extends Activity {
 
     private int voiceId;
     private Context context;
+
+    @OnClick(R.id.bt_back)
+    public void back() {
+        finish();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

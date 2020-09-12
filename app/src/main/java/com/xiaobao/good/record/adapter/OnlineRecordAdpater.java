@@ -48,6 +48,14 @@ public class OnlineRecordAdpater extends BaseAdapter {
     private Handler mHandler = new Handler();
     int selectItem = -1;
 
+    public int getSelectItem() {
+        return selectItem;
+    }
+
+    public void setSelectItem(int selectItem) {
+        this.selectItem = selectItem;
+    }
+
     int visitId;
 
     public OnlineRecordAdpater(Context context, List<RecordDetailItem> list, int visitId) {
@@ -73,163 +81,149 @@ public class OnlineRecordAdpater extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
+        View view;
         ViewHolder holder;
         RecordDetailItem recordDetailItem = list.get(position);
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.layout_record_detail_item, null);
+            view = LayoutInflater.from(context).inflate(R.layout.layout_record_detail_item, null);
             holder = new ViewHolder();
 
-            holder.showArea = convertView.findViewById(R.id.ll_showArea);
-            holder.text = (TextView) convertView.findViewById(R.id.tv_record_name);
-            holder.seekbar = (SeekBar) convertView.findViewById(R.id.seekbar);
+            holder.showArea = view.findViewById(R.id.ll_showArea);
+            holder.text = (TextView) view.findViewById(R.id.tv_record_name);
+            holder.seekbar = (SeekBar) view.findViewById(R.id.seekbar);
 
             holder.seekbar.setEnabled(false);
 
-            holder.detailOrUpload = (Button) convertView.findViewById(R.id.bt_detail_or_upload);
-            holder.play = (Button) convertView.findViewById(R.id.bt_play);
+            holder.detailOrUpload = (Button) view.findViewById(R.id.bt_detail_or_upload);
+            holder.play = (Button) view.findViewById(R.id.bt_play);
 
 
-            holder.rl_btshow = convertView.findViewById(R.id.rl_btshow);
-            holder.rl_seekShow = convertView.findViewById(R.id.rl_seekShow);
+            holder.rl_btshow = view.findViewById(R.id.rl_btshow);
+            holder.rl_seekShow = view.findViewById(R.id.rl_seekShow);
 
-            holder.current_progress_text_view = convertView.findViewById(R.id.current_progress_text_view);
-            holder.file_length_text_view = convertView.findViewById(R.id.file_length_text_view);
-
-
-//            holder.seekbar.setEnabled(false);
+            holder.current_progress_text_view = view.findViewById(R.id.current_progress_text_view);
+            holder.file_length_text_view = view.findViewById(R.id.file_length_text_view);
 
 
-            holder.text.setText(recordDetailItem.getFilePath());
-            String typeMsg = recordDetailItem.getType().equals("0") ? "详情" : "上传";
-            holder.detailOrUpload.setText(typeMsg);
-
-
-            holder.showArea.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    selectItem = position;
-                    notifyDataSetChanged(); //必须
-                }
-            });
-
-            holder.detailOrUpload.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    /**
-                     * 根据type,展示详情，还是上传
-                     */
-
-                    if (recordDetailItem.getType().equals("0")) {
-                        /**
-                         * 详情
-                         */
-
-
-                        Intent intent = new Intent(context, AudioRecordContentActivity.class);
-
-                        intent.putExtra("voiceId", Integer.parseInt(recordDetailItem.getExtra()));
-                        /**
-                         *传参
-                         */
-                        context.startActivity(intent);
-                    } else {
-
-                        File file = new File(recordDetailItem.getFilePath());
-
-                        Log.i(TAG, "file :" + file);
-                        Log.i(TAG, "visit_id :" + visitId);
-
-                        RequestBody fileRQ = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                        MultipartBody.Part part = MultipartBody.Part.createFormData("picture", file.getName(), fileRQ);
-
-                        RequestBody body = new MultipartBody.Builder()
-                                .addFormDataPart("visit_id", visitId + "")
-                                .addFormDataPart("voiceFile", file.getName(), fileRQ)
-                                .build();
-                        Call<RecordUploadResult> uploadCall = RetrofitUtils.getService().uploadVoice(body);
-                        uploadCall.enqueue(new Callback<RecordUploadResult>() {
-                            @Override
-                            public void onResponse(Call<RecordUploadResult> call, Response<RecordUploadResult> response) {
-
-                                Log.i(TAG, "recordupload :" + response.body().getCode());
-                                String code = response.body().getCode();
-
-                                if ("success".equals(code)) {
-                                    /**
-                                     * 更新录音详情
-                                     */
-
-                                    RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
-                                    testDao.updateCloudStatus(1, file.getPath());
-
-
-                                    toast("提交成功");
-
-                                } else {
-                                    toast("上传失败");
-                                }
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<RecordUploadResult> call, Throwable t) {
-                                toast("上传失败");
-
-                            }
-                        });
-                    }
-
-
-                }
-            });
-
-
-            holder.play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                    mMediaPlayer = new MediaPlayer();
-
-                    try {
-                        mMediaPlayer.setDataSource(recordDetailItem.getFilePath());
-                        mMediaPlayer.prepare();
-                        Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
-                        holder.seekbar.setMax(mMediaPlayer.getDuration());
-
-
-                        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mp) {
-                                mMediaPlayer.start();
-                            }
-                        });
-                    } catch (IOException e) {
-                        Log.e(TAG, "prepare() failed");
-                    }
-
-                    mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            stopPlaying(holder);
-                        }
-                    });
-
-                    mRunnable = new MyRunnable(holder);
-
-                    mHandler.postDelayed(mRunnable, 1000);
-
-                }
-            });
-            convertView.setTag(holder);
+            view.setTag(holder);
         } else {
-            holder = (ViewHolder) convertView.getTag();
+            view = convertView;
+            holder = (ViewHolder) view.getTag();
         }
 
+        holder.text.setText(recordDetailItem.getFilePath());
+        String typeMsg = recordDetailItem.getType().equals("0") ? "详情" : "上传";
+        holder.detailOrUpload.setText(typeMsg);
+        holder.detailOrUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                /**
+                 * 根据type,展示详情，还是上传
+                 */
+
+                if (recordDetailItem.getType().equals("0")) {
+                    /**
+                     * 详情
+                     */
+
+
+                    Intent intent = new Intent(context, AudioRecordContentActivity.class);
+
+                    intent.putExtra("voiceId", Integer.parseInt(recordDetailItem.getExtra()));
+                    /**
+                     *传参
+                     */
+                    context.startActivity(intent);
+                } else {
+
+                    File file = new File(recordDetailItem.getFilePath());
+
+                    Log.i(TAG, "file :" + file);
+                    Log.i(TAG, "visit_id :" + visitId);
+
+                    RequestBody fileRQ = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                    MultipartBody.Part part = MultipartBody.Part.createFormData("picture", file.getName(), fileRQ);
+
+                    RequestBody body = new MultipartBody.Builder()
+                            .addFormDataPart("visit_id", visitId + "")
+                            .addFormDataPart("voiceFile", file.getName(), fileRQ)
+                            .build();
+                    Call<RecordUploadResult> uploadCall = RetrofitUtils.getService().uploadVoice(body);
+                    uploadCall.enqueue(new Callback<RecordUploadResult>() {
+                        @Override
+                        public void onResponse(Call<RecordUploadResult> call, Response<RecordUploadResult> response) {
+
+                            Log.i(TAG, "recordupload :" + response.body().getCode());
+                            String code = response.body().getCode();
+
+                            if ("success".equals(code)) {
+                                /**
+                                 * 更新录音详情
+                                 */
+
+                                RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
+                                testDao.updateCloudStatus(1, file.getPath());
+
+
+                                toast("提交成功");
+
+                            } else {
+                                toast("上传失败");
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<RecordUploadResult> call, Throwable t) {
+                            toast("上传失败");
+
+                        }
+                    });
+                }
+
+
+            }
+        });
+
+
+        holder.play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                mMediaPlayer = new MediaPlayer();
+
+                try {
+                    mMediaPlayer.setDataSource(recordDetailItem.getFilePath());
+                    mMediaPlayer.prepare();
+                    Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
+                    holder.seekbar.setMax(mMediaPlayer.getDuration());
+
+
+                    mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            mMediaPlayer.start();
+                        }
+                    });
+                } catch (IOException e) {
+                    Log.e(TAG, "prepare() failed");
+                }
+
+                mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        stopPlaying(holder);
+                    }
+                });
+
+                mRunnable = new MyRunnable(holder);
+
+                mHandler.postDelayed(mRunnable, 1000);
+
+            }
+        });
         if (selectItem >= 0) {
 
             if (position == selectItem) {
@@ -251,7 +245,7 @@ public class OnlineRecordAdpater extends BaseAdapter {
         holder.file_length_text_view.setText(String.format("%02d:%02d", minutes, seconds));
 
 
-        return convertView;
+        return view;
 
     }
 

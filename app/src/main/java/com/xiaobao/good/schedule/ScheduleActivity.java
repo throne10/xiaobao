@@ -91,6 +91,7 @@ public class ScheduleActivity extends Activity {
         if (s.getPurpose().equals("展业")) {
             Intent i = new Intent(context, AudioRecordDetailActivity.class);
             i.putExtra("visitId", s.getVisit_id());
+            i.putExtra("add", s.getSign_address());
             i.putExtra("name", intentClient.getClient_name());
 
 
@@ -101,7 +102,7 @@ public class ScheduleActivity extends Activity {
 
             Intent i = new Intent(context, AudioRecordDetailActivity.class);
             i.putExtra("name", intentClient.getClient_name());
-
+            i.putExtra("add", s.getSign_address());
             i.putExtra("visitId", s.getVisit_id());
 
             i.putExtra("date", new Gson().toJson(recordsBeans.get(p)));
@@ -110,9 +111,8 @@ public class ScheduleActivity extends Activity {
         if (s.getPurpose().equals("递送保单")) {
             Intent i = new Intent(context, AudioRecordDetailActivity.class);
             i.putExtra("name", intentClient.getClient_name());
-
+            i.putExtra("add", s.getSign_address());
             i.putExtra("visitId", s.getVisit_id());
-
             i.putExtra("date", new Gson().toJson(recordsBeans.get(p)));
             context.startActivity(i);
         }

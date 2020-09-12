@@ -91,4 +91,15 @@ public class RecordDetailItem implements Parcelable {
     public void setExtra(String extra) {
         this.extra = extra;
     }
+
+    @Override
+    public String toString() {
+        return "RecordDetailItem{" +
+                "filePath='" + filePath + '\'' +
+                ", position=" + position +
+                ", type='" + type + '\'' +
+                ", file_elpased=" + file_elpased +
+                ", extra='" + extra + '\'' +
+                '}';
+    }
 }

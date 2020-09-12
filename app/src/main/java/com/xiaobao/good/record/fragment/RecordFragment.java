@@ -53,18 +53,18 @@ public class RecordFragment extends Fragment {
         int visitId = bundle.getInt("visitId", -1);
 
 
-        Log.i("RecordDetailItem", "size :" + list.size());
+        Log.i("RecordDetailItem", "size :" + list);
 
 
-        onlineRecordAdpater = new OnlineRecordAdpater(mActivity, list, visitId );
+        onlineRecordAdpater = new OnlineRecordAdpater(mActivity, list, visitId);
         listView.setAdapter(onlineRecordAdpater);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                list.get(position);
+                Log.i("RecordDetailItem", "position :" + position);
+                onlineRecordAdpater.setSelectItem(position);
+                onlineRecordAdpater.notifyDataSetChanged();
             }
         });
 

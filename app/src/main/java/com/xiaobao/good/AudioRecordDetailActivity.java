@@ -50,6 +50,7 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
     private VisitRecords.DataBean.RecordsBean recordsBean;
 
     private int visit_id;
+    private String add;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +74,8 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
         tv_online_record.setOnClickListener(this);
         tv_local_record.setOnClickListener(this);
         String s = getIntent().getStringExtra("date");
+        add = getIntent().getStringExtra("add");
+
         visit_id = getIntent().getIntExtra("visitId", -1);
 
         recordsBean = new Gson().fromJson(s, VisitRecords.DataBean.RecordsBean.class);
@@ -196,6 +199,7 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
             try {
                 Intent intent = new Intent(AudioRecordDetailActivity.this, AudioRecordActivity.class);
                 intent.putExtra("visitId", visit_id);
+                intent.putExtra("location", add);
                 startActivity(intent);
 
                 finish();

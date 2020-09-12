@@ -98,14 +98,14 @@ public class WechatRecordActivity extends Activity {
                         List<String> strings = Arrays.asList(s);
                         EventBus.getDefault().post(strings);
                     } else {
-                        Toast.makeText(context, "请求微信聊天记录失败。", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "请求微信聊天记录失败。", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<WeChatResult> call, Throwable t) {
-                    Toast.makeText(context, "请求微信聊天记录失败。", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "请求微信聊天记录失败。", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             });
@@ -118,7 +118,7 @@ public class WechatRecordActivity extends Activity {
         //接收以及处理数据
         Log.i(TAG, "result>>>" + result);
         if (result.isEmpty()) {
-            Toast.makeText(this, "请求失败，请检查网络后重试。", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "请求失败，请检查网络后重试。", Toast.LENGTH_SHORT).show();
         } else {
             allChat.addAll(result);
             lvChats.setAdapter(new ChatListAdapter(allChat));
@@ -149,13 +149,17 @@ public class WechatRecordActivity extends Activity {
                     if (bTemp != null) {
                         append();
                     } else {
-                        Toast.makeText(context, "请先追加微信聊天内容后提交。", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "请先追加微信聊天内容后提交。", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (b != null) {
-                        visit();
+                        if (visitId != 0) {
+                            visit();
+                        } else {
+                            Toast.makeText(context, "您已提交完成。", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(context, "请先添加微信聊天内容后提交。", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "请先添加微信聊天内容后提交。", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -174,15 +178,15 @@ public class WechatRecordActivity extends Activity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(context, "追加微信聊天记录成功。", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "追加微信聊天记录成功。", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "追加微信聊天记录失败。", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "追加微信聊天记录失败。", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(context, "追加微信聊天记录失败!", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "追加微信聊天记录失败!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -204,15 +208,15 @@ public class WechatRecordActivity extends Activity {
                     if (response.isSuccessful()) {
                         visitId = response.body().getData();
                         LogUtil.i(TAG, response.body().getData() + "");
-                        Toast.makeText(context, "添加微信聊天记录成功。", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "添加微信聊天记录成功。", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(context, "添加微信聊天记录失败。", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "添加微信聊天记录失败。", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<VisitResult> call, Throwable t) {
-                    Toast.makeText(context, "添加微信聊天记录失败。", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "添加微信聊天记录失败。", Toast.LENGTH_SHORT).show();
                 }
             });
         }

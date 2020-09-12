@@ -105,6 +105,7 @@ public class SignInActivity extends Activity {
             i.putExtra("visitId", visitId);
             i.putExtra("name", name);
             context.startActivity(i);
+            finish();
             if (StringUtils.isEmpty(addr)) {
                 Toast.makeText(context, "定位失败，请查看gps是否打开", Toast.LENGTH_LONG).show();
             }
