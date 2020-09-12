@@ -70,7 +70,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tv_location"
                 android:background="@drawable/button_empty"
                 android:gravity="center_vertical"
@@ -83,15 +83,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:lines="1"
                     android:text="当前位置当前位置当前位置当前位置当前位置当前位置当前位置当前位置当前位置"
+                    android:paddingRight="30dp"
+                    android:paddingLeft="10dp"
                     android:textColor="@color/color_text_white"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
                     android:src="@mipmap/location" />
 
             </RelativeLayout>

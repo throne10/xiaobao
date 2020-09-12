@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.xiaobao.good.common.StringUtils;
 import com.xiaobao.good.record.RecordItem;
 import com.xiaobao.good.record.RecordingService;
 
@@ -282,13 +281,13 @@ public class AudioRecordActivity extends Activity {
         String addr = getIntent().getStringExtra("location");
         visitId = getIntent().getStringExtra("visitId");
         String name = getIntent().getStringExtra("name");
-        if (StringUtils.isNotEmpty(addr)) {
-            try {
-                addr = addr.substring(addr.indexOf("省") + 1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        if (StringUtils.isNotEmpty(addr)) {
+//            try {
+//                addr = addr.substring(addr.indexOf("省") + 1);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
         tvLocationData.setText(addr);
         Log.i("yxd123", name);
         btName.setText(name);
