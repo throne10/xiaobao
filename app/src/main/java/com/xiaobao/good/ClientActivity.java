@@ -407,7 +407,7 @@ public class ClientActivity extends AppCompatActivity {
 
         // 为数据项赋值
         int thisYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(new java.util.Date()));
-        for (int i = 1980; i <= thisYear; i++) // 从1980到今年
+        for (int i = 1970; i <= thisYear; i++) // 从1980到今年
         gradeYear.add(i + "");
         for (int i = 1; i <= 12; i++) // 1月到12月
         gradeMonth.add(i + "");

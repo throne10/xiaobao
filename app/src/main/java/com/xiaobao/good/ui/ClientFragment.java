@@ -205,14 +205,16 @@ public class ClientFragment extends Fragment
     private boolean hasMore;
 
     private void updateData() {
-        getActivity()
-                .runOnUiThread(
-                        () -> {
-                            hasMore = false;
-                            mAdapter.addData(itemList);
-                            mAdapter.removeFooter(mLoadMoreFooterModel);
-                            srlRefresh.setRefreshing(false);
-                        });
+        if (getActivity() != null) {
+            getActivity()
+                    .runOnUiThread(
+                            () -> {
+                                hasMore = false;
+                                mAdapter.addData(itemList);
+                                mAdapter.removeFooter(mLoadMoreFooterModel);
+                                srlRefresh.setRefreshing(false);
+                            });
+        }
     }
 
     @Override
@@ -259,9 +261,9 @@ public class ClientFragment extends Fragment
                         }
                         if (response.isSuccessful()) {
                             Toast.makeText(
-                                    getActivity(),
-                                    "删除成功：" + response.message(),
-                                    Toast.LENGTH_SHORT)
+                                            getActivity(),
+                                            "删除成功：" + response.message(),
+                                            Toast.LENGTH_SHORT)
                                     .show();
                             getClients();
                         } else {
