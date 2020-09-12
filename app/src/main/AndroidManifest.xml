@@ -56,6 +56,14 @@
             android:name=".sign.SignInActivity"
             android:label="sign" />
         <activity
+            android:name=".AudioRecordContentActivity"
+            android:label="RecordContent">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".schedule.ScheduleActivity"
             android:label="schedule">
             <intent-filter>

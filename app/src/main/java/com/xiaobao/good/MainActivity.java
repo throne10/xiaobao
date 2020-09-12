@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         testDao.insert(mTestBean);
         String ss = testDao.getAll() + "";
 
-        t1.setText(ss);
+//        t1.setText(ss);
         //日志
         LogUtil.i(TAG, ss);
 

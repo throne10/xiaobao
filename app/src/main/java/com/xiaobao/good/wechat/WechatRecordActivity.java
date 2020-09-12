@@ -59,7 +59,6 @@ public class WechatRecordActivity extends Activity {
         finish();
     }
 
-
     @BindView(R.id.lv_chats)
     ListView lvChats;
 
@@ -73,6 +72,8 @@ public class WechatRecordActivity extends Activity {
     private List<String> allChat = new ArrayList<>();
     private List<String> tempChat = new ArrayList<>();
     private int giveVisitId;
+    private int employeeId;
+    private int clientId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,8 @@ public class WechatRecordActivity extends Activity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         giveVisitId = getIntent().getIntExtra("visitId", 0);
+        employeeId = getIntent().getIntExtra("employeeId", 0);
+        clientId = getIntent().getIntExtra("clientId", 0);
         LogUtil.i(TAG, "giveVisitId>>>>" + giveVisitId);
         if (giveVisitId != 0) {
             btCommit.setText("追加");
@@ -124,7 +127,7 @@ public class WechatRecordActivity extends Activity {
                 b.append(s).append("<br>");
             }
             if (giveVisitId != 0) {
-                if(!tempChat.isEmpty()) {
+                if (!tempChat.isEmpty()) {
                     bTemp = new StringBuffer();
                     for (String s : tempChat) {
                         bTemp.append(s).append("<br>");
@@ -188,8 +191,8 @@ public class WechatRecordActivity extends Activity {
         if (visitId == 0) {
             Visit visit = new Visit();
             visit.setSign_address("");
-            visit.setClient_id(38);
-            visit.setEmployee_id(4);
+            visit.setClient_id(clientId);
+            visit.setEmployee_id(employeeId);
             visit.setPurpose("微信聊天");
             visit.setWechat_content(b.toString());
             String s = new Gson().toJson(visit);

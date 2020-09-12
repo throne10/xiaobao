@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:background="@mipmap/visit_time"
                 android:gravity="bottom|center"
-                android:text="3"
+                android:text="-"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
 
@@ -115,7 +115,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@mipmap/last_visit_time"
                 android:gravity="bottom|center"
-                android:text="1991/01/01"
+                android:text="-"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -128,7 +128,7 @@
             android:background="@mipmap/last_visit_key_words"
             android:gravity="bottom|left"
             android:paddingLeft="20dp"
-            android:text="尼玛"
+            android:text="-"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
@@ -141,7 +141,7 @@
             android:background="@mipmap/client_label"
             android:gravity="bottom|left"
             android:paddingLeft="20dp"
-            android:text="尼玛"
+            android:text="-"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
