@@ -238,6 +238,11 @@ public class ClientActivity extends AppCompatActivity {
     @OnClick(R.id.tv_save)
     public void save(TextView tvSave) {
         try {
+            if (StringUtils.isEmpty(cacheClientBean.getClient_name())) {
+                Toast.makeText(getApplicationContext(), "请添加客户信息", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Call<ResponseBody> call;
             LogUtil.d(TAG, "cacheClientBean : " + cacheClientBean);
             if (intentClientBean == null) {
@@ -380,7 +385,8 @@ public class ClientActivity extends AppCompatActivity {
 
     public void myCalendar() {
         // 初始化对话框
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+        final AlertDialog.Builder builder =
+                new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog_Alert);
         // 初始化自定义布局参数
         LayoutInflater layoutInflater = getLayoutInflater();
         // 绑定布局
