@@ -165,6 +165,7 @@ public class AudioRecordActivity extends Activity {
          * 上传录音
          */
         MyAlertDialog myAlertDialog = new MyAlertDialog(this);
+        myAlertDialog.setTitle("是否上传到云端");
         myAlertDialog.setPositiveButton("保存到本地", view -> {
 
         });
