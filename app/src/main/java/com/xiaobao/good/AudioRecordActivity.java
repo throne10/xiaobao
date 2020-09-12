@@ -18,13 +18,10 @@ import androidx.annotation.Nullable;
 import com.xiaobao.good.db.AbstractAppDatabase;
 import com.xiaobao.good.db.RecordHistoryBean;
 import com.xiaobao.good.db.dao.RecordHistoryDao;
-import com.xiaobao.good.db.dao.TestDao;
-import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.record.RecordItem;
 import com.xiaobao.good.record.RecordingService;
 import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.retrofit.result.RecordUploadResult;
-import com.xiaobao.good.retrofit.result.WechatRecord;
 import com.xiaobao.good.sp.UserSp;
 import com.xiaobao.good.ui.MyAlertDialog;
 
@@ -34,8 +31,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,7 +38,6 @@ import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

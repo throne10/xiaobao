@@ -153,7 +153,7 @@ public class WechatRecordActivity extends Activity {
                     }
                 } else {
                     if (b != null) {
-                        if (visitId != 0) {
+                        if (visitId == 0) {
                             visit();
                         } else {
                             Toast.makeText(context, "您已提交完成。", Toast.LENGTH_SHORT).show();
