@@ -41,20 +41,20 @@ public class RecordingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
+            if (intent.hasExtra("start")) {
+                startRecording(intent.getParcelableExtra("item"));
+            } else if (intent.hasExtra("stop")) {
+                Log.i(LOG_TAG, "stop");
+                stopRecording();
+                notifyRecordActivity("stop");
+            } else if (intent.hasExtra("pause")) {
+                Log.i(LOG_TAG, "pause");
+                pauseRecord();
+                notifyRecordActivity("pause");
+            }
 
-        if (intent.hasExtra("start")) {
-            startRecording(intent.getParcelableExtra("item"));
-        } else if (intent.hasExtra("stop")) {
-            Log.i(LOG_TAG, "stop");
-            stopRecording();
-            notifyRecordActivity("stop");
-        } else if (intent.hasExtra("pause")) {
-            Log.i(LOG_TAG, "pause");
-            pauseRecord();
-            notifyRecordActivity("pause");
         }
-
-
         return START_STICKY;
     }
 

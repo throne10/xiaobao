@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.xiaobao.good.common.StringUtils;
 import com.xiaobao.good.record.RecordItem;
 import com.xiaobao.good.record.RecordingService;
 
@@ -57,6 +60,23 @@ public class AudioRecordActivity extends Activity {
 
     @BindView(R.id.bt_upload)
     public Button upload;
+
+    @BindView(R.id.tv_location_data)
+    TextView tvLocationData;
+
+    @BindView(R.id.bt_name)
+    public Button btName;
+
+    @OnClick(R.id.iv_back)
+    public void back() {
+        if (nowStus == Status.RECORDING) {
+            Toast.makeText(this, "请先处理完录音再退出！", Toast.LENGTH_LONG).show();
+        } else {
+            finish();
+        }
+    }
+
+    private String visitId;
 
     @OnClick(R.id.bt_pause_play)
     public void pauseClick() {
@@ -259,9 +279,22 @@ public class AudioRecordActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_record);
         ButterKnife.bind(this);
+        String addr = getIntent().getStringExtra("location");
+        visitId = getIntent().getStringExtra("visitId");
+        String name = getIntent().getStringExtra("name");
+        if (StringUtils.isNotEmpty(addr)) {
+            try {
+                addr = addr.substring(addr.indexOf("省") + 1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        tvLocationData.setText(addr);
+        Log.i("yxd123", name);
+        btName.setText(name);
+        EventBus.getDefault().
 
-
-        EventBus.getDefault().register(this);
+                register(this);
 
         nowStus = Status.RECORDING;//默认进入后开始录音
 
@@ -273,6 +306,7 @@ public class AudioRecordActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        doRecordStop();
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
@@ -290,4 +324,17 @@ public class AudioRecordActivity extends Activity {
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            if (nowStus == Status.RECORDING) {
+                Toast.makeText(this, "请先处理完录音再退出！", Toast.LENGTH_LONG).show();
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
 }

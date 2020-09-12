@@ -2,6 +2,7 @@ package com.xiaobao.good.retrofit.interfaces;
 
 import com.xiaobao.good.retrofit.result.Clients;
 import com.xiaobao.good.retrofit.result.UserInfoData;
+import com.xiaobao.good.retrofit.result.VoiceContent;
 import com.xiaobao.good.retrofit.result.WechatRecord;
 import com.xiaobao.good.schedule.VisitRecords;
 import com.xiaobao.good.sign.Visit;
@@ -44,7 +45,7 @@ public interface HttpInterface {
     Call<ResponseBody> appendWechats(@Query("visit_id") int visitId, @Query("wechatContent") String weChatContent);//追加微信上报
 
     @GET("visit")
-    Call<VisitRecords> getVisit(@Query("employeeId") int employeeId); // 修改客户信息
+    Call<VisitRecords> getVisit(@Query("employeeId") int employeeId, @Query("clientId") int clientId); // 拜访记录
 
 
     @POST("visit")
@@ -59,5 +60,7 @@ public interface HttpInterface {
     Call<ResponseBody> upload(@Query("visit_id") int visit_id,
                               @Part MultipartBody.Part file);
 
+    @GET("voiceContent")
+    Call<VoiceContent> getVoiceContent(@Query("voice_id") int voiceId);
 
 }
