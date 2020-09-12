@@ -1,6 +1,7 @@
 package com.xiaobao.good.record.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.xiaobao.good.AudioRecordContentActivity;
 import com.xiaobao.good.R;
 import com.xiaobao.good.record.RecordDetailItem;
 
@@ -102,6 +104,20 @@ public class OnlineRecordAdpater extends BaseAdapter {
                     /**
                      * 根据type,展示详情，还是上传
                      */
+
+                    if (recordDetailItem.getType().equals("0")) {
+                        /**
+                         * 详情
+                         */
+
+                        Intent intent = new Intent(context, AudioRecordContentActivity.class);
+                        /**
+                         *传参
+                         */
+                        context.startActivity(intent);
+                    } else {
+
+                    }
 
 //                    File file = new File(recordItem.getRootFilePath() + "/" + recordItem.getFileName() + ".mp3");
 //
