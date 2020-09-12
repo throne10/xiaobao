@@ -119,6 +119,7 @@ public class ClientFragment extends Fragment
         initViews();
         registerModel();
         initEvent();
+        srlRefresh.setRefreshing(true);
         getClients();
     }
 
@@ -146,7 +147,6 @@ public class ClientFragment extends Fragment
     }
 
     private void getClients() {
-        srlRefresh.setRefreshing(true);
         UserInfoData.LoginUserData userInfoData = UserSp.getInstances().getUser();
         LogUtil.d(TAG, "userInfoData > " + userInfoData.toString());
         String employedId = "4";
@@ -245,6 +245,7 @@ public class ClientFragment extends Fragment
     }
 
     public void deleteItem(Clients.DataBean.ClientsBean bean) {
+        srlRefresh.setRefreshing(true);
         Call<Clients> mResponseBody = RetrofitUtils.getService().deleteClient(bean.getClient_id());
         mResponseBody.enqueue(
                 new Callback<Clients>() {

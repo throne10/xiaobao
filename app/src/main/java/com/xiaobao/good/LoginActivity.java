@@ -58,21 +58,18 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
         loginButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                v -> {
 
-                        String name = usernameEditText.getText().toString().trim();
-                        String pwd = passwordEditText.getText().toString().trim();
+                    String name = usernameEditText.getText().toString().trim();
+                    String pwd = passwordEditText.getText().toString().trim();
 
-                        Result re = conditionCheck(name, pwd);
+                    Result re = conditionCheck(name, pwd);
 
-                        if (!Result.SUCCESS.equals(re)) {
-                            toast(re.getMsg());
-                        } else if (Result.SUCCESS.equals(re)) {
+                    if (!Result.SUCCESS.equals(re)) {
+                        toast(re.getMsg());
+                    } else if (Result.SUCCESS.equals(re)) {
 
-                            doLogin(name, pwd);
-                        }
+                        doLogin(name, pwd);
                     }
                 });
     }
@@ -128,8 +125,12 @@ public class LoginActivity extends AppCompatActivity {
                                         } catch (Exception e) {
                                             LogUtil.e(TAG, "read from sp e:" + e);
                                         }
+                                    } else {
+                                        toast("登录失败:" + userInfoData.getCode());
                                     }
                                 }
+                            } else {
+                                toast("登录失败:" + response.message());
                             }
                         }
 
