@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -56,6 +57,15 @@ public class RecordFragment extends Fragment {
 
         onlineRecordAdpater = new OnlineRecordAdpater(mActivity, list);
         listView.setAdapter(onlineRecordAdpater);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                list.get(position);
+            }
+        });
 
 
         return view;
