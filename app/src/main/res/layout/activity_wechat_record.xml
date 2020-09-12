@@ -4,14 +4,6 @@
     android:layout_height="match_parent"
     tools:context="com.xiaobao.good.MainActivity">
 
-    <ImageView
-        android:id="@+id/result_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@mipmap/bg"
-        android:scaleType="centerInside" />
-
-
     <Button
         android:id="@+id/bt_back"
         android:layout_width="@dimen/img_back_width"
@@ -28,24 +20,35 @@
         android:layout_margin="10dp"
         android:background="@mipmap/picture_icon" />
 
+
     <Button
         android:id="@+id/bt_commit"
-        android:layout_width="65dp"
-        android:layout_height="30dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
         android:background="@drawable/record_btn_selector"
-        android:text="提交" />
+        android:text="提交"
+        android:textSize="@dimen/text_size_18" />
+
+    <ImageView
+        android:id="@+id/result_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/bg"
+        android:scaleType="centerInside" />
 
     <ListView
         android:id="@+id/lv_chats"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/bt_commit"
         android:layout_centerInParent="true"
-        android:layout_marginVertical="70dp"
+        android:layout_marginBottom="@dimen/margin_10"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_marginTop="70dp"
         android:divider="#A9A9A9"
         android:dividerHeight="1dp" />
 </RelativeLayout>

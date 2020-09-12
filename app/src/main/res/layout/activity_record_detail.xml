@@ -27,8 +27,9 @@
 
         <ImageView
             android:id="@+id/iv_add"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/img_block_40"
+            android:layout_height="@dimen/img_block_40"
+            android:padding="@dimen/content_padding_5"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@mipmap/voice_add" />
@@ -49,7 +50,7 @@
             android:gravity="center"
             android:text="云端录音"
             android:textColor="@color/color_yellow"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_size_16" />
 
         <TextView
             android:id="@+id/tv_local_record"
@@ -59,7 +60,7 @@
             android:gravity="center"
             android:text="本地录音"
             android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_size_16" />
 
 
     </LinearLayout>

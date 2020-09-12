@@ -67,7 +67,7 @@
                         android:paddingLeft="15dp"
                         android:text="新闻"
                         android:textColor="#FFFFFF"
-                        android:textSize="21sp" />
+                        android:textSize="@dimen/text_size_18" />
 
                     <TextView
                         android:id="@+id/tv_phone_no"
@@ -80,7 +80,7 @@
                         android:paddingLeft="10dp"
                         android:text="19383223222"
                         android:textColor="#FFFFFF"
-                        android:textSize="21sp" />
+                        android:textSize="@dimen/text_size_16" />
                 </LinearLayout>
 
                 <ImageView
@@ -108,7 +108,7 @@
                 android:gravity="bottom|center"
                 android:text="-"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_14" />
 
             <TextView
                 android:id="@+id/tv_last_visit_time"
@@ -119,7 +119,7 @@
                 android:gravity="bottom|center"
                 android:text="-"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_14" />
         </LinearLayout>
 
         <TextView
@@ -132,7 +132,7 @@
             android:paddingLeft="20dp"
             android:text="-"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="@dimen/text_size_14" />
 
         <TextView
             android:id="@+id/tv_client_label"
@@ -145,7 +145,7 @@
             android:paddingLeft="20dp"
             android:text="-"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="@dimen/text_size_14" />
 
         <LinearLayout
             android:layout_width="match_parent"

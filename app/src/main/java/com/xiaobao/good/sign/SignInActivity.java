@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.LocationClient;
@@ -51,6 +52,9 @@ public class SignInActivity extends Activity {
     public void back() {
         finish();
     }
+
+    @BindView(R.id.tv_visit_name)
+    TextView tvVisitName;
 
     @OnItemSelected(R.id.sp_purpose)
     public void purpose(int position) {
@@ -120,6 +124,8 @@ public class SignInActivity extends Activity {
         EventBus.getDefault().register(this);
 
         ButterKnife.bind(this);
+
+        tvVisitName.setText(name);
         startLocation();
 
     }
