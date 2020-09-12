@@ -17,7 +17,6 @@ import com.xiaobao.good.R;
 import com.xiaobao.good.record.RecordDetailItem;
 import com.xiaobao.good.record.adapter.OnlineRecordAdpater;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecordFragment extends Fragment {

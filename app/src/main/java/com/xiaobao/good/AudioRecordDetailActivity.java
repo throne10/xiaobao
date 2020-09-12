@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.xiaobao.good.db.AbstractAppDatabase;
+import com.xiaobao.good.db.RecordHistoryBean;
+import com.xiaobao.good.db.dao.RecordHistoryDao;
 import com.xiaobao.good.record.RecordDetailItem;
 import com.xiaobao.good.record.fragment.ContentFragmentPagerAdapter;
 import com.xiaobao.good.record.fragment.RecordFragment;
@@ -56,6 +59,8 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
         tv_local_record.setOnClickListener(this);
 
         initViewPager(0);
+
+
     }
 
 
@@ -93,15 +98,31 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
      */
     public void initViewPager(int i) {
 
+        RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
+
+
+        List<RecordHistoryBean> listBean = testDao.getAll();
 
         List<RecordDetailItem> itemList = new ArrayList<>();
+
+        List<RecordDetailItem> itemList2 = new ArrayList<>();
         RecordDetailItem recordDetailItem;
-        for (int j = 0; j < 10; j++) {
+
+
+        for (RecordHistoryBean r : listBean) {
+
             recordDetailItem = new RecordDetailItem();
-            recordDetailItem.setFilePath(System.currentTimeMillis() + "_" + j);
-            recordDetailItem.setPosition(0);
-            recordDetailItem.setType("0");
-            itemList.add(recordDetailItem);
+            recordDetailItem.setFilePath(r.getFile_path());
+            recordDetailItem.setFile_elpased(r.getFile_elpased());
+            recordDetailItem.setType(r.getCloud() + "");
+
+            if (recordDetailItem.getType().equals("0")) {
+                itemList.add(recordDetailItem);
+            } else {
+                itemList2.add(recordDetailItem);
+            }
+
+
         }
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("data", (ArrayList<? extends Parcelable>) itemList);
@@ -109,22 +130,13 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
         recordFragment.setArguments(bundle);
         list.add(recordFragment);
 
-/**
- * 本地录音数据
- */
-        itemList = new ArrayList<>();
-        for (int j = 0; j < 10; j++) {
-            recordDetailItem = new RecordDetailItem();
-            recordDetailItem.setFilePath(System.currentTimeMillis() + "_" + j);
-            recordDetailItem.setPosition(0);
-            recordDetailItem.setType("1");
-            itemList.add(recordDetailItem);
-        }
+
         bundle = new Bundle();
-        bundle.putParcelableArrayList("data", (ArrayList<? extends Parcelable>) itemList);
+        bundle.putParcelableArrayList("data", (ArrayList<? extends Parcelable>) itemList2);
         recordFragment = new RecordFragment();
         recordFragment.setArguments(bundle);
         list.add(recordFragment);
+
 
         this.pager.setAdapter(
                 new ContentFragmentPagerAdapter(this.getSupportFragmentManager(), list));

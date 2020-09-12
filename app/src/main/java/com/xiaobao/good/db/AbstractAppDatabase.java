@@ -8,11 +8,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.xiaobao.good.InitApplication;
+import com.xiaobao.good.db.dao.RecordHistoryDao;
 import com.xiaobao.good.db.dao.TestDao;
 
 @Database(
         entities = {
-                TestBean.class,
+                TestBean.class, RecordHistoryBean.class
         },
         version = 1,
         exportSchema = false)
@@ -28,6 +29,7 @@ public abstract class AbstractAppDatabase extends RoomDatabase {
 
         return db;
     }
+
     public static void initDb(Context context) {
         db =
                 Room.databaseBuilder(
@@ -40,6 +42,8 @@ public abstract class AbstractAppDatabase extends RoomDatabase {
     }
 
     public abstract TestDao getTestDao();
+
+    public abstract RecordHistoryDao getRecordHistoryDao();
 }
 
 

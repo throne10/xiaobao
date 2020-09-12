@@ -3,8 +3,6 @@ package com.xiaobao.good.record;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.xiaobao.good.AudioRecordActivity;
-
 public class RecordItem implements Parcelable {
 
 
@@ -13,6 +11,7 @@ public class RecordItem implements Parcelable {
         fileCount = in.readInt();
         rootFilePath = in.readString();
         status = in.readString();
+        elpased = in.readLong();
     }
 
     public static final Creator<RecordItem> CREATOR = new Creator<RecordItem>() {
@@ -38,6 +37,7 @@ public class RecordItem implements Parcelable {
         dest.writeInt(fileCount);
         dest.writeString(rootFilePath);
         dest.writeString(status);
+        dest.writeLong(elpased);
     }
 
     public RecordItem() {
@@ -49,6 +49,7 @@ public class RecordItem implements Parcelable {
     private int fileCount = 1;
     private String rootFilePath;
     private String status;
+    private long elpased;
 
     public String getFileName() {
         return fileName;
@@ -89,6 +90,16 @@ public class RecordItem implements Parcelable {
                 ", fileCount=" + fileCount +
                 ", rootFilePath='" + rootFilePath + '\'' +
                 ", status='" + status + '\'' +
+                ", elpased=" + elpased +
                 '}';
     }
+
+    public long getElpased() {
+        return elpased;
+    }
+
+    public void setElpased(long elpased) {
+        this.elpased = elpased;
+    }
+
 }

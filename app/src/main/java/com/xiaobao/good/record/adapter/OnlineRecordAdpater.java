@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -59,6 +58,7 @@ public class OnlineRecordAdpater extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder;
+        RecordDetailItem recordDetailItem = list.get(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.layout_record_detail_item, null);
             holder = new ViewHolder();
@@ -74,9 +74,13 @@ public class OnlineRecordAdpater extends BaseAdapter {
             holder.rl_btshow = convertView.findViewById(R.id.rl_btshow);
             holder.rl_seekShow = convertView.findViewById(R.id.rl_seekShow);
 
-            holder.seekbar.setEnabled(false);
+            holder.current_progress_text_view = convertView.findViewById(R.id.current_progress_text_view);
+            holder.file_length_text_view = convertView.findViewById(R.id.file_length_text_view);
 
-            RecordDetailItem recordDetailItem = list.get(position);
+
+//            holder.seekbar.setEnabled(false);
+
+
             holder.text.setText(recordDetailItem.getFilePath());
             String typeMsg = recordDetailItem.getType().equals("0") ? "详情" : "上传";
             holder.detailOrUpload.setText(typeMsg);
@@ -99,6 +103,47 @@ public class OnlineRecordAdpater extends BaseAdapter {
                      * 根据type,展示详情，还是上传
                      */
 
+//                    File file = new File(recordItem.getRootFilePath() + "/" + recordItem.getFileName() + ".mp3");
+//
+//                    RequestBody fileRQ = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//                    MultipartBody.Part part = MultipartBody.Part.createFormData("picture", file.getName(), fileRQ);
+//
+//                    RequestBody body = new MultipartBody.Builder()
+//                            .addFormDataPart("visit_id", visitId + "")
+//                            .addFormDataPart("voiceFile", file.getName(), fileRQ)
+//                            .build();
+//                    Call<RecordUploadResult> uploadCall = RetrofitUtils.getService().uploadVoice(body);
+//                    uploadCall.enqueue(new Callback<RecordUploadResult>() {
+//                        @Override
+//                        public void onResponse(Call<RecordUploadResult> call, Response<RecordUploadResult> response) {
+//
+//                            Log.i(TAG, "recordupload :" + response.body().getCode());
+//                            String code = response.body().getCode();
+//
+//                            if ("success".equals(code)) {
+//                                /**
+//                                 * 更新录音详情
+//                                 */
+//
+//                                RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
+//                                testDao.updateCloudStatus(1, file.getPath());
+//
+//
+//                                toast("提交成功");
+//
+//                            } else {
+//                                toast("上传失败");
+//                            }
+//
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<RecordUploadResult> call, Throwable t) {
+//                            toast("上传失败");
+//
+//                        }
+//                    });
+
 
                 }
             });
@@ -114,6 +159,7 @@ public class OnlineRecordAdpater extends BaseAdapter {
                     try {
                         mMediaPlayer.setDataSource(recordDetailItem.getFilePath());
                         mMediaPlayer.prepare();
+                        Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
                         holder.seekbar.setMax(mMediaPlayer.getDuration());
 
 
@@ -130,11 +176,13 @@ public class OnlineRecordAdpater extends BaseAdapter {
                     mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            stopPlaying();
+                            stopPlaying(holder);
                         }
                     });
 
-                    updateSeekBar();
+                    mRunnable = new MyRunnable(holder);
+
+                    mHandler.postDelayed(mRunnable, 1000);
 
                 }
             });
@@ -158,49 +206,59 @@ public class OnlineRecordAdpater extends BaseAdapter {
             }
         }
 
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(recordDetailItem.getFile_elpased());
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(recordDetailItem.getFile_elpased())
+                - TimeUnit.MINUTES.toSeconds(minutes);
+
+        holder.file_length_text_view.setText(String.format("%02d:%02d", minutes, seconds));
+
 
         return convertView;
 
     }
 
-    //updating mSeekBar
-    private Runnable mRunnable = new Runnable() {
+    MyRunnable mRunnable;
+
+    class MyRunnable implements Runnable {
+        ViewHolder holder;
+
+        public MyRunnable(ViewHolder holder) {
+            this.holder = holder;
+        }
+
         @Override
         public void run() {
+
             if (mMediaPlayer != null) {
 
                 int mCurrentPosition = mMediaPlayer.getCurrentPosition();
-//                mSeekBar.setProgress(mCurrentPosition);
-//
-//                long minutes = TimeUnit.MILLISECONDS.toMinutes(mCurrentPosition);
-//                long seconds = TimeUnit.MILLISECONDS.toSeconds(mCurrentPosition)
-//                        - TimeUnit.MINUTES.toSeconds(minutes);
-//                mCurrentProgressTextView.setText(String.format("%02d:%02d", minutes, seconds));
+                holder.seekbar.setProgress(mCurrentPosition);
 
-                updateSeekBar();
+                long minutes = TimeUnit.MILLISECONDS.toMinutes(mCurrentPosition);
+                long seconds = TimeUnit.MILLISECONDS.toSeconds(mCurrentPosition)
+                        - TimeUnit.MINUTES.toSeconds(minutes);
+                holder.current_progress_text_view.setText(String.format("%02d:%02d", minutes, seconds));
+
+                updateSeekBar(holder);
             }
         }
-    };
-
-
-    private void stopPlaying() {
-//        mHandler.removeCallbacks(mRunnable);
-//        mMediaPlayer.stop();
-//        mMediaPlayer.reset();
-//        mMediaPlayer.release();
-//        mMediaPlayer = null;
-//
-//        mSeekBar.setProgress(mSeekBar.getMax());
-//        isPlaying = !isPlaying;
-//
-//        mCurrentProgressTextView.setText(mFileLengthTextView.getText());
-//        mSeekBar.setProgress(mSeekBar.getMax());
-//
-//        //allow the screen to turn off again once audio is finished playing
-//        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    private void updateSeekBar() {
+
+    private void stopPlaying(ViewHolder holder) {
+        mHandler.removeCallbacks(mRunnable);
+        mMediaPlayer.stop();
+        mMediaPlayer.reset();
+        mMediaPlayer.release();
+        mMediaPlayer = null;
+
+        holder.seekbar.setProgress(holder.seekbar.getMax());
+
+
+        holder.current_progress_text_view.setText(holder.file_length_text_view.getText());
+    }
+
+    private void updateSeekBar(ViewHolder holder) {
         mHandler.postDelayed(mRunnable, 1000);
     }
 
@@ -209,6 +267,8 @@ public class OnlineRecordAdpater extends BaseAdapter {
 
         LinearLayout showArea;
         TextView text;
+        TextView file_length_text_view;
+        TextView current_progress_text_view;
         SeekBar seekbar;
         Button detailOrUpload;
         Button play;

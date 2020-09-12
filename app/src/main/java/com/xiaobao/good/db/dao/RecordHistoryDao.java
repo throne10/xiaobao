@@ -19,6 +19,9 @@ public interface RecordHistoryDao {
     @Query("SELECT * FROM RecordHistoryBean")
     List<RecordHistoryBean> getAll();
 
+    @Query("SELECT * FROM RecordHistoryBean WHERE :path = file_path")
+    List<RecordHistoryBean> getSpecificPath(String path);
+
     @Query("DELETE  FROM RecordHistoryBean")
     int deleteAll();
 
@@ -27,6 +30,7 @@ public interface RecordHistoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(RecordHistoryBean testBean);
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     List<Long> insert(List<RecordHistoryBean> testBeans);
@@ -48,4 +52,7 @@ public interface RecordHistoryDao {
 
     @Delete
     int deleteAll(RecordHistoryBean... testBeans);
+
+    @Query("UPDATE RecordHistoryBean SET cloud= :cloud WHERE file_path = :file_path")
+    public abstract int updateCloudStatus(int cloud, String file_path);
 }

@@ -14,6 +14,7 @@ public class RecordDetailItem implements Parcelable {
         filePath = in.readString();
         position = in.readInt();
         type = in.readString();
+        file_elpased = in.readLong();
     }
 
     public static final Creator<RecordDetailItem> CREATOR = new Creator<RecordDetailItem>() {
@@ -38,11 +39,13 @@ public class RecordDetailItem implements Parcelable {
         dest.writeString(filePath);
         dest.writeInt(position);
         dest.writeString(type);
+        dest.writeLong(file_elpased);
     }
 
     private String filePath;
     private int position;
     private String type;
+    private long file_elpased;
 
 
     public String getFilePath() {
@@ -67,5 +70,13 @@ public class RecordDetailItem implements Parcelable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public long getFile_elpased() {
+        return file_elpased;
+    }
+
+    public void setFile_elpased(long file_elpased) {
+        this.file_elpased = file_elpased;
     }
 }

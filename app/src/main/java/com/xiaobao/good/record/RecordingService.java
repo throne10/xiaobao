@@ -19,7 +19,6 @@ public class RecordingService extends Service {
     private String mFileName = null;
     private String mFilePath = null;
 
-//    private MediaRecorder mRecorder = null;
 
     private AudioRecorder audioRecorder;
 
@@ -99,11 +98,15 @@ public class RecordingService extends Service {
         audioRecorder.stopRecord();
         mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
 
-        getSharedPreferences("sp_name_audio", MODE_PRIVATE)
-                .edit()
-                .putString("audio_path", mFilePath)
-                .putLong("elpased", mElapsedMillis)
-                .apply();
+
+        item.setElpased(mElapsedMillis);
+
+
+//        getSharedPreferences("sp_name_audio", MODE_PRIVATE)
+//                .edit()
+//                .putString("audio_path", mFilePath)
+//                .putLong("elpased", mElapsedMillis)
+//                .apply();
 
     }
 

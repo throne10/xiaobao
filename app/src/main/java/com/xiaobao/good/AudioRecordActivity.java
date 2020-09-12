@@ -15,8 +15,17 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.xiaobao.good.db.AbstractAppDatabase;
+import com.xiaobao.good.db.RecordHistoryBean;
+import com.xiaobao.good.db.dao.RecordHistoryDao;
+import com.xiaobao.good.db.dao.TestDao;
+import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.record.RecordItem;
 import com.xiaobao.good.record.RecordingService;
+import com.xiaobao.good.retrofit.RetrofitUtils;
+import com.xiaobao.good.retrofit.result.RecordUploadResult;
+import com.xiaobao.good.retrofit.result.WechatRecord;
+import com.xiaobao.good.sp.UserSp;
 import com.xiaobao.good.ui.MyAlertDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,14 +34,23 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AudioRecordActivity extends Activity {
 
-    private static String TAG = "X_AudioRecordActivity";
+    private static String TAG = "audio_record";
 
     private RecordItem recordItem = new RecordItem();
 
@@ -75,7 +93,7 @@ public class AudioRecordActivity extends Activity {
         }
     }
 
-    private String visitId;
+    private int visitId;
 
     @OnClick(R.id.bt_pause_play)
     public void pauseClick() {
@@ -164,6 +182,10 @@ public class AudioRecordActivity extends Activity {
         /**
          * 上传录音
          */
+
+        /**
+         * 上传录音
+         */
         MyAlertDialog myAlertDialog = new MyAlertDialog(this);
         myAlertDialog.setTitle("是否上传到云端");
         myAlertDialog.setPositiveButton("保存到本地", view -> {
@@ -171,33 +193,51 @@ public class AudioRecordActivity extends Activity {
         });
         myAlertDialog.setNegativeButton("上传", view -> {
 
+
+            toast("正在提交");
+            File file = new File(recordItem.getRootFilePath() + "/" + recordItem.getFileName() + ".mp3");
+
+            RequestBody fileRQ = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("picture", file.getName(), fileRQ);
+
+            RequestBody body = new MultipartBody.Builder()
+                    .addFormDataPart("visit_id", visitId + "")
+                    .addFormDataPart("voiceFile", file.getName(), fileRQ)
+                    .build();
+            Call<RecordUploadResult> uploadCall = RetrofitUtils.getService().uploadVoice(body);
+            uploadCall.enqueue(new Callback<RecordUploadResult>() {
+                @Override
+                public void onResponse(Call<RecordUploadResult> call, Response<RecordUploadResult> response) {
+
+                    Log.i(TAG, "recordupload :" + response.body().getCode());
+                    String code = response.body().getCode();
+
+                    if ("success".equals(code)) {
+                        /**
+                         * 更新录音详情
+                         */
+
+                        RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
+                        testDao.updateCloudStatus(1, file.getPath());
+
+
+                        toast("提交成功");
+
+                    } else {
+                        toast("上传失败");
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<RecordUploadResult> call, Throwable t) {
+                    toast("上传失败");
+
+                }
+            });
         });
-//        http://ineutech.com:60003/xiaobao/api/uploadVoice
 
 
-//        RequestBody requestFile = RequestBody.create(MediaType.parse("audio/*"), newFile);
-//        MultipartBody.Part body =
-//                MultipartBody.Part.createFormData("imageFile", newFile.getName(), requestFile);
-
-
-//
-//        String descriptionString = "This is a description";
-//        RequestBody description =
-//                RequestBody.create(
-//                        MediaType.parse("multipart/form-data"), descriptionString);
-//
-//        Call<ResponseBody> call = service.upload(description, body);
-//        call.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call,
-//                                   Response<ResponseBody> response) {
-//                System.out.println("success");
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                t.printStackTrace();
-//            }
     }
 
 
@@ -286,7 +326,7 @@ public class AudioRecordActivity extends Activity {
         setContentView(R.layout.activity_audio_record);
         ButterKnife.bind(this);
         String addr = getIntent().getStringExtra("location");
-        visitId = getIntent().getStringExtra("visitId");
+        visitId = getIntent().getIntExtra("visitId", -1);
         String name = getIntent().getStringExtra("name");
 //        if (StringUtils.isNotEmpty(addr)) {
 //            try {
@@ -324,9 +364,38 @@ public class AudioRecordActivity extends Activity {
             Toast.makeText(this, "正在保存录音", Toast.LENGTH_LONG).show();
             nowStus = Status.RECORD_STOP;
             //文件合并
+
+            try {
+                recordItem.setElpased(event.getElpased());
+
+
+                RecordHistoryBean recordHistoryBean = new RecordHistoryBean();
+
+                recordHistoryBean.setClient_id(visitId);
+                recordHistoryBean.setCloud(0);
+                recordHistoryBean.setFile_elpased(recordItem.getElpased());
+
+
+                recordHistoryBean.setEmployee_id(UserSp.getInstances().getUser().getEmployee_id());
+                recordHistoryBean.setFile_path(recordItem.getRootFilePath() + "/" + recordItem.getFileName() + ".mp3");
+
+
+                Log.i(TAG, "bean :" + recordHistoryBean.toString());
+                RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
+                testDao.insert(recordHistoryBean);
+            } catch (NumberFormatException e) {
+                Log.i(TAG, "e :" + e);
+            }
+
+
         }
         if ("finish".equals(event.getStatus())) {
             Toast.makeText(this, "文件保存完成>>>>" + recordItem.getRootFilePath() + "/" + recordItem.getFileName() + ".mp3", Toast.LENGTH_LONG).show();
+
+
+            newFile = new File(recordItem.getRootFilePath() + "/" + recordItem.getFileName() + ".mp3");
+
+
             nowStus = Status.MP3DONE;
         }
 

@@ -10,8 +10,6 @@ public class RecordHistoryBean {
     @ColumnInfo(name = "id")
     private int id;
 
-    @ColumnInfo(name = "content")
-    private String content;
 
     @ColumnInfo(name = "employee_id")
     private int employee_id;
@@ -40,13 +38,6 @@ public class RecordHistoryBean {
         this.id = id;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     public int getEmployee_id() {
         return employee_id;
@@ -86,5 +77,18 @@ public class RecordHistoryBean {
 
     public void setFile_elpased(long file_elpased) {
         this.file_elpased = file_elpased;
+    }
+
+
+    @Override
+    public String toString() {
+        return "RecordHistoryBean{" +
+                "id=" + id +
+                ", employee_id=" + employee_id +
+                ", client_id=" + client_id +
+                ", file_path='" + file_path + '\'' +
+                ", cloud=" + cloud +
+                ", file_elpased=" + file_elpased +
+                '}';
     }
 }
