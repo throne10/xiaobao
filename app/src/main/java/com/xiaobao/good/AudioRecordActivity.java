@@ -123,8 +123,6 @@ public class AudioRecordActivity extends Activity {
             return;
         }
 
-        Log.i(TAG, "click play :" + newFile.getPath() + ",,stauts :" + nowStus);
-
 
         if (Status.MP3DONE == nowStus) {
 
