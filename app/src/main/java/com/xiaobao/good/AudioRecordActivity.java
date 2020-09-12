@@ -29,9 +29,6 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 public class AudioRecordActivity extends Activity {
 
@@ -177,9 +174,9 @@ public class AudioRecordActivity extends Activity {
 //        http://ineutech.com:60003/xiaobao/api/uploadVoice
 
 
-        RequestBody requestFile = RequestBody.create(MediaType.parse("audio/*"), newFile);
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("imageFile", newFile.getName(), requestFile);
+//        RequestBody requestFile = RequestBody.create(MediaType.parse("audio/*"), newFile);
+//        MultipartBody.Part body =
+//                MultipartBody.Part.createFormData("imageFile", newFile.getName(), requestFile);
 
 
 //
