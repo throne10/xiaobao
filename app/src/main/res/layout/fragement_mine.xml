@@ -8,7 +8,6 @@
     android:padding="40dp">
 
     <ImageView
-
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@mipmap/my_head_icon" />
@@ -20,9 +19,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
-        android:text="王绵杰"
+        android:text="--"
         android:textColor="@color/color_text_white"
-        android:textSize="30sp" />
+        android:textSize="@dimen/text_size_28" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -33,49 +32,50 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-
-
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
-
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
             android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/iv_man"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_centerVertical="true"
                 android:src="@mipmap/man" />
 
             <TextView
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-
                 android:layout_below="@id/iv_man"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="@dimen/margin_10"
                 android:gravity="center"
                 android:text="个人信息"
                 android:textColor="@color/color_text_white"
-                android:textSize="20dp" />
+                android:textSize="@dimen/text_size_20" />
 
+        </LinearLayout>
 
-        </RelativeLayout>
-
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/rl_setting"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
             android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/iv_sys"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:src="@mipmap/system" />
@@ -83,15 +83,13 @@
             <TextView
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/iv_sys"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="@dimen/margin_10"
                 android:gravity="center"
                 android:text="设置"
                 android:textColor="@color/color_text_white"
-                android:textSize="20dp" />
+                android:textSize="@dimen/text_size_20" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
 
     </LinearLayout>

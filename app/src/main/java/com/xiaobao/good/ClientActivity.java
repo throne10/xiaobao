@@ -25,9 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -376,13 +374,13 @@ public class ClientActivity extends AppCompatActivity {
         etJob.setText(intentClientBean.getClient_job());
     }
 
-    private int year = 2000;
-    private int month = 10;
+    private int year = 1980;
+    private int month = 1;
     private int day = 1;
     private long birthdayLong;
 
     public void myCalendar() {
-        // 初始化对话框             R.style.CalendarDialog 是自定义的弹框主题，在styles设置
+        // 初始化对话框
         final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CalendarDialog);
         // 初始化自定义布局参数
         LayoutInflater layoutInflater = getLayoutInflater();
@@ -407,7 +405,7 @@ public class ClientActivity extends AppCompatActivity {
         ArrayList<String> gradeDay31 = new ArrayList<>();
 
         // 为数据项赋值
-        int thisYear = Integer.parseInt(new SimpleDateFormat("YYYY").format(new java.util.Date()));
+        int thisYear = Integer.parseInt(new SimpleDateFormat("yyyy").format(new java.util.Date()));
         for (int i = 1980; i <= thisYear; i++) // 从1980到今年
         gradeYear.add(i + "");
         for (int i = 1; i <= 12; i++) // 1月到12月
@@ -425,6 +423,9 @@ public class ClientActivity extends AppCompatActivity {
         calendarView1.setData(gradeYear);
         calendarView2.setData(gradeMonth);
         calendarView3.setData(gradeDay31);
+        calendarView1.setSelected(0);
+        calendarView2.setSelected(0);
+        calendarView3.setSelected(0);
 
         // 滚动选择事件
         calendarView1.setOnSelectListener(
@@ -482,19 +483,22 @@ public class ClientActivity extends AppCompatActivity {
                     if (day < 10) {
                         d = "0" + month;
                     }
-                    tvBirth.setText(year + "-" + m + "-" + d);
-                    birthDayToLong();
+                    String birthDay = year + "-" + m + "-" + d;
+                    tvBirth.setText(birthDay);
+                    birthDayToLong(birthDay);
                 });
+
         // 对话框的取消按钮
         builder.setNegativeButton("取消", null);
         // 显示对话框
         builder.show();
     }
 
-    private void birthDayToLong() {
-        Calendar calendar = Calendar.getInstance(Locale.CHINA);
-        calendar.set(year, month, day);
-        birthdayLong = calendar.getTimeInMillis();
-        cacheClientBean.setClient_birthday(birthdayLong);
+    private void birthDayToLong(String birthDayStr) {
+        Date date = DateUtil.StringToDate(birthDayStr, "yyyy-MM-dd");
+        if (date != null) {
+            birthdayLong = date.getTime();
+            cacheClientBean.setClient_birthday(birthdayLong);
+        }
     }
 }

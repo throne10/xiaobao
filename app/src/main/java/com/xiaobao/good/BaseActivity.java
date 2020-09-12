@@ -5,7 +5,12 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.xiaobao.good.common.eventbus.ClientUpdate;
+import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.ui.ClientFragment;
+import com.xiaobao.good.ui.MineFragment;
+
+import org.greenrobot.eventbus.EventBus;
 
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindColor;
@@ -15,6 +20,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class BaseActivity extends AppCompatActivity {
+
+    private static final String TAG = "BaseActivity_BA";
 
     @BindColor(R.color.color_text_white)
     int colorWhite;
@@ -64,9 +71,14 @@ public class BaseActivity extends AppCompatActivity {
         ivClient.setImageDrawable(costumUnselected);
         tvMine.setTextColor(colorYellow);
         ivMine.setImageDrawable(mineSelected);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, mMineFragment)
+                .commitNow();
     }
 
     private ClientFragment mClientFragment;
+    private MineFragment mMineFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +86,7 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.base_activity);
         ButterKnife.bind(this);
         mClientFragment = new ClientFragment();
+        mMineFragment = new MineFragment();
         if (savedInstanceState == null) {
             selectClient();
         }

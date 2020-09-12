@@ -104,8 +104,9 @@
 
     <Button
         android:id="@+id/bt_back"
-        android:layout_width="65dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/img_back_width"
+        android:layout_height="@dimen/img_back_height"
+        android:layout_marginTop="6dp"
         android:background="@mipmap/back" />
 
 </RelativeLayout>

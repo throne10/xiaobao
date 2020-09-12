@@ -39,7 +39,7 @@
             android:layout_toEndOf="@+id/tv_visit_count_label"
             android:gravity="center"
             android:paddingStart="10dp"
-            android:text="66"
+            android:text="-"
             android:textColor="@color/color_text_white"
             android:textSize="24sp" />
 
@@ -62,7 +62,7 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:paddingStart="10dp"
-            android:text="22"
+            android:text="-"
             android:textColor="@color/color_text_white"
             android:textSize="24sp" />
     </RelativeLayout>
@@ -93,7 +93,6 @@
             android:paddingEnd="10dp"
             android:paddingStart="10dp"
             android:paddingTop="2dp"
-            android:text="新闻"
             android:textColor="@color/color_text_white"
             android:textSize="12sp" />
 
@@ -108,7 +107,6 @@
             android:paddingEnd="10dp"
             android:paddingStart="10dp"
             android:paddingTop="2dp"
-            android:text="2020年9月9日22:24"
             android:textColor="@color/color_text_white"
             android:textSize="12sp" />
 
@@ -147,7 +145,6 @@
             android:paddingEnd="10dp"
             android:paddingStart="10dp"
             android:paddingTop="2dp"
-            android:text="展业"
             android:textColor="@color/color_text_white"
             android:textSize="12sp" />
 
@@ -162,7 +159,6 @@
             android:paddingEnd="10dp"
             android:paddingStart="10dp"
             android:paddingTop="2dp"
-            android:text="上海市宝山区"
             android:textColor="@color/color_text_white"
             android:textSize="12sp" />
 

@@ -100,7 +100,7 @@ public class ClientFragment extends Fragment
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         LogUtil.d(TAG, "onCreateView");
-        View view = inflater.inflate(R.layout.client_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_client, container, false);
         unbinder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
         return view;
@@ -146,6 +146,7 @@ public class ClientFragment extends Fragment
     }
 
     private void getClients() {
+        srlRefresh.setRefreshing(true);
         UserInfoData.LoginUserData userInfoData = UserSp.getInstances().getUser();
         LogUtil.d(TAG, "userInfoData > " + userInfoData.toString());
         String employedId = "4";
@@ -160,12 +161,11 @@ public class ClientFragment extends Fragment
                     @Override
                     public void onResponse(Call<Clients> call, Response<Clients> response) {
                         LogUtil.i(TAG, response.body().getData() + "");
-                        mAdapter.clearData();
                         itemList = null;
                         itemList = new ArrayList<>();
                         dataBean = response.body().getData();
-                        dataFilter();
                         initData();
+                        dataFilter();
                     }
 
                     // 请求失败时候的回调
@@ -198,6 +198,7 @@ public class ClientFragment extends Fragment
             model.clientsBean = bean;
             itemList.add(model);
         }
+        mAdapter.clearData();
         updateData();
     }
 
@@ -256,6 +257,11 @@ public class ClientFragment extends Fragment
                             LogUtil.e(TAG, "deleteClient Exception : " + e.toString());
                         }
                         if (response.isSuccessful()) {
+                            Toast.makeText(
+                                    getActivity(),
+                                    "删除成功：" + response.message(),
+                                    Toast.LENGTH_SHORT)
+                                    .show();
                             getClients();
                         } else {
                             Toast.makeText(
