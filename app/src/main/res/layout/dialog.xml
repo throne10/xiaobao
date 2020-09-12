@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+
+        android:background="@drawable/bg_dialog_btn" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+
+            <TextView
+                android:id="@+id/tv_dialog_tip"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/c_dialog_tip"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/iv_dialog_divider_1"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@id/tv_dialog_tip"
+                android:background="@color/c_dialog_divider" />
+
+            <!-- 按钮部分 -->
+
+            <LinearLayout
+                android:id="@+id/rl_dialog"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:gravity="center_horizontal" >
+
+                <RelativeLayout
+                    android:id="@+id/rl_dialog_positive"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:gravity="center" >
+
+                    <TextView
+                        android:id="@+id/tv_dialog_positive"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="确定"
+                        android:textColor="@color/c_dialog_text"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/iv_dialog_divider"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/c_dialog_divider" />
+
+                <RelativeLayout
+                    android:id="@+id/rl_dialog_negative"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:gravity="center" >
+
+                    <TextView
+                        android:id="@+id/tv_dialog_negative"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="取消"
+                        android:textColor="@color/c_dialog_text"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

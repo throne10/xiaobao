@@ -21,4 +21,13 @@
     <color name="color_green">#4caf50</color>
     <color name="color_light_white">#d8d8d8</color>
     <color name="color_dark_gray">#4d4f53</color>
+
+    <color name="tab__tv_selected">#000000</color>
+    <color name="c_dialog_divider">#B6B6B6</color>
+    <color name="c_dialog_tip">#030303</color>
+    <color name="c_dialog_background">#E6E6E6</color>
+    <color name="c_dialog_text">#1F70CB</color>
+    <color name="c_cancel_text">#FFFFFF</color>
+    <color name="c_dialog">#E9E6E6</color>
+    <color name="c_common_bg">#F2F2F2</color>
 </resources>

@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 
 import com.xiaobao.good.record.RecordItem;
 import com.xiaobao.good.record.RecordingService;
+import com.xiaobao.good.ui.MyAlertDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,6 +71,8 @@ public class AudioRecordActivity extends Activity {
     public void back() {
         if (nowStus == Status.RECORDING) {
             Toast.makeText(this, "请先处理完录音再退出！", Toast.LENGTH_LONG).show();
+        } else if (nowStus == Status.RECORD_STOP) {
+            Toast.makeText(this, "录音转码中请稍等！", Toast.LENGTH_LONG).show();
         } else {
             finish();
         }
@@ -164,7 +167,13 @@ public class AudioRecordActivity extends Activity {
         /**
          * 上传录音
          */
+        MyAlertDialog myAlertDialog = new MyAlertDialog(this);
+        myAlertDialog.setPositiveButton("保存到本地", view -> {
 
+        });
+        myAlertDialog.setNegativeButton("上传", view -> {
+
+        });
 //        http://ineutech.com:60003/xiaobao/api/uploadVoice
 
 
@@ -267,7 +276,7 @@ public class AudioRecordActivity extends Activity {
 
 
     public enum Status {
-        PLAYING, PAUSE_PLAYING, RECORDING, RECORDING_PAUSE, RECORD_STOP, UPLOADING;
+        PLAYING, PAUSE_PLAYING, RECORDING, RECORDING_PAUSE, RECORD_STOP, MP3DONE, UPLOADING;
     }
 
 
@@ -315,10 +324,12 @@ public class AudioRecordActivity extends Activity {
 
         if ("stop".equals(event.getStatus())) {
             Toast.makeText(this, "正在保存录音", Toast.LENGTH_LONG).show();
+            nowStus = Status.RECORD_STOP;
             //文件合并
         }
         if ("finish".equals(event.getStatus())) {
             Toast.makeText(this, "文件保存完成>>>>" + recordItem.getRootFilePath() + "/" + recordItem.getFileName() + ".mp3", Toast.LENGTH_LONG).show();
+            nowStus = Status.MP3DONE;
         }
 
     }
@@ -328,6 +339,9 @@ public class AudioRecordActivity extends Activity {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             if (nowStus == Status.RECORDING) {
                 Toast.makeText(this, "请先处理完录音再退出！", Toast.LENGTH_LONG).show();
+                return false;
+            } else if (nowStus == Status.RECORD_STOP) {
+                Toast.makeText(this, "录音转码中请稍等！", Toast.LENGTH_LONG).show();
                 return false;
             } else {
                 return true;
