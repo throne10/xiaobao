@@ -120,7 +120,7 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
         RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
 
 
-        List<RecordHistoryBean> listBean = testDao.getAll();
+        List<RecordHistoryBean> listBean = testDao.getAllByVisitId(visit_id);
 
         List<RecordDetailItem> itemList = new ArrayList<>();
 
@@ -154,6 +154,7 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
         }
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("data", (ArrayList<? extends Parcelable>) itemList);
+        bundle.putInt("visitId", visit_id);
         RecordFragment recordFragment = new RecordFragment();
         recordFragment.setArguments(bundle);
         list.add(recordFragment);
@@ -161,6 +162,8 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
 
         bundle = new Bundle();
         bundle.putParcelableArrayList("data", (ArrayList<? extends Parcelable>) itemList2);
+        bundle.putInt("visitId", visit_id);
+
         recordFragment = new RecordFragment();
         recordFragment.setArguments(bundle);
         list.add(recordFragment);
@@ -194,6 +197,8 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
                 Intent intent = new Intent(AudioRecordDetailActivity.this, AudioRecordActivity.class);
                 intent.putExtra("visitId", visit_id);
                 startActivity(intent);
+
+                finish();
             } catch (Exception e) {
                 Log.i(TAG, "add e:" + e);
             }

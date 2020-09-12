@@ -19,6 +19,9 @@ public interface RecordHistoryDao {
     @Query("SELECT * FROM RecordHistoryBean")
     List<RecordHistoryBean> getAll();
 
+    @Query("SELECT * FROM RecordHistoryBean WHERE client_id=:visitId")
+    List<RecordHistoryBean> getAllByVisitId(int visitId);
+
     @Query("SELECT * FROM RecordHistoryBean WHERE :path = file_path")
     List<RecordHistoryBean> getSpecificPath(String path);
 

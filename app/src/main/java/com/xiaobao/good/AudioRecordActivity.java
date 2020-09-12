@@ -98,6 +98,7 @@ public class AudioRecordActivity extends Activity {
     @OnClick(R.id.bt_pause_play)
     public void pauseClick() {
 
+
         if (Status.PLAYING != nowStus) {
             toast("当前未在播放");
             return;
@@ -326,7 +327,20 @@ public class AudioRecordActivity extends Activity {
 
 
     public enum Status {
-        PLAYING, PAUSE_PLAYING, RECORDING, RECORDING_PAUSE, RECORD_STOP, MP3DONE, UPLOADING;
+        PLAYING("播放"),
+        PAUSE_PLAYING("播放暂停"),
+        RECORDING("录音中"),
+        RECORDING_PAUSE("录音暂停"),
+        RECORD_STOP("录音停止"),
+        MP3DONE("MP3转码"),
+        UPLOADING("上传");
+
+
+        String describe;
+
+        Status(String desribe) {
+            this.describe = desribe;
+        }
     }
 
 

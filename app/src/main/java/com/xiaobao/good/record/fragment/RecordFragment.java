@@ -50,11 +50,13 @@ public class RecordFragment extends Fragment {
         Bundle bundle = getArguments();
         List<RecordDetailItem> list = (List<RecordDetailItem>) bundle.get("data");
 
+        int visitId = bundle.getInt("visitId", -1);
+
 
         Log.i("RecordDetailItem", "size :" + list.size());
 
 
-        onlineRecordAdpater = new OnlineRecordAdpater(mActivity, list);
+        onlineRecordAdpater = new OnlineRecordAdpater(mActivity, list, visitId );
         listView.setAdapter(onlineRecordAdpater);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

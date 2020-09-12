@@ -14,14 +14,27 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xiaobao.good.AudioRecordContentActivity;
 import com.xiaobao.good.R;
+import com.xiaobao.good.db.AbstractAppDatabase;
+import com.xiaobao.good.db.dao.RecordHistoryDao;
 import com.xiaobao.good.record.RecordDetailItem;
+import com.xiaobao.good.retrofit.RetrofitUtils;
+import com.xiaobao.good.retrofit.result.RecordUploadResult;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OnlineRecordAdpater extends BaseAdapter {
     private static final String TAG = "OnlineRecordAdpater";
@@ -35,10 +48,12 @@ public class OnlineRecordAdpater extends BaseAdapter {
     private Handler mHandler = new Handler();
     int selectItem = -1;
 
+    int visitId;
 
-    public OnlineRecordAdpater(Context context, List<RecordDetailItem> list) {
+    public OnlineRecordAdpater(Context context, List<RecordDetailItem> list, int visitId) {
         this.list = list;
         this.context = context;
+        this.visitId = visitId;
     }
 
     @Override
@@ -122,48 +137,50 @@ public class OnlineRecordAdpater extends BaseAdapter {
                         context.startActivity(intent);
                     } else {
 
-                    }
+                        File file = new File(recordDetailItem.getFilePath());
 
-//                    File file = new File(recordItem.getRootFilePath() + "/" + recordItem.getFileName() + ".mp3");
-//
-//                    RequestBody fileRQ = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//                    MultipartBody.Part part = MultipartBody.Part.createFormData("picture", file.getName(), fileRQ);
-//
-//                    RequestBody body = new MultipartBody.Builder()
-//                            .addFormDataPart("visit_id", visitId + "")
-//                            .addFormDataPart("voiceFile", file.getName(), fileRQ)
-//                            .build();
-//                    Call<RecordUploadResult> uploadCall = RetrofitUtils.getService().uploadVoice(body);
-//                    uploadCall.enqueue(new Callback<RecordUploadResult>() {
-//                        @Override
-//                        public void onResponse(Call<RecordUploadResult> call, Response<RecordUploadResult> response) {
-//
-//                            Log.i(TAG, "recordupload :" + response.body().getCode());
-//                            String code = response.body().getCode();
-//
-//                            if ("success".equals(code)) {
-//                                /**
-//                                 * 更新录音详情
-//                                 */
-//
-//                                RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
-//                                testDao.updateCloudStatus(1, file.getPath());
-//
-//
-//                                toast("提交成功");
-//
-//                            } else {
-//                                toast("上传失败");
-//                            }
-//
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<RecordUploadResult> call, Throwable t) {
-//                            toast("上传失败");
-//
-//                        }
-//                    });
+                        Log.i(TAG, "file :" + file);
+                        Log.i(TAG, "visit_id :" + visitId);
+
+                        RequestBody fileRQ = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                        MultipartBody.Part part = MultipartBody.Part.createFormData("picture", file.getName(), fileRQ);
+
+                        RequestBody body = new MultipartBody.Builder()
+                                .addFormDataPart("visit_id", visitId + "")
+                                .addFormDataPart("voiceFile", file.getName(), fileRQ)
+                                .build();
+                        Call<RecordUploadResult> uploadCall = RetrofitUtils.getService().uploadVoice(body);
+                        uploadCall.enqueue(new Callback<RecordUploadResult>() {
+                            @Override
+                            public void onResponse(Call<RecordUploadResult> call, Response<RecordUploadResult> response) {
+
+                                Log.i(TAG, "recordupload :" + response.body().getCode());
+                                String code = response.body().getCode();
+
+                                if ("success".equals(code)) {
+                                    /**
+                                     * 更新录音详情
+                                     */
+
+                                    RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
+                                    testDao.updateCloudStatus(1, file.getPath());
+
+
+                                    toast("提交成功");
+
+                                } else {
+                                    toast("上传失败");
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<RecordUploadResult> call, Throwable t) {
+                                toast("上传失败");
+
+                            }
+                        });
+                    }
 
 
                 }
@@ -236,6 +253,10 @@ public class OnlineRecordAdpater extends BaseAdapter {
 
         return convertView;
 
+    }
+
+    private void toast(String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
     MyRunnable mRunnable;
