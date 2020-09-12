@@ -90,14 +90,17 @@ public class ScheduleActivity extends Activity {
         VisitRecords.DataBean.RecordsBean s = recordsBeans.get(p);
         if (s.getPurpose().equals("展业")) {
             Intent i = new Intent(context, AudioRecordDetailActivity.class);
+            i.putExtra("date",new Gson().toJson(recordsBeans.get(p)));
             context.startActivity(i);
         }
         if (s.getPurpose().equals("送礼品")) {
             Intent i = new Intent(context, AudioRecordDetailActivity.class);
+            i.putExtra("date", new Gson().toJson(recordsBeans.get(p)));
             context.startActivity(i);
         }
         if (s.getPurpose().equals("递送保单")) {
             Intent i = new Intent(context, AudioRecordDetailActivity.class);
+            i.putExtra("date", new Gson().toJson(recordsBeans.get(p)));
             context.startActivity(i);
         }
         if (s.getPurpose().equals("微信聊天")) {
@@ -127,6 +130,8 @@ public class ScheduleActivity extends Activity {
     public void schedule() {
         Intent i = new Intent(context, SignInActivity.class);
         i.putExtra("name", intentClient.getClient_name());
+        i.putExtra("clientId", intentClient.getClient_id());
+        i.putExtra("employeeId", intentClient.getEmployee_id());
         context.startActivity(i);
     }
 

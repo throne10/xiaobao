@@ -12,12 +12,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.gson.Gson;
 import com.xiaobao.good.db.AbstractAppDatabase;
 import com.xiaobao.good.db.RecordHistoryBean;
 import com.xiaobao.good.db.dao.RecordHistoryDao;
 import com.xiaobao.good.record.RecordDetailItem;
 import com.xiaobao.good.record.fragment.ContentFragmentPagerAdapter;
 import com.xiaobao.good.record.fragment.RecordFragment;
+import com.xiaobao.good.schedule.VisitRecords;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
      * 未选中选项颜色
      */
     private int deselectTextColor = Color.parseColor("#ffffff");
+    private VisitRecords.DataBean.RecordsBean recordsBean;
 
 
     @Override
@@ -57,7 +60,11 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
 
         tv_online_record.setOnClickListener(this);
         tv_local_record.setOnClickListener(this);
+        String s = getIntent().getStringExtra("date");
 
+        recordsBean = new Gson().fromJson(s, VisitRecords.DataBean.RecordsBean.class);
+
+        Log.i(TAG, "recordsBean>>>" + recordsBean.getVoices().get(0).getVoice_file());
         initViewPager(0);
 
 

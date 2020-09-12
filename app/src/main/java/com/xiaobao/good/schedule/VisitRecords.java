@@ -91,7 +91,7 @@ public class VisitRecords {
                     '}';
         }
 
-        public static class RecordsBean {
+        public static class RecordsBean   {
             /**
              * client : {"age":23,"client_address":"宝山","client_area":null,"client_birthday":871315200000,"client_car":"是","client_cname":null,"client_email":null,"client_house":"是","client_id":38,"client_idcard":"28746637183737","client_income":25,"client_job":"商人","client_keep":null,"client_label":"旅游","client_marriage":"未婚","client_name":"张三","client_origin":null,"client_phone":"177373627222","client_sex":"男","client_type":"P","employee_id":4,"employee_name":null}
              * client_id : 38
@@ -608,6 +608,20 @@ public class VisitRecords {
 
                 public void setVoice_time(long voice_time) {
                     this.voice_time = voice_time;
+                }
+
+                @Override
+                public String toString() {
+                    return "VoicesBean{" +
+                            "analyze=" + analyze +
+                            ", visit_id=" + visit_id +
+                            ", voice_comment='" + voice_comment + '\'' +
+                            ", voice_content=" + voice_content +
+                            ", voice_file='" + voice_file + '\'' +
+                            ", voice_id=" + voice_id +
+                            ", voice_task='" + voice_task + '\'' +
+                            ", voice_time=" + voice_time +
+                            '}';
                 }
             }
         }

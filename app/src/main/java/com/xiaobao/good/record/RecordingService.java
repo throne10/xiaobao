@@ -95,7 +95,11 @@ public class RecordingService extends Service {
     }
 
     public void stopRecording() {
-        audioRecorder.stopRecord();
+        try {
+            audioRecorder.stopRecord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
 
 

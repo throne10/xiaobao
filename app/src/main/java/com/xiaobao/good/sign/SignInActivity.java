@@ -44,6 +44,8 @@ public class SignInActivity extends Activity {
     private String purpose = "展业";
     private int visitId;
     private String name = "unknown";
+    private int clientId;
+    private int employeeId;
 
     @OnClick(R.id.bt_back)
     public void back() {
@@ -65,8 +67,8 @@ public class SignInActivity extends Activity {
         }
         Visit visit = new Visit();
         visit.setSign_address(addr);
-        visit.setClient_id(38);
-        visit.setEmployee_id(4);
+        visit.setClient_id(clientId);
+        visit.setEmployee_id(employeeId);
         visit.setPurpose(purpose);
         String s = new Gson().toJson(visit);
         LogUtil.i(TAG, "toJson>>>" + s);
@@ -113,6 +115,8 @@ public class SignInActivity extends Activity {
         setContentView(R.layout.activity_sign);
         context = this;
         name = getIntent().getStringExtra("name");
+        clientId = getIntent().getIntExtra("clientId", 0);
+        employeeId = getIntent().getIntExtra("employeeId", 0);
         EventBus.getDefault().register(this);
 
         ButterKnife.bind(this);
