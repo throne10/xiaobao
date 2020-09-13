@@ -465,7 +465,11 @@ public class AudioRecordActivity extends Activity {
         if ("process".equals(event.getStatus())) {
             Log.i(TAG, "getProcess :" + event.getProcess());
             if (uploadDialog != null) {
-                uploadDialog.setProgress(4);
+                try {
+                    uploadDialog.setProgress(event.getProcess());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
         } else if ("stop".equals(event.getStatus())) {
