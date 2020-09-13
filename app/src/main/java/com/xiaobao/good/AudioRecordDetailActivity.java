@@ -1,5 +1,6 @@
 package com.xiaobao.good;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,13 +20,19 @@ import com.google.gson.Gson;
 import com.xiaobao.good.db.AbstractAppDatabase;
 import com.xiaobao.good.db.RecordHistoryBean;
 import com.xiaobao.good.db.dao.RecordHistoryDao;
+import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.record.RecordDetailItem;
 import com.xiaobao.good.record.fragment.ContentFragmentPagerAdapter;
 import com.xiaobao.good.record.fragment.RecordFragment;
+import com.xiaobao.good.retrofit.RetrofitUtils;
 import com.xiaobao.good.schedule.VisitRecords;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AudioRecordDetailActivity extends FragmentActivity implements View.OnClickListener {
 
@@ -51,6 +59,10 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
 
     private int visit_id;
     private String add;
+    private int clientId;
+    private int employeeId;
+    private List<VisitRecords.DataBean.RecordsBean> recordsBeans;
+    private Context context;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +70,7 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
 
         setContentView(R.layout.activity_record_detail);
 
-
+        context = this;
         //初始化Fragment数组
         pager = (ViewPager) this.findViewById(R.id.pager);
         list = new ArrayList<>();
@@ -75,16 +87,50 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
         tv_local_record.setOnClickListener(this);
         String s = getIntent().getStringExtra("date");
         add = getIntent().getStringExtra("add");
-
+        clientId = getIntent().getIntExtra("clientId", 0);
+        employeeId = getIntent().getIntExtra("employeeId", 0);
         visit_id = getIntent().getIntExtra("visitId", -1);
 
         recordsBean = new Gson().fromJson(s, VisitRecords.DataBean.RecordsBean.class);
 
         initViewPager(0);
 
-
+//        getVisitRecords();
     }
 
+    private void getVisitRecords() {
+        Call<VisitRecords> visitRecordsCall =
+                RetrofitUtils.getService()
+                        .getVisit(employeeId, clientId);
+
+        visitRecordsCall.enqueue(
+                new Callback<VisitRecords>() {
+                    @Override
+                    public void onResponse(
+                            Call<VisitRecords> call, Response<VisitRecords> response) {
+                        if (response.isSuccessful()) {
+                            recordsBeans = response.body().getData().getRecords();
+                            LogUtil.i(TAG, "recordsBeans>>>>" + recordsBeans);
+                            if (!recordsBeans.isEmpty()) {
+                                for (VisitRecords.DataBean.RecordsBean recordsBean : recordsBeans) {
+                                    if (visit_id == recordsBean.getVisit_id()) {
+                                        LogUtil.i(TAG, "records>>>>" + recordsBean);
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(context, "暂无拜访记录", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(context, "拜访记录请求失败", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<VisitRecords> call, Throwable t) {
+                        Toast.makeText(context, "拜访记录请求失败", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
 
     protected void doSwitch(int id) {
 
@@ -212,7 +258,6 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
 
     /**
      * 页面切换监听事件
-     *
      */
     public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
 

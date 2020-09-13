@@ -107,8 +107,8 @@ public class ScheduleActivity extends Activity {
             i.putExtra("visitId", s.getVisit_id());
             i.putExtra("add", s.getSign_address());
             i.putExtra("name", intentClient.getClient_name());
-
-
+            i.putExtra("employeeId", intentClient.getEmployee_id());
+            i.putExtra("clientId", intentClient.getClient_id());
             i.putExtra("date", new Gson().toJson(recordsBeans.get(p)));
             context.startActivity(i);
         }
@@ -118,7 +118,8 @@ public class ScheduleActivity extends Activity {
             i.putExtra("name", intentClient.getClient_name());
             i.putExtra("add", s.getSign_address());
             i.putExtra("visitId", s.getVisit_id());
-
+            i.putExtra("employeeId", intentClient.getEmployee_id());
+            i.putExtra("clientId", intentClient.getClient_id());
             i.putExtra("date", new Gson().toJson(recordsBeans.get(p)));
             context.startActivity(i);
         }
@@ -128,6 +129,8 @@ public class ScheduleActivity extends Activity {
             i.putExtra("add", s.getSign_address());
             i.putExtra("visitId", s.getVisit_id());
             i.putExtra("date", new Gson().toJson(recordsBeans.get(p)));
+            i.putExtra("employeeId", intentClient.getEmployee_id());
+            i.putExtra("clientId", intentClient.getClient_id());
             context.startActivity(i);
         }
         if (s.getPurpose().equals("微信聊天")) {
