@@ -17,7 +17,7 @@ public class FileUtil {
 
     private static String rootPath = "pauseRecordDemo";
     //原始文件(不能播放)
-    private final static String AUDIO_PCM_BASEPATH = "/" + rootPath + "/pcm/";
+    public final static String AUDIO_PCM_BASEPATH = "/" + rootPath + "/pcm/";
     //可播放的高质量音频文件
     private final static String AUDIO_WAV_BASEPATH = "/" + rootPath + "/wav/";
 

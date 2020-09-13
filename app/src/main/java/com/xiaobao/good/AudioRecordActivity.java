@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,9 +17,11 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.xiaobao.good.common.CommonUtils;
 import com.xiaobao.good.db.AbstractAppDatabase;
 import com.xiaobao.good.db.RecordHistoryBean;
 import com.xiaobao.good.db.dao.RecordHistoryDao;
+import com.xiaobao.good.record.FileUtil;
 import com.xiaobao.good.record.RecordItem;
 import com.xiaobao.good.record.RecordingService;
 import com.xiaobao.good.retrofit.RetrofitUtils;
@@ -101,81 +104,61 @@ public class AudioRecordActivity extends Activity {
 
     private int visitId;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+    }
+
     @OnClick(R.id.bt_pause_play)
     public void pauseClick() {
-
-        if (Status.PAUSE_PLAYING == nowStus) {
-            toast("已经停止播放");
-            return;
-        }
-
-
-        if (Status.PLAYING == nowStus) {
-            if (mMediaPlayer != null) {
-                mMediaPlayer.pause();
-                nowStus = Status.PAUSE_PLAYING;
-
-            }
+        if (nowStus == Status.RECORDING) {
+            pause_play.setText("录音");
+            nowStus = Status.PAUSE_RECORDING;
+            doRecordPause();
+        } else if (nowStus == Status.PAUSE_RECORDING) {
+            pause_play.setText("暂停");
+            nowStus = Status.RECORDING;
+            reStartRecord();
         } else {
-            toast("当前未在播放");
-            return;
+            toast("当前不在录音状态");
         }
 
     }
 
     @OnClick(R.id.bt_play)
     public void playClick() {
-
-        if (Status.PLAYING == nowStus) {
-            toast("正在播放");
-            return;
-        }
-
-
-        if (Status.MP3DONE == nowStus) {
-
-            mMediaPlayer = new MediaPlayer();
-
-            try {
-
-                Log.i(TAG, "play :" + newFile.getPath());
-                mMediaPlayer.setDataSource(newFile.getPath());
-                mMediaPlayer.prepare();
-
-                nowStus = Status.PLAYING;
-                mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        mMediaPlayer.start();
-                    }
-
-                });
-
-                mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        mMediaPlayer.release();
-                        nowStus = Status.MP3DONE;
-                    }
-                });
-            } catch (IOException e) {
-                Log.e(TAG, "prepare() failed");
-            }
-        } else if (Status.PAUSE_PLAYING == nowStus) {
-
+        if (StatusPlay.PLAYING == nowStusPlay) {
+            play.setText("播放");
             if (mMediaPlayer != null) {
-                mMediaPlayer.start();
-                nowStus = Status.PLAYING;
+                mMediaPlayer.pause();
+                nowStusPlay = StatusPlay.PAUSE_PLAYING;
             }
-        } else {
+        } else if (StatusPlay.PAUSE_PLAYING == nowStusPlay) {
+            if (Status.MP3DONE == nowStus) {
+                mMediaPlayer = new MediaPlayer();
+                try {
+                    Log.i(TAG, "play :" + newFile.getPath());
+                    mMediaPlayer.setDataSource(newFile.getPath());
+                    mMediaPlayer.prepare();
 
-            if (Status.RECORDING == nowStus) {
+                    nowStusPlay = StatusPlay.PLAYING;
+                    mMediaPlayer.setOnPreparedListener(mp -> {
+                        mMediaPlayer.start();
+                        play.setText("停止");
+                    });
+
+                    mMediaPlayer.setOnCompletionListener(mp -> {
+                        mMediaPlayer.release();
+                        nowStusPlay = StatusPlay.PAUSE_PLAYING;
+                        play.setText("播放");
+                    });
+                } catch (IOException e) {
+                    Log.e(TAG, "prepare() failed");
+                }
+            } else {
                 toast("正在录音，当前操作无法完成");
-            } else if (Status.UPLOADING == nowStus) {
-                toast("正在提交，请稍等");
             }
         }
-
     }
 
 
@@ -186,7 +169,6 @@ public class AudioRecordActivity extends Activity {
             toast("已经停止录音");
             return;
         }
-
         if (nowStus == Status.RECORDING) {
 
             chronometer.stop();
@@ -215,7 +197,7 @@ public class AudioRecordActivity extends Activity {
         }
 
         boolean re = false;
-        if (nowStus == Status.MP3DONE || nowStus == Status.PAUSE_PLAYING || nowStus == Status.PAUSE_PLAYING) {
+        if (nowStus == Status.MP3DONE) {
             re = true;
         }
 
@@ -226,8 +208,12 @@ public class AudioRecordActivity extends Activity {
 
 
         if (mMediaPlayer != null) {
-            if (mMediaPlayer.isPlaying()) {
-                mMediaPlayer.stop();
+            try {
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.stop();
+                }
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
             }
         }
 
@@ -309,6 +295,15 @@ public class AudioRecordActivity extends Activity {
 
     }
 
+    private void doRecordPause() {
+
+        Intent intent = new Intent(this, RecordingService.class);
+
+        intent.putExtra("pause", true);
+
+        startService(intent);
+
+    }
 
     private void doRecordStop() {
 
@@ -341,29 +336,26 @@ public class AudioRecordActivity extends Activity {
 
         Log.i(TAG, "root file :" + folder.exists());
 
+        startRecord();
+
+    }
+
+    private void startRecord() {
         Intent intent = new Intent(this, RecordingService.class);
 
         intent.putExtra("start", true);
         intent.putExtra("item", recordItem);
 
         startService(intent);
-
     }
 
-
-    private void doAddRecord() {
-
-        recordItem.setFileCount(recordItem.getFileCount() + 1);
-
+    private void reStartRecord() {
         Intent intent = new Intent(this, RecordingService.class);
 
-        intent.putExtra("start", true);
-        intent.putExtra("item", recordItem);
+        intent.putExtra("restart", true);
 
         startService(intent);
-
     }
-
 
     private void toast(String msg) {
 
@@ -372,9 +364,8 @@ public class AudioRecordActivity extends Activity {
 
 
     public enum Status {
-        PLAYING(true),
-        PAUSE_PLAYING(true),
         RECORDING(false),
+        PAUSE_RECORDING(false),
         RECORD_STOP(false),
         MP3DONE(true),
         UPLOADING(false);
@@ -387,13 +378,29 @@ public class AudioRecordActivity extends Activity {
         }
     }
 
+    public enum StatusPlay {
+        NULL(true),
+        PLAYING(true),
+        PAUSE_PLAYING(true);
+        boolean can_be_close;
+
+        StatusPlay(boolean can_be_close) {
+            this.can_be_close = can_be_close;
+        }
+    }
+
 
     private Status nowStus;
+    private StatusPlay nowStusPlay = StatusPlay.PAUSE_PLAYING;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_record);
+        File f = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + FileUtil.AUDIO_PCM_BASEPATH);
+        String[] fs = f.list();
+        new Thread(() -> CommonUtils.clearFiles(fs, Environment.getExternalStorageDirectory().getAbsolutePath() + FileUtil.AUDIO_PCM_BASEPATH)).start();
+
         ButterKnife.bind(this);
         context = this;
         try {
@@ -428,6 +435,9 @@ public class AudioRecordActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         doRecordStop();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+        }
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 

@@ -193,38 +193,41 @@ public class OnlineRecordAdpater extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
 
-                        mMediaPlayer = new MediaPlayer();
+                Button b = (Button) v;
+                if (b.getText().equals("播放")) {
+                    mMediaPlayer = new MediaPlayer();
 
-                        try {
-                            mMediaPlayer.setDataSource(recordDetailItem.getFilePath());
-                            mMediaPlayer.prepare();
-                            Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
-                            holder.seekbar.setMax(mMediaPlayer.getDuration());
+                    try {
+                        mMediaPlayer.setDataSource(recordDetailItem.getFilePath());
+                        mMediaPlayer.prepareAsync();
+//                        Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
+//                        holder.seekbar.setMax(mMediaPlayer.getDuration());
+                        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer mp) {
+                                Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
+                                holder.seekbar.setMax(mMediaPlayer.getDuration());
+                                mMediaPlayer.start();
+                                mRunnable = new MyRunnable(holder);
 
-                            mMediaPlayer.setOnPreparedListener(
-                                    new MediaPlayer.OnPreparedListener() {
-                                        @Override
-                                        public void onPrepared(MediaPlayer mp) {
-                                            mMediaPlayer.start();
-                                        }
-                                    });
-                        } catch (IOException e) {
-                            Log.e(TAG, "prepare() failed");
-                        }
-
-                        mMediaPlayer.setOnCompletionListener(
-                                new MediaPlayer.OnCompletionListener() {
-                                    @Override
-                                    public void onCompletion(MediaPlayer mp) {
-                                        stopPlaying(holder);
-                                    }
-                                });
-
-                        mRunnable = new MyRunnable(holder);
-
-                        mHandler.postDelayed(mRunnable, 1000);
+                                mHandler.postDelayed(mRunnable, 1000);
+                            }
+                        });
+                    } catch (IOException e) {
+                        Log.e(TAG, "prepare() failed");
                     }
-                });
+
+                    mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            stopPlaying(holder);
+                        }
+                    });
+
+                }
+
+            }
+        });
         if (selectItem >= 0) {
 
             if (position == selectItem) {
@@ -281,13 +284,27 @@ public class OnlineRecordAdpater extends BaseAdapter {
         }
     }
 
+    public void stopPaly() {
+        try {
+            if (mMediaPlayer != null) {
+                mMediaPlayer.stop();
+                mMediaPlayer.reset();
+                mMediaPlayer.release();
+                mMediaPlayer = null;
+            }
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void stopPlaying(ViewHolder holder) {
         mHandler.removeCallbacks(mRunnable);
-        mMediaPlayer.stop();
-        mMediaPlayer.reset();
-        mMediaPlayer.release();
-        mMediaPlayer = null;
-
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
         holder.seekbar.setProgress(holder.seekbar.getMax());
 
         holder.current_progress_text_view.setText(holder.file_length_text_view.getText());

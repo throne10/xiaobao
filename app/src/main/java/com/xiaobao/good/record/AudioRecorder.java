@@ -8,7 +8,10 @@ import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -272,38 +275,66 @@ public class AudioRecorder {
      */
 
     private void PCMFilesToMp3ile(final List<String> filePaths) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String pcmName = filePaths.get(0);
-                String mp3file = mp3Path + "/" + fileName.replace(".pcm", ".mp3");
-                Log.i("AudioRecorder", "pcmName>>>" + pcmName + "   mp3file>>>" + mp3file);
-                Mp3Converter.init(44100, 1, 1, 22050, 128 * 1024, 0);
-                new Thread(() -> Mp3Converter.convertMp3(pcmName, mp3file)).start();
-                Runnable runnable = () -> {
-                    while (true) {
-                        long bytes = Mp3Converter.getConvertBytes();
-                        Log.i("AudioRecorder", "convert bytes>>>" + bytes);
-                        if (bytes == -1) {
-                            Log.i("AudioRecorder", "convert progress 100");
-                            clearFiles(filePaths);
-                            RecordItem item = new RecordItem();
-                            item.setStatus("finish");
-                            EventBus.getDefault().post(
-                                    item);
-                            break;
-                        }
-                        try {
-                            Thread.sleep(1000L);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+        new Thread(() -> {
+            String pcmName = mergePCMFilesToPCM(filePaths);
+
+            String mp3file = mp3Path + "/" + fileName.replace(".pcm", ".mp3");
+            Log.i("AudioRecorder", "pcmName>>>" + pcmName + "   mp3file>>>" + mp3file);
+            Mp3Converter.init(44100, 1, 1, 22050, 128 * 1024, 0);
+            new Thread(() -> Mp3Converter.convertMp3(pcmName, mp3file)).start();
+            Runnable runnable = () -> {
+                while (true) {
+                    long bytes = Mp3Converter.getConvertBytes();
+                    Log.i("AudioRecorder", "convert bytes>>>" + bytes);
+                    if (bytes == -1) {
+                        Log.i("AudioRecorder", "convert progress 100");
+                        clearFiles(filePaths);
+                        clearFile(pcmName);
+                        RecordItem item = new RecordItem();
+                        item.setStatus("finish");
+                        EventBus.getDefault().post(
+                                item);
+                        break;
                     }
-                };
-                new Thread(runnable).start();
-                fileName = null;
-            }
+                    try {
+                        Thread.sleep(1000L);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            new Thread(runnable).start();
+            fileName = null;
         }).start();
+    }
+
+    private String mergePCMFilesToPCM(List<String> filePaths) {
+        byte buffer[] = null;
+        String destinationPath = null;
+        try {
+            if (filePaths.size() == 1) {
+                return filePaths.get(0);
+            }
+            destinationPath = filePaths.get(0) + ".m";
+
+            BufferedOutputStream ouStream = new BufferedOutputStream(new FileOutputStream(
+                    destinationPath));
+            buffer = new byte[1024 * 4]; // Length of All Files, Total Size
+
+            for (int j = 0; j < filePaths.size(); j++) {
+                Log.i("AudioRecorder", "merge>>>" + filePaths.get(j));
+                BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(new File(filePaths.get(j))));
+                int size;
+                while ((size = inStream.read(buffer)) != -1) {
+                    ouStream.write(buffer, 0, size);
+                }
+                inStream.close();
+            }
+            ouStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return destinationPath;
     }
 
     /**
@@ -394,6 +425,13 @@ public class AudioRecorder {
             if (file.exists()) {
                 file.delete();
             }
+        }
+    }
+
+    private static void clearFile(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
         }
     }
 }

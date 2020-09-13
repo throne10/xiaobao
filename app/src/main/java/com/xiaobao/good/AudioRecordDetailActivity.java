@@ -213,7 +213,6 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
     /**
      * 页面切换监听事件
      *
-     * @author Justsy
      */
     public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
 

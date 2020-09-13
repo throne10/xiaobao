@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -14,6 +15,23 @@ import java.io.IOException;
 import java.util.List;
 
 public class CommonUtils {
+
+
+    /**
+     * 清除文件
+     *
+     * @param filePathList
+     */
+    public static void clearFiles(String[] filePathList, String h) {
+        for (String s : filePathList) {
+            Log.i("yxd", "path>>>" + h + "/" + s);
+            File file = new File(h + "/" + s);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+    }
+
     public static void Toast(Context context, String s) {
         Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
     }

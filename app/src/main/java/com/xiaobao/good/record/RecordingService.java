@@ -51,6 +51,9 @@ public class RecordingService extends Service {
                 Log.i(LOG_TAG, "pause");
                 pauseRecord();
                 notifyRecordActivity("pause");
+            } else if (intent.hasExtra("restart")) {
+                Log.i(LOG_TAG, "restart");
+                audioRecorder.startRecord(null);
             }
 
         }
@@ -58,9 +61,11 @@ public class RecordingService extends Service {
     }
 
     private void notifyRecordActivity(String status) {
-        item.setStatus(status);
-        EventBus.getDefault().post(
-                item);
+        if(item!=null) {
+            item.setStatus(status);
+            EventBus.getDefault().post(
+                    item);
+        }
     }
 
     @Override
@@ -95,22 +100,17 @@ public class RecordingService extends Service {
     }
 
     public void stopRecording() {
-        try {
-            audioRecorder.stopRecord();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(item!=null) {
+            try {
+                audioRecorder.stopRecord();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
+
+
+            item.setElpased(mElapsedMillis);
         }
-        mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
-
-
-        item.setElpased(mElapsedMillis);
-
-
-//        getSharedPreferences("sp_name_audio", MODE_PRIVATE)
-//                .edit()
-//                .putString("audio_path", mFilePath)
-//                .putLong("elpased", mElapsedMillis)
-//                .apply();
 
     }
 

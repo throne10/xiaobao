@@ -121,4 +121,11 @@ public class RecordFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        onlineRecordAdpater.stopPaly();
+        Log.i("yxd", "onDestroy");
+    }
 }
