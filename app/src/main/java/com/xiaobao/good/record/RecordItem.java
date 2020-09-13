@@ -12,6 +12,7 @@ public class RecordItem implements Parcelable {
         rootFilePath = in.readString();
         status = in.readString();
         elpased = in.readLong();
+        process = in.readInt();
     }
 
     public static final Creator<RecordItem> CREATOR = new Creator<RecordItem>() {
@@ -38,6 +39,7 @@ public class RecordItem implements Parcelable {
         dest.writeString(rootFilePath);
         dest.writeString(status);
         dest.writeLong(elpased);
+        dest.writeInt(process);
     }
 
     public RecordItem() {
@@ -50,6 +52,7 @@ public class RecordItem implements Parcelable {
     private String rootFilePath;
     private String status;
     private long elpased;
+    private int process;
 
     public String getFileName() {
         return fileName;
@@ -83,6 +86,10 @@ public class RecordItem implements Parcelable {
         this.status = status;
     }
 
+    public static Creator<RecordItem> getCREATOR() {
+        return CREATOR;
+    }
+
     @Override
     public String toString() {
         return "RecordItem{" +
@@ -102,4 +109,11 @@ public class RecordItem implements Parcelable {
         this.elpased = elpased;
     }
 
+    public int getProcess() {
+        return process;
+    }
+
+    public void setProcess(int process) {
+        this.process = process;
+    }
 }

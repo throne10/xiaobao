@@ -42,6 +42,7 @@ public class RecordingService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             if (intent.hasExtra("start")) {
+                Log.i(LOG_TAG, "getParcelableExtra>>>" + intent.getParcelableExtra("item"));
                 startRecording(intent.getParcelableExtra("item"));
             } else if (intent.hasExtra("stop")) {
                 Log.i(LOG_TAG, "stop");
@@ -61,7 +62,7 @@ public class RecordingService extends Service {
     }
 
     private void notifyRecordActivity(String status) {
-        if(item!=null) {
+        if (item != null) {
             item.setStatus(status);
             EventBus.getDefault().post(
                     item);
@@ -100,7 +101,7 @@ public class RecordingService extends Service {
     }
 
     public void stopRecording() {
-        if(item!=null) {
+        if (item != null) {
             try {
                 audioRecorder.stopRecord();
             } catch (Exception e) {

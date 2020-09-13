@@ -281,8 +281,12 @@ public class AudioRecorder {
             String mp3file = mp3Path + "/" + fileName.replace(".pcm", ".mp3");
             Log.i("AudioRecorder", "pcmName>>>" + pcmName + "   mp3file>>>" + mp3file);
             Mp3Converter.init(44100, 1, 1, 22050, 128 * 1024, 0);
+            File file = new File(pcmName);
+            long length = file.length();
+            Log.i("AudioRecorder", "pcmName length>>>" + length);
             new Thread(() -> Mp3Converter.convertMp3(pcmName, mp3file)).start();
             Runnable runnable = () -> {
+                RecordItem item;
                 while (true) {
                     long bytes = Mp3Converter.getConvertBytes();
                     Log.i("AudioRecorder", "convert bytes>>>" + bytes);
@@ -290,11 +294,17 @@ public class AudioRecorder {
                         Log.i("AudioRecorder", "convert progress 100");
                         clearFiles(filePaths);
                         clearFile(pcmName);
-                        RecordItem item = new RecordItem();
+                        item = new RecordItem();
                         item.setStatus("finish");
                         EventBus.getDefault().post(
                                 item);
                         break;
+                    } else {
+                        item = new RecordItem();
+                        item.setStatus("process");
+                        item.setProcess((int) ((bytes * 1.0 / length) * 100L));
+                        EventBus.getDefault().post(
+                                item);
                     }
                     try {
                         Thread.sleep(1000L);

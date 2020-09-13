@@ -341,12 +341,12 @@ public class AudioRecordActivity extends Activity {
     }
 
     private void startRecord() {
-        Intent intent = new Intent(this, RecordingService.class);
+        Intent i = new Intent(this, RecordingService.class);
 
-        intent.putExtra("start", true);
-        intent.putExtra("item", recordItem);
-
-        startService(intent);
+        i.putExtra("item", recordItem);
+        i.putExtra("start", true);
+        Log.i(TAG, "recordItem>>>" + recordItem);
+        startService(i);
     }
 
     private void reStartRecord() {
@@ -444,8 +444,10 @@ public class AudioRecordActivity extends Activity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(RecordItem event) {
 
+        if ("process".equals(event.getStatus())) {
+            Log.i(TAG, "getProcess :" + event.getProcess());
 
-        if ("stop".equals(event.getStatus())) {
+        } else if ("stop".equals(event.getStatus())) {
             Toast.makeText(this, "正在保存录音", Toast.LENGTH_LONG).show();
             nowStus = Status.RECORD_STOP;
             //文件合并
