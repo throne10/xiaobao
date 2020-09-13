@@ -1,5 +1,6 @@
 package com.xiaobao.good.record.adapter;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -39,6 +40,7 @@ import retrofit2.Response;
 public class OnlineRecordAdpater extends BaseAdapter {
     private static final String TAG = "OnlineRecordAdpater";
 
+    ProgressDialog dialog;
     List<RecordDetailItem> list;
 
     Context context;
@@ -133,6 +135,9 @@ public class OnlineRecordAdpater extends BaseAdapter {
                             context.startActivity(intent);
                         } else {
 
+                            dialog = ProgressDialog.show(context, "提示", "正在提交中", false, false);
+
+
                             File file = new File(recordDetailItem.getFilePath());
 
                             Log.i(TAG, "file :" + file);
@@ -159,6 +164,10 @@ public class OnlineRecordAdpater extends BaseAdapter {
                                                 Call<RecordUploadResult> call,
                                                 Response<RecordUploadResult> response) {
 
+                                            if (dialog != null) {
+                                                dialog.dismiss();
+                                            }
+
                                             Log.i(
                                                     TAG,
                                                     "recordupload :" + response.body().getCode());
@@ -181,6 +190,9 @@ public class OnlineRecordAdpater extends BaseAdapter {
                                         @Override
                                         public void onFailure(
                                                 Call<RecordUploadResult> call, Throwable t) {
+                                            if (dialog != null) {
+                                                dialog.dismiss();
+                                            }
                                             toast("上传失败");
                                         }
                                     });
@@ -193,41 +205,41 @@ public class OnlineRecordAdpater extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
 
-                Button b = (Button) v;
-                if (b.getText().equals("播放")) {
-                    mMediaPlayer = new MediaPlayer();
+                        Button b = (Button) v;
+                        if (b.getText().equals("播放")) {
+                            mMediaPlayer = new MediaPlayer();
 
-                    try {
-                        mMediaPlayer.setDataSource(recordDetailItem.getFilePath());
-                        mMediaPlayer.prepareAsync();
+                            try {
+                                mMediaPlayer.setDataSource(recordDetailItem.getFilePath());
+                                mMediaPlayer.prepareAsync();
 //                        Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
 //                        holder.seekbar.setMax(mMediaPlayer.getDuration());
-                        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mp) {
-                                Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
-                                holder.seekbar.setMax(mMediaPlayer.getDuration());
-                                mMediaPlayer.start();
-                                mRunnable = new MyRunnable(holder);
+                                mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                    @Override
+                                    public void onPrepared(MediaPlayer mp) {
+                                        Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
+                                        holder.seekbar.setMax(mMediaPlayer.getDuration());
+                                        mMediaPlayer.start();
+                                        mRunnable = new MyRunnable(holder);
 
-                                mHandler.postDelayed(mRunnable, 1000);
+                                        mHandler.postDelayed(mRunnable, 1000);
+                                    }
+                                });
+                            } catch (IOException e) {
+                                Log.e(TAG, "prepare() failed");
                             }
-                        });
-                    } catch (IOException e) {
-                        Log.e(TAG, "prepare() failed");
-                    }
 
-                    mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            stopPlaying(holder);
+                            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+                                    stopPlaying(holder);
+                                }
+                            });
+
                         }
-                    });
 
-                }
-
-            }
-        });
+                    }
+                });
         if (selectItem >= 0) {
 
             if (position == selectItem) {
