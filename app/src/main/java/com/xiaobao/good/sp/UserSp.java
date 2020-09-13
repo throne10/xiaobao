@@ -15,7 +15,6 @@ import org.json.JSONObject;
 
 public class UserSp {
 
-
     private SharedPreferences userP;
     private SharedPreferences.Editor editor;
 
@@ -31,6 +30,13 @@ public class UserSp {
         return userSp;
     }
 
+    public String getString(String key) {
+        return userP.getString(key, "");
+    }
+
+    public void saveString(String key, String value) {
+        editor.putString(key, value).commit();
+    }
 
     public void saveUser(String userData) {
         editor.putString(Constants.USERINFO, userData).commit();
@@ -45,12 +51,10 @@ public class UserSp {
         String userData = userP.getString(Constants.USERINFO, null);
         if (StringUtils.isNotEmpty(userData)) {
 
-
             try {
                 JSONObject jo = new JSONObject(userData);
 
                 LogUtil.i("xiaobao_login", "read from sp:" + userData);
-
 
                 return gson.fromJson(jo.toString(), UserInfoData.LoginUserData.class);
             } catch (JSONException e) {
@@ -59,8 +63,5 @@ public class UserSp {
         }
 
         return null;
-
-
     }
-
 }

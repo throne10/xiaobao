@@ -521,9 +521,10 @@ public class ClientActivity extends AppCompatActivity {
                     }
                     String d = "" + day;
                     if (day < 10) {
-                        d = "0" + month;
+                        d = "0" + day;
                     }
                     String birthDay = year + "-" + m + "-" + d;
+                    LogUtil.d(TAG, "birthDay : " + birthDay);
                     tvBirth.setText(birthDay);
                     birthDayToLong(birthDay);
                 });
