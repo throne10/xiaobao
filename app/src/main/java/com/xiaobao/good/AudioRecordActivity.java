@@ -57,6 +57,8 @@ public class AudioRecordActivity extends Activity {
     private File newFile;
 
     ProgressDialog dialog;
+    ProgressDialog uploadDialog;
+
 
     @BindView(R.id.record_audio_chronometer_time)
     public Chronometer chronometer;
@@ -462,8 +464,24 @@ public class AudioRecordActivity extends Activity {
 
         if ("process".equals(event.getStatus())) {
             Log.i(TAG, "getProcess :" + event.getProcess());
+            if (uploadDialog != null) {
+                uploadDialog.setProgress(4);
+            }
 
         } else if ("stop".equals(event.getStatus())) {
+
+
+            uploadDialog = new ProgressDialog(this);
+            uploadDialog.setTitle("请稍等");
+            //设置对话进度条样式为水平
+            uploadDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            //设置提示信息
+            uploadDialog.setMessage("正在正在转码中......");
+            uploadDialog.setCancelable(false);
+
+            uploadDialog.show();
+            uploadDialog.setMax(100);
+
             Toast.makeText(this, "正在保存录音", Toast.LENGTH_LONG).show();
             nowStus = Status.RECORD_STOP;
             //文件合并
@@ -493,6 +511,11 @@ public class AudioRecordActivity extends Activity {
 
         }
         if ("finish".equals(event.getStatus())) {
+
+            if (uploadDialog != null) {
+                uploadDialog.setProgress(100);
+
+            }
             Toast.makeText(this, "文件保存完成>>>>" + recordItem.getRootFilePath() + "/" + recordItem.getFileName() + ".mp3", Toast.LENGTH_LONG).show();
 
 
@@ -500,6 +523,11 @@ public class AudioRecordActivity extends Activity {
 
 
             nowStus = Status.MP3DONE;
+
+
+            if (uploadDialog != null) {
+                uploadDialog.dismiss();
+            }
         }
 
     }
