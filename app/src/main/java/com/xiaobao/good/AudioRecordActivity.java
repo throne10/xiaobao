@@ -1,6 +1,7 @@
 package com.xiaobao.good;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -54,6 +55,8 @@ public class AudioRecordActivity extends Activity {
 
     private MediaPlayer mMediaPlayer;
     private File newFile;
+
+    ProgressDialog dialog;
 
     @BindView(R.id.record_audio_chronometer_time)
     public Chronometer chronometer;
@@ -232,6 +235,8 @@ public class AudioRecordActivity extends Activity {
          */
 
         nowStus = Status.UPLOADING;
+
+
         MyAlertDialog myAlertDialog = new MyAlertDialog(this);
         myAlertDialog.setTitle("是否上传到云端");
 
@@ -243,6 +248,11 @@ public class AudioRecordActivity extends Activity {
             nowStus = Status.MP3DONE;
         });
         myAlertDialog.setNegativeButton("上传", view -> {
+            if (myAlertDialog != null) {
+                myAlertDialog.dismiss();
+            }
+
+            dialog = ProgressDialog.show(this, "提示", "正在提交中", false, false);
 
 
             toast("正在提交");
@@ -259,8 +269,9 @@ public class AudioRecordActivity extends Activity {
             uploadCall.enqueue(new Callback<RecordUploadResult>() {
                 @Override
                 public void onResponse(Call<RecordUploadResult> call, Response<RecordUploadResult> response) {
-                    if (myAlertDialog != null) {
-                        myAlertDialog.dismiss();
+
+                    if (dialog != null) {
+                        dialog.dismiss();
                     }
                     Log.i(TAG, "recordupload :" + response.body().getCode());
                     String code = response.body().getCode();
@@ -286,8 +297,8 @@ public class AudioRecordActivity extends Activity {
 
                 @Override
                 public void onFailure(Call<RecordUploadResult> call, Throwable t) {
-                    if (myAlertDialog != null) {
-                        myAlertDialog.dismiss();
+                    if (dialog != null) {
+                        dialog.dismiss();
                     }
                     toast("上传失败");
                     nowStus = Status.MP3DONE;
