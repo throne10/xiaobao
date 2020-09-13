@@ -22,6 +22,7 @@ import com.xiaobao.good.db.RecordHistoryBean;
 import com.xiaobao.good.db.dao.RecordHistoryDao;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.record.RecordDetailItem;
+import com.xiaobao.good.record.fragment.CloudRecordFragment;
 import com.xiaobao.good.record.fragment.ContentFragmentPagerAdapter;
 import com.xiaobao.good.record.fragment.RecordFragment;
 import com.xiaobao.good.retrofit.RetrofitUtils;
@@ -46,6 +47,9 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
 
     ImageView iv_back;
     ImageView iv_add;
+
+    RecordFragment recordFragment;
+    CloudRecordFragment clouldRecordFragment;
 
     /**
      * 选中选项卡颜色
@@ -98,7 +102,7 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
 //        getVisitRecords();
     }
 
-    private void getVisitRecords() {
+    public void getVisitRecords() {
         Call<VisitRecords> visitRecordsCall =
                 RetrofitUtils.getService()
                         .getVisit(employeeId, clientId);
@@ -115,6 +119,14 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
                                 for (VisitRecords.DataBean.RecordsBean recordsBean : recordsBeans) {
                                     if (visit_id == recordsBean.getVisit_id()) {
                                         LogUtil.i(TAG, "records>>>>" + recordsBean);
+
+
+                                        /**
+                                         * 更新数据
+                                         */
+                                        clouldRecordFragment.reflesh(recordsBean);
+
+
                                     }
                                 }
                             } else {
@@ -204,16 +216,16 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("data", (ArrayList<? extends Parcelable>) itemList);
         bundle.putInt("visitId", visit_id);
-        RecordFragment recordFragment = new RecordFragment();
-        recordFragment.setArguments(bundle);
-        list.add(recordFragment);
+        clouldRecordFragment = new CloudRecordFragment();
+        clouldRecordFragment.setArguments(bundle);
+        list.add(clouldRecordFragment);
 
 
         bundle = new Bundle();
         bundle.putParcelableArrayList("data", (ArrayList<? extends Parcelable>) itemList2);
         bundle.putInt("visitId", visit_id);
 
-        recordFragment = new RecordFragment();
+        RecordFragment recordFragment = new RecordFragment();
         recordFragment.setArguments(bundle);
         list.add(recordFragment);
 

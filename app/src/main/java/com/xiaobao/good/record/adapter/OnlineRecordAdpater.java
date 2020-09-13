@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xiaobao.good.AudioRecordContentActivity;
+import com.xiaobao.good.AudioRecordDetailActivity;
 import com.xiaobao.good.R;
 import com.xiaobao.good.db.AbstractAppDatabase;
 import com.xiaobao.good.db.dao.RecordHistoryDao;
@@ -43,7 +44,7 @@ public class OnlineRecordAdpater extends BaseAdapter {
     ProgressDialog dialog;
     List<RecordDetailItem> list;
 
-    Context context;
+    AudioRecordDetailActivity context;
 
     MediaPlayer mMediaPlayer;
     private Handler mHandler = new Handler();
@@ -59,7 +60,7 @@ public class OnlineRecordAdpater extends BaseAdapter {
 
     int visitId;
 
-    public OnlineRecordAdpater(Context context, List<RecordDetailItem> list, int visitId) {
+    public OnlineRecordAdpater(AudioRecordDetailActivity context, List<RecordDetailItem> list, int visitId) {
         this.list = list;
         this.context = context;
         this.visitId = visitId;
@@ -181,6 +182,9 @@ public class OnlineRecordAdpater extends BaseAdapter {
                                                 testDao.updateCloudStatus(1, file.getPath());
 
                                                 toast("提交成功");
+
+                                                context.getVisitRecords();
+
 
                                             } else {
                                                 toast("上传失败");

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.xiaobao.good.AudioRecordDetailActivity;
 import com.xiaobao.good.R;
 import com.xiaobao.good.db.AbstractAppDatabase;
 import com.xiaobao.good.log.LogUtil;
@@ -26,7 +27,7 @@ import androidx.fragment.app.Fragment;
 public class RecordFragment extends Fragment {
 
     private static final String TAG = "RecordFragment_RF";
-    private Activity mActivity;
+    private AudioRecordDetailActivity mActivity;
 
     ListView listView;
 
@@ -35,7 +36,7 @@ public class RecordFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
 
-        mActivity = (Activity) context;
+        mActivity = (AudioRecordDetailActivity) context;
 
         super.onAttach(context);
     }
