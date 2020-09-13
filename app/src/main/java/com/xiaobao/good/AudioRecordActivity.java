@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
@@ -72,6 +73,19 @@ public class AudioRecordActivity extends Activity {
 
     @BindView(R.id.tv_location_data)
     TextView tvLocationData;
+    private AudioRecordActivity context;
+
+    @OnClick({R.id.tv_location_data, R.id.bt_name})
+    public void tos(View view) {
+        switch (view.getId()) {
+            case R.id.tv_location_data:
+                Toast.makeText(context, tvLocationData.getText(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.bt_name:
+                Toast.makeText(context, btName.getText(), Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 
     @BindView(R.id.bt_name)
     public Button btName;
@@ -156,7 +170,7 @@ public class AudioRecordActivity extends Activity {
         } else {
 
             if (Status.RECORDING == nowStus) {
-                toast("录音未停止");
+                toast("正在录音，当前操作无法完成");
             } else if (Status.UPLOADING == nowStus) {
                 toast("正在提交，请稍等");
             }
@@ -381,7 +395,7 @@ public class AudioRecordActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_record);
         ButterKnife.bind(this);
-
+        context = this;
         try {
             String addr = "";
             if (getIntent().hasExtra("location")) {
@@ -472,7 +486,7 @@ public class AudioRecordActivity extends Activity {
                 Toast.makeText(this, "录音转码中请稍等！", Toast.LENGTH_LONG).show();
                 return false;
             } else {
-                return true;
+                return super.onKeyDown(keyCode, event);
             }
         } else {
             return super.onKeyDown(keyCode, event);

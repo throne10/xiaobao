@@ -9,6 +9,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.gson.Gson;
 import com.xiaobao.good.ClientActivity;
 import com.xiaobao.good.R;
@@ -34,11 +40,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,10 +50,10 @@ import retrofit2.Response;
 
 public class ClientFragment extends Fragment
         implements LoadMoreFooterModel.LoadMoreListener,
-                OnClickByViewIdListener,
-                SwipeRefreshLayout.OnRefreshListener,
-                SwipeRecyclerView.OnRightClickListener,
-                SwipeRecyclerView.OnItemClickListener {
+        OnClickByViewIdListener,
+        SwipeRefreshLayout.OnRefreshListener,
+        SwipeRecyclerView.OnRightClickListener,
+        SwipeRecyclerView.OnItemClickListener {
 
     private static final String TAG = "fragment_CF";
 
@@ -86,6 +87,18 @@ public class ClientFragment extends Fragment
 
     @BindView(R.id.recyclerView)
     SwipeRecyclerView rvRecyclerView;
+
+    @OnClick({R.id.tv_last_visit_client, R.id.tv_visit_address})
+    public void tos(View view) {
+        switch (view.getId()) {
+            case R.id.tv_last_visit_client_label:
+                Toast.makeText(getContext(), tvLastVisitClient.getText(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tv_visit_address:
+                Toast.makeText(getContext(), tvVisitAddress.getText(), Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 
     private Unbinder unbinder;
     private RecyclerAdapter mAdapter;
@@ -234,7 +247,8 @@ public class ClientFragment extends Fragment
     }
 
     @Override
-    public void clickByViewId(View view, Object o, int position) {}
+    public void clickByViewId(View view, Object o, int position) {
+    }
 
     @Override
     public void onRefresh() {
@@ -261,16 +275,16 @@ public class ClientFragment extends Fragment
                         }
                         if (response.isSuccessful()) {
                             Toast.makeText(
-                                            getActivity(),
-                                            "删除成功：" + response.message(),
-                                            Toast.LENGTH_SHORT)
+                                    getActivity(),
+                                    "删除成功：" + response.message(),
+                                    Toast.LENGTH_SHORT)
                                     .show();
                             getClients();
                         } else {
                             Toast.makeText(
-                                            getActivity(),
-                                            "删除失败：" + response.message(),
-                                            Toast.LENGTH_SHORT)
+                                    getActivity(),
+                                    "删除失败：" + response.message(),
+                                    Toast.LENGTH_SHORT)
                                     .show();
                         }
                     }

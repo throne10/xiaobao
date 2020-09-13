@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -66,8 +67,21 @@ public class ScheduleActivity extends Activity {
     @BindView(R.id.tv_name)
     TextView tvName;
 
+    @OnClick({R.id.tv_name, R.id.tv_phone_no})
+    public void tos(View view) {
+        switch (view.getId()) {
+            case R.id.tv_name:
+                Toast.makeText(context, tvName.getText(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tv_phone_no:
+                Toast.makeText(context, tvPhoneNo.getText(), Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
     @BindView(R.id.tv_phone_no)
     TextView tvPhoneNo;
+
 
     @BindView(R.id.tv_visit_time)
     TextView tvVisitCount;

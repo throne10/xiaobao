@@ -209,6 +209,7 @@ public class WechatRecordActivity extends Activity {
                         visitId = response.body().getData();
                         LogUtil.i(TAG, response.body().getData() + "");
                         Toast.makeText(context, "添加微信聊天记录成功。", Toast.LENGTH_SHORT).show();
+                        finish();
                     } else {
                         Toast.makeText(context, "添加微信聊天记录失败。", Toast.LENGTH_SHORT).show();
                     }

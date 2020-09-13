@@ -21,15 +21,13 @@
         <activity
             android:name=".MainActivity"
             android:label="MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".BaseActivity"
             android:label="BaseActivity"></activity>
+        <activity
+            android:name=".SettingActivity"
+            android:label="Setting"></activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity
             android:name=".wechat.WechatRecordActivity"

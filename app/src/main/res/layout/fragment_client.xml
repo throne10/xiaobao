@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:background="@mipmap/bg"
     android:orientation="vertical"
-    android:paddingEnd="20dp"
-    android:paddingStart="20dp">
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
 
     <ImageView
         android:id="@+id/iv_add"
@@ -76,10 +76,10 @@
             android:id="@+id/iv_calendar"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_alignBottom="@+id/tv_last_visit_time"
-            android:layout_alignEnd="@+id/tv_last_visit_time"
-            android:layout_alignParentBottom="true"
             android:layout_alignTop="@+id/tv_last_visit_time"
+            android:layout_alignEnd="@+id/tv_last_visit_time"
+            android:layout_alignBottom="@+id/tv_last_visit_time"
+            android:layout_alignParentBottom="true"
             android:layout_marginEnd="8dp"
             android:src="@drawable/icon_calendar" />
 
@@ -89,10 +89,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@drawable/client_bg_edit"
-            android:paddingBottom="2dp"
-            android:paddingEnd="10dp"
             android:paddingStart="10dp"
             android:paddingTop="2dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="2dp"
+            android:singleLine="true"
             android:textColor="@color/color_text_white"
             android:textSize="12sp" />
 
@@ -100,13 +101,13 @@
             android:id="@+id/tv_last_visit_time"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:background="@drawable/client_bg_edit"
-            android:paddingBottom="2dp"
-            android:paddingEnd="10dp"
             android:paddingStart="10dp"
             android:paddingTop="2dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="2dp"
             android:textColor="@color/color_text_white"
             android:textSize="12sp" />
 
@@ -141,10 +142,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@drawable/client_bg_edit"
-            android:paddingBottom="2dp"
-            android:paddingEnd="10dp"
             android:paddingStart="10dp"
             android:paddingTop="2dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="2dp"
             android:textColor="@color/color_text_white"
             android:textSize="12sp" />
 
@@ -152,13 +153,14 @@
             android:id="@+id/tv_visit_address"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:background="@drawable/client_bg_edit"
-            android:paddingBottom="2dp"
-            android:paddingEnd="10dp"
             android:paddingStart="10dp"
             android:paddingTop="2dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="2dp"
+            android:singleLine="true"
             android:textColor="@color/color_text_white"
             android:textSize="12sp" />
 
@@ -185,8 +187,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/content_padding_5"
-        android:layout_marginTop="@dimen/content_padding_5">
+        android:layout_marginTop="@dimen/content_padding_5"
+        android:layout_marginBottom="@dimen/content_padding_5">
 
         <TextView
             android:id="@+id/tv_clients_list"

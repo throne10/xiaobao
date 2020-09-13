@@ -1,21 +1,25 @@
 package com.xiaobao.good.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.xiaobao.good.R;
+import com.xiaobao.good.SettingActivity;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.result.UserInfoData;
 import com.xiaobao.good.sp.UserSp;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class MineFragment extends Fragment {
@@ -26,6 +30,12 @@ public class MineFragment extends Fragment {
 
     @BindView(R.id.tv_name)
     TextView tvName;
+
+    @OnClick(R.id.iv_sys)
+    public void settings() {
+        Intent intent = new Intent(this.getContext(), SettingActivity.class);
+        this.getContext().startActivity(intent);
+    }
 
     @Override
     public View onCreateView(

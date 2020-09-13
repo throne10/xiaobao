@@ -5,14 +5,11 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.xiaobao.good.common.eventbus.ClientUpdate;
-import com.xiaobao.good.log.LogUtil;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.xiaobao.good.ui.ClientFragment;
 import com.xiaobao.good.ui.MineFragment;
 
-import org.greenrobot.eventbus.EventBus;
-
-import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
@@ -46,6 +43,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @BindView(R.id.iv_client)
     ImageView ivClient;
+    private static BaseActivity a;
 
     @OnClick({R.id.tv_client, R.id.iv_client})
     public void selectClient() {
@@ -87,9 +85,13 @@ public class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mClientFragment = new ClientFragment();
         mMineFragment = new MineFragment();
+        a = this;
         if (savedInstanceState == null) {
             selectClient();
         }
     }
 
+    public static void finishBase() throws Exception {
+        a.finish();
+    }
 }
