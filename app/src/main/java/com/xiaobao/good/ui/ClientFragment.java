@@ -91,7 +91,7 @@ public class ClientFragment extends Fragment
     @OnClick({R.id.tv_last_visit_client, R.id.tv_visit_address})
     public void tos(View view) {
         switch (view.getId()) {
-            case R.id.tv_last_visit_client_label:
+            case R.id.tv_last_visit_client:
                 Toast.makeText(getContext(), tvLastVisitClient.getText(), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_visit_address:
