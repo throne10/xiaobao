@@ -12,7 +12,6 @@ import com.xiaobao.good.db.TestBean;
 
 import java.util.List;
 
-
 @Dao
 public interface RecordHistoryDao {
 
@@ -28,12 +27,14 @@ public interface RecordHistoryDao {
     @Query("DELETE  FROM RecordHistoryBean")
     int deleteAll();
 
+    @Query("DELETE  FROM RecordHistoryBean WHERE file_path =:filePath")
+    int deleteByFilePath(String filePath);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     List<Long> insert(RecordHistoryBean... testBeans);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(RecordHistoryBean testBean);
-
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     List<Long> insert(List<RecordHistoryBean> testBeans);

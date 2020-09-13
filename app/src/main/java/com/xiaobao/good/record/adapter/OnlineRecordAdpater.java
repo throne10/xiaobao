@@ -39,7 +39,6 @@ import retrofit2.Response;
 public class OnlineRecordAdpater extends BaseAdapter {
     private static final String TAG = "OnlineRecordAdpater";
 
-
     List<RecordDetailItem> list;
 
     Context context;
@@ -62,6 +61,12 @@ public class OnlineRecordAdpater extends BaseAdapter {
         this.list = list;
         this.context = context;
         this.visitId = visitId;
+    }
+
+    public void removeItem(int position) {
+        if (list != null && list.size() > position) {
+            list.remove(position);
+        }
     }
 
     @Override
@@ -97,13 +102,11 @@ public class OnlineRecordAdpater extends BaseAdapter {
             holder.detailOrUpload = (Button) view.findViewById(R.id.bt_detail_or_upload);
             holder.play = (Button) view.findViewById(R.id.bt_play);
 
-
             holder.rl_btshow = view.findViewById(R.id.rl_btshow);
             holder.rl_seekShow = view.findViewById(R.id.rl_seekShow);
 
             holder.current_progress_text_view = view.findViewById(R.id.current_progress_text_view);
             holder.file_length_text_view = view.findViewById(R.id.file_length_text_view);
-
 
             view.setTag(holder);
         } else {
@@ -114,116 +117,114 @@ public class OnlineRecordAdpater extends BaseAdapter {
         holder.text.setText(recordDetailItem.getFilePath());
         String typeMsg = recordDetailItem.getType().equals("0") ? "详情" : "上传";
         holder.detailOrUpload.setText(typeMsg);
-        holder.detailOrUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                /**
-                 * 根据type,展示详情，还是上传
-                 */
-
-                if (recordDetailItem.getType().equals("0")) {
-                    /**
-                     * 详情
-                     */
-
-
-                    Intent intent = new Intent(context, AudioRecordContentActivity.class);
-
-                    intent.putExtra("voiceId", Integer.parseInt(recordDetailItem.getExtra()));
-                    /**
-                     *传参
-                     */
-                    context.startActivity(intent);
-                } else {
-
-                    File file = new File(recordDetailItem.getFilePath());
-
-                    Log.i(TAG, "file :" + file);
-                    Log.i(TAG, "visit_id :" + visitId);
-
-                    RequestBody fileRQ = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                    MultipartBody.Part part = MultipartBody.Part.createFormData("picture", file.getName(), fileRQ);
-
-                    RequestBody body = new MultipartBody.Builder()
-                            .addFormDataPart("visit_id", visitId + "")
-                            .addFormDataPart("voiceFile", file.getName(), fileRQ)
-                            .build();
-                    Call<RecordUploadResult> uploadCall = RetrofitUtils.getService().uploadVoice(body);
-                    uploadCall.enqueue(new Callback<RecordUploadResult>() {
-                        @Override
-                        public void onResponse(Call<RecordUploadResult> call, Response<RecordUploadResult> response) {
-
-                            Log.i(TAG, "recordupload :" + response.body().getCode());
-                            String code = response.body().getCode();
-
-                            if ("success".equals(code)) {
-                                /**
-                                 * 更新录音详情
-                                 */
-
-                                RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
-                                testDao.updateCloudStatus(1, file.getPath());
-
-
-                                toast("提交成功");
-
-                            } else {
-                                toast("上传失败");
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<RecordUploadResult> call, Throwable t) {
-                            toast("上传失败");
-
-                        }
-                    });
-                }
-
-
-            }
-        });
-
-
-        holder.play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                mMediaPlayer = new MediaPlayer();
-
-                try {
-                    mMediaPlayer.setDataSource(recordDetailItem.getFilePath());
-                    mMediaPlayer.prepare();
-                    Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
-                    holder.seekbar.setMax(mMediaPlayer.getDuration());
-
-
-                    mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mp) {
-                            mMediaPlayer.start();
-                        }
-                    });
-                } catch (IOException e) {
-                    Log.e(TAG, "prepare() failed");
-                }
-
-                mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        holder.detailOrUpload.setOnClickListener(
+                new View.OnClickListener() {
                     @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        stopPlaying(holder);
+                    public void onClick(View v) {
+
+                        /** 根据type,展示详情，还是上传 */
+                        if (recordDetailItem.getType().equals("0")) {
+                            /** 详情 */
+                            Intent intent = new Intent(context, AudioRecordContentActivity.class);
+
+                            intent.putExtra(
+                                    "voiceId", Integer.parseInt(recordDetailItem.getExtra()));
+                            /** 传参 */
+                            context.startActivity(intent);
+                        } else {
+
+                            File file = new File(recordDetailItem.getFilePath());
+
+                            Log.i(TAG, "file :" + file);
+                            Log.i(TAG, "visit_id :" + visitId);
+
+                            RequestBody fileRQ =
+                                    RequestBody.create(
+                                            MediaType.parse("multipart/form-data"), file);
+                            MultipartBody.Part part =
+                                    MultipartBody.Part.createFormData(
+                                            "picture", file.getName(), fileRQ);
+
+                            RequestBody body =
+                                    new MultipartBody.Builder()
+                                            .addFormDataPart("visit_id", visitId + "")
+                                            .addFormDataPart("voiceFile", file.getName(), fileRQ)
+                                            .build();
+                            Call<RecordUploadResult> uploadCall =
+                                    RetrofitUtils.getService().uploadVoice(body);
+                            uploadCall.enqueue(
+                                    new Callback<RecordUploadResult>() {
+                                        @Override
+                                        public void onResponse(
+                                                Call<RecordUploadResult> call,
+                                                Response<RecordUploadResult> response) {
+
+                                            Log.i(
+                                                    TAG,
+                                                    "recordupload :" + response.body().getCode());
+                                            String code = response.body().getCode();
+
+                                            if ("success".equals(code)) {
+                                                /** 更新录音详情 */
+                                                RecordHistoryDao testDao =
+                                                        AbstractAppDatabase.getDbDateHelper()
+                                                                .getRecordHistoryDao();
+                                                testDao.updateCloudStatus(1, file.getPath());
+
+                                                toast("提交成功");
+
+                                            } else {
+                                                toast("上传失败");
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(
+                                                Call<RecordUploadResult> call, Throwable t) {
+                                            toast("上传失败");
+                                        }
+                                    });
+                        }
                     }
                 });
 
-                mRunnable = new MyRunnable(holder);
+        holder.play.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                mHandler.postDelayed(mRunnable, 1000);
+                        mMediaPlayer = new MediaPlayer();
 
-            }
-        });
+                        try {
+                            mMediaPlayer.setDataSource(recordDetailItem.getFilePath());
+                            mMediaPlayer.prepare();
+                            Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
+                            holder.seekbar.setMax(mMediaPlayer.getDuration());
+
+                            mMediaPlayer.setOnPreparedListener(
+                                    new MediaPlayer.OnPreparedListener() {
+                                        @Override
+                                        public void onPrepared(MediaPlayer mp) {
+                                            mMediaPlayer.start();
+                                        }
+                                    });
+                        } catch (IOException e) {
+                            Log.e(TAG, "prepare() failed");
+                        }
+
+                        mMediaPlayer.setOnCompletionListener(
+                                new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mp) {
+                                        stopPlaying(holder);
+                                    }
+                                });
+
+                        mRunnable = new MyRunnable(holder);
+
+                        mHandler.postDelayed(mRunnable, 1000);
+                    }
+                });
         if (selectItem >= 0) {
 
             if (position == selectItem) {
@@ -234,19 +235,17 @@ public class OnlineRecordAdpater extends BaseAdapter {
                 holder.rl_seekShow.setVisibility(View.GONE);
                 holder.rl_btshow.setVisibility(View.GONE);
                 holder.seekbar.setVisibility(View.GONE);
-
             }
         }
 
         long minutes = TimeUnit.MILLISECONDS.toMinutes(recordDetailItem.getFile_elpased());
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(recordDetailItem.getFile_elpased())
-                - TimeUnit.MINUTES.toSeconds(minutes);
+        long seconds =
+                TimeUnit.MILLISECONDS.toSeconds(recordDetailItem.getFile_elpased())
+                        - TimeUnit.MINUTES.toSeconds(minutes);
 
         holder.file_length_text_view.setText(String.format("%02d:%02d", minutes, seconds));
 
-
         return view;
-
     }
 
     private void toast(String msg) {
@@ -271,15 +270,16 @@ public class OnlineRecordAdpater extends BaseAdapter {
                 holder.seekbar.setProgress(mCurrentPosition);
 
                 long minutes = TimeUnit.MILLISECONDS.toMinutes(mCurrentPosition);
-                long seconds = TimeUnit.MILLISECONDS.toSeconds(mCurrentPosition)
-                        - TimeUnit.MINUTES.toSeconds(minutes);
-                holder.current_progress_text_view.setText(String.format("%02d:%02d", minutes, seconds));
+                long seconds =
+                        TimeUnit.MILLISECONDS.toSeconds(mCurrentPosition)
+                                - TimeUnit.MINUTES.toSeconds(minutes);
+                holder.current_progress_text_view.setText(
+                        String.format("%02d:%02d", minutes, seconds));
 
                 updateSeekBar(holder);
             }
         }
     }
-
 
     private void stopPlaying(ViewHolder holder) {
         mHandler.removeCallbacks(mRunnable);
@@ -290,14 +290,12 @@ public class OnlineRecordAdpater extends BaseAdapter {
 
         holder.seekbar.setProgress(holder.seekbar.getMax());
 
-
         holder.current_progress_text_view.setText(holder.file_length_text_view.getText());
     }
 
     private void updateSeekBar(ViewHolder holder) {
         mHandler.postDelayed(mRunnable, 1000);
     }
-
 
     static class ViewHolder {
 
@@ -314,7 +312,5 @@ public class OnlineRecordAdpater extends BaseAdapter {
 
         String type;
         int position;
-
-
     }
 }
