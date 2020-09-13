@@ -77,6 +77,7 @@ public class AudioRecordActivity extends Activity {
     @BindView(R.id.tv_location_data)
     TextView tvLocationData;
     private AudioRecordActivity context;
+    private long base;
 
     @OnClick({R.id.tv_location_data, R.id.bt_name})
     public void tos(View view) {
@@ -114,10 +115,14 @@ public class AudioRecordActivity extends Activity {
         if (nowStus == Status.RECORDING) {
             pause_play.setText("录音");
             nowStus = Status.PAUSE_RECORDING;
+            base = SystemClock.elapsedRealtime();
+            chronometer.stop();
             doRecordPause();
         } else if (nowStus == Status.PAUSE_RECORDING) {
             pause_play.setText("暂停");
             nowStus = Status.RECORDING;
+            chronometer.setBase(chronometer.getBase() + (SystemClock.elapsedRealtime() - base));
+            chronometer.start();
             reStartRecord();
         } else {
             toast("当前不在录音状态");
