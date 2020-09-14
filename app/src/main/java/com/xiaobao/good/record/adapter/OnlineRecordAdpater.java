@@ -221,8 +221,19 @@ public class OnlineRecordAdpater extends BaseAdapter {
                                 mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                                     @Override
                                     public void onPrepared(MediaPlayer mp) {
-                                        Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
+                                        Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration() + ",\n fileelpased" + recordDetailItem.getFile_elpased());
                                         holder.seekbar.setMax(mMediaPlayer.getDuration());
+
+                                        if (recordDetailItem.getFile_elpased() == 0) {
+                                            Log.i(TAG, "getDuration in");
+                                            recordDetailItem.setFile_elpased(mMediaPlayer.getDuration());
+                                            long minutes = TimeUnit.MILLISECONDS.toMinutes(recordDetailItem.getFile_elpased());
+                                            long seconds =
+                                                    TimeUnit.MILLISECONDS.toSeconds(recordDetailItem.getFile_elpased())
+                                                            - TimeUnit.MINUTES.toSeconds(minutes);
+
+                                            holder.file_length_text_view.setText(String.format("%02d:%02d", minutes, seconds));
+                                        }
                                         mMediaPlayer.start();
                                         mRunnable = new MyRunnable(holder);
 
@@ -257,6 +268,7 @@ public class OnlineRecordAdpater extends BaseAdapter {
             }
         }
 
+        Log.i(TAG, "elpased :" + recordDetailItem.getFile_elpased());
         long minutes = TimeUnit.MILLISECONDS.toMinutes(recordDetailItem.getFile_elpased());
         long seconds =
                 TimeUnit.MILLISECONDS.toSeconds(recordDetailItem.getFile_elpased())

@@ -194,7 +194,9 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
             for (VisitRecords.DataBean.RecordsBean.VoicesBean v : voicesList) {
                 recordDetailItem = new RecordDetailItem();
                 recordDetailItem.setType("0");
-                recordDetailItem.setFilePath("http://ineutech.com:60003/xiaobaovisit/visit_voice/" + v.getVoice_file());
+
+//http://ineutech.com:60001/xiaobaovisit/test/visit_voice/266_94e28fe4c44144f4ba7cc321e3e0f0e1_1600011900789.mp3
+                recordDetailItem.setFilePath("http://ineutech.com:60001/xiaobaovisit/test/visit_voice/" + v.getVoice_file());
                 recordDetailItem.setExtra(v.getVoice_id() + "");
                 itemList.add(recordDetailItem);
             }
