@@ -152,6 +152,7 @@ public class CloudRecordFragment extends Fragment {
 
             onlineRecordAdpater = new OnlineRecordAdpater(mActivity, list, visitId);
 
+            listView.setAdapter(onlineRecordAdpater);
 
             onlineRecordAdpater.notifyDataSetChanged();
         }
