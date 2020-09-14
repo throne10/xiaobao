@@ -455,8 +455,12 @@ public class AudioRecordActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         doRecordStop();
-        if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
+        try {
+            if (mMediaPlayer != null) {
+                mMediaPlayer.stop();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
