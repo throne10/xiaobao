@@ -1,5 +1,6 @@
 package com.xiaobao.good;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -103,6 +104,9 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
     }
 
     public void getVisitRecords() {
+
+        ProgressDialog dialog = ProgressDialog.show(this, "提示", "正在更新云端数据……", false, false);
+
         Call<VisitRecords> visitRecordsCall =
                 RetrofitUtils.getService()
                         .getVisit(employeeId, clientId);
@@ -112,6 +116,10 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
                     @Override
                     public void onResponse(
                             Call<VisitRecords> call, Response<VisitRecords> response) {
+
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
                         if (response.isSuccessful()) {
                             recordsBeans = response.body().getData().getRecords();
                             LogUtil.i(TAG, "recordsBeans>>>>" + recordsBeans);
@@ -139,6 +147,10 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
 
                     @Override
                     public void onFailure(Call<VisitRecords> call, Throwable t) {
+
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
                         Toast.makeText(context, "拜访记录请求失败", Toast.LENGTH_LONG).show();
                     }
                 });
