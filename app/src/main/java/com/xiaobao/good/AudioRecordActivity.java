@@ -289,6 +289,8 @@ public class AudioRecordActivity extends Activity {
 
                         toast("提交成功");
 
+                        finish();
+
                     } else {
                         toast("上传失败");
                     }
