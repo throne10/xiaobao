@@ -179,7 +179,7 @@ public class AudioRecordActivity extends Activity {
             toast("已经停止录音");
             return;
         }
-        if (nowStus == Status.RECORDING) {
+        if (nowStus == Status.RECORDING || nowStus == Status.PAUSE_RECORDING) {
 
             chronometer.stop();
 

@@ -209,8 +209,16 @@ public class OnlineRecordAdpater extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
 
+
                         Button b = (Button) v;
                         if (b.getText().equals("播放")) {
+
+                            if (mMediaPlayer != null) {
+                                if (mMediaPlayer.isPlaying()) {
+                                    toast("正在播放，请勿再次播放");
+                                    return;
+                                }
+                            }
                             mMediaPlayer = new MediaPlayer();
 
                             try {
