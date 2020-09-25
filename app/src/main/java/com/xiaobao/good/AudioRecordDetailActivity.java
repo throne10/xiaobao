@@ -154,6 +154,11 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
                         } else {
                             Toast.makeText(context, "拜访记录请求失败", Toast.LENGTH_LONG).show();
                         }
+
+
+                        RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
+                        List<RecordHistoryBean> listBean = testDao.getAllByVisitId(visit_id);
+                        recordFragment.reflesh(listBean);
                     }
 
                     @Override
@@ -163,6 +168,12 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
                             dialog.dismiss();
                         }
                         Toast.makeText(context, "拜访记录请求失败", Toast.LENGTH_LONG).show();
+
+                        RecordHistoryDao testDao = AbstractAppDatabase.getDbDateHelper().getRecordHistoryDao();
+
+                        List<RecordHistoryBean> listBean = testDao.getAllByVisitId(visit_id);
+
+                        recordFragment.reflesh(listBean);
                     }
                 });
     }
@@ -250,7 +261,7 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
         bundle.putParcelableArrayList("data", (ArrayList<? extends Parcelable>) itemList2);
         bundle.putInt("visitId", visit_id);
 
-        RecordFragment recordFragment = new RecordFragment();
+        recordFragment = new RecordFragment();
         recordFragment.setArguments(bundle);
         list.add(recordFragment);
 

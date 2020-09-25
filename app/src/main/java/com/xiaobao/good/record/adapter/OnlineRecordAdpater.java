@@ -182,9 +182,14 @@ public class OnlineRecordAdpater extends BaseAdapter {
                                                 RecordHistoryDao testDao =
                                                         AbstractAppDatabase.getDbDateHelper()
                                                                 .getRecordHistoryDao();
-                                                testDao.updateCloudStatus(1, file.getPath());
+                                                testDao.updateCloudStatus(0, file.getPath());
 
                                                 toast("提交成功");
+                                                try {
+                                                    file.delete();
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
 
                                                 context.getVisitRecords();
 

@@ -1,6 +1,5 @@
 package com.xiaobao.good.record.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,12 +12,14 @@ import android.widget.ListView;
 import com.xiaobao.good.AudioRecordDetailActivity;
 import com.xiaobao.good.R;
 import com.xiaobao.good.db.AbstractAppDatabase;
+import com.xiaobao.good.db.RecordHistoryBean;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.record.RecordDetailItem;
 import com.xiaobao.good.record.adapter.OnlineRecordAdpater;
 import com.xiaobao.good.ui.MyAlertDialog;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,10 @@ public class RecordFragment extends Fragment {
     ListView listView;
 
     OnlineRecordAdpater onlineRecordAdpater;
+
+    int visitId;
+
+    List<RecordDetailItem> list;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -49,9 +54,9 @@ public class RecordFragment extends Fragment {
         listView = view.findViewById(R.id.lv_onlinerecord);
         /** 获取数据，展示 */
         Bundle bundle = getArguments();
-        List<RecordDetailItem> list = (List<RecordDetailItem>) bundle.get("data");
+        list = (List<RecordDetailItem>) bundle.get("data");
 
-        int visitId = bundle.getInt("visitId", -1);
+        visitId = bundle.getInt("visitId", -1);
 
         Log.i("RecordDetailItem", "size :" + list);
 
@@ -128,5 +133,31 @@ public class RecordFragment extends Fragment {
         super.onDestroy();
         onlineRecordAdpater.stopPaly();
         Log.i("yxd", "onDestroy");
+    }
+
+
+    public void reflesh(List<RecordHistoryBean> listBean) {
+
+        RecordDetailItem recordDetailItem;
+        List<RecordDetailItem> itemList2 = new ArrayList<>();
+        for (RecordHistoryBean r : listBean) {
+
+            recordDetailItem = new RecordDetailItem();
+            recordDetailItem.setFilePath(r.getFile_path());
+            recordDetailItem.setFile_elpased(r.getFile_elpased());
+            recordDetailItem.setType(r.getCloud() + "");
+
+            if (recordDetailItem.getType().equals("1")) {
+                itemList2.add(recordDetailItem);
+            }
+
+
+        }
+
+        list = itemList2;
+
+        onlineRecordAdpater = new OnlineRecordAdpater(mActivity, list, visitId);
+        listView.setAdapter(onlineRecordAdpater);
+        onlineRecordAdpater.notifyDataSetChanged();
     }
 }
