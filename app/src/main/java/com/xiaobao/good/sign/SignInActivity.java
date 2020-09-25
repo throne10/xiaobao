@@ -37,6 +37,8 @@ public class SignInActivity extends BaseActivity2 {
     Spinner spPurpose;
     @BindView(R.id.bt_record)
     Button btRecord;
+    @BindView(R.id.bt_sign)
+    Button btSign;
     private Context context;
     private String coorType = "bd09ll";
     private String TAG = "X_SignInActivity";
@@ -84,6 +86,8 @@ public class SignInActivity extends BaseActivity2 {
                     visitId = response.body().getData();
                     LogUtil.i(TAG, response.body().getData() + "");
                     Toast.makeText(context, "签到成功。", Toast.LENGTH_LONG).show();
+                    btSign.setText("已签到");
+                    btSign.setBackgroundResource(R.drawable.sign_btn_signed);
                     isSign = true;
                 } else {
                     Toast.makeText(context, "签到请求失败", Toast.LENGTH_LONG).show();
