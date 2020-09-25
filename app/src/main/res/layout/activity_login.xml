@@ -16,16 +16,16 @@
         android:layout_height="wrap_content"
         android:text="Welcome Back"
         android:textColor="@color/color_welcome"
-        android:textSize="@dimen/text_size_32"
+        android:textSize="@dimen/text_size_24"
         android:textStyle="bold|italic" />
 
     <TextView
         android:id="@+id/t1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginStart="20dp"
         android:text="密码登录"
         android:textColor="@color/color_text_white"
         android:textSize="@dimen/text_size_18" />
@@ -48,8 +48,8 @@
 
             android:layout_width="@dimen/img_block_40"
             android:layout_height="@dimen/img_block_40"
-            android:padding="8dp"
             android:layout_centerVertical="true"
+            android:padding="8dp"
             android:src="@mipmap/shouji" />
 
         <EditText
@@ -60,9 +60,9 @@
             android:layout_toRightOf="@id/iv_username"
             android:background="@android:color/transparent"
             android:hint="请输入用户名"
-            android:textSize="@dimen/text_size_16"
             android:textColor="@color/color_text_white"
-            android:textColorHint="@color/color_text_white" />
+            android:textColorHint="@color/color_text_white"
+            android:textSize="@dimen/text_size_16" />
     </RelativeLayout>
 
     <View
@@ -82,8 +82,8 @@
             android:id="@+id/iv_pwd"
             android:layout_width="@dimen/img_block_40"
             android:layout_height="@dimen/img_block_40"
-            android:padding="8dp"
             android:layout_centerVertical="true"
+            android:padding="8dp"
             android:src="@mipmap/mima" />
 
         <EditText
@@ -95,9 +95,9 @@
             android:background="@android:color/transparent"
             android:hint="请输入密码"
             android:inputType="textPassword"
-            android:textSize="@dimen/text_size_16"
             android:textColor="@color/color_text_white"
-            android:textColorHint="@color/color_text_white" />
+            android:textColorHint="@color/color_text_white"
+            android:textSize="@dimen/text_size_16" />
     </RelativeLayout>
 
 
@@ -111,8 +111,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_20"
-        android:gravity="center_vertical|end"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical|end">
 
         <ImageView
 
@@ -128,22 +128,22 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:text="记住密码"
-            android:textSize="@dimen/text_size_14"
             android:textColor="@color/color_text_white"
-            android:textColorHint="@color/color_text_white" />
+            android:textColorHint="@color/color_text_white"
+            android:textSize="@dimen/text_size_14" />
     </LinearLayout>
 
 
     <Button
         android:id="@+id/login"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/button"
         android:layout_marginTop="@dimen/margin_40"
+        android:background="@drawable/button"
         android:text="登录"
-        android:textSize="@dimen/text_size_24"
-        android:textColor="@color/color_text_white">
+        android:textColor="@color/color_text_white"
+        android:textSize="@dimen/text_size_20">
 
     </Button>
 

@@ -117,7 +117,10 @@ public class OnlineRecordAdpater extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.text.setText(recordDetailItem.getFilePath());
+
+        String[] nameSplit = recordDetailItem.getFilePath().split("/");
+        String nameShow = nameSplit[nameSplit.length - 1];
+        holder.text.setText(nameShow);
         String typeMsg = recordDetailItem.getType().equals("0") ? "详情" : "上传";
         holder.detailOrUpload.setText(typeMsg);
         holder.detailOrUpload.setOnClickListener(
