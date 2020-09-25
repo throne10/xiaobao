@@ -1,6 +1,5 @@
 package com.xiaobao.good;
 
-import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +8,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity2 {
     private MediaPlayer mp;
 
     @Override

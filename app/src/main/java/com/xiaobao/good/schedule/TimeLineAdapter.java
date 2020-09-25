@@ -1,5 +1,6 @@
 package com.xiaobao.good.schedule;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,18 +8,19 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.xiaobao.good.InitApplication;
 import com.xiaobao.good.R;
 import com.xiaobao.good.common.StringUtils;
 
 import java.util.List;
 
 public class TimeLineAdapter extends BaseAdapter {
+    private  Context context;
     List<VisitRecords.DataBean.RecordsBean> recordsBeans;
 
     // 适配器的构造函数，把要适配的数据传入这里
-    public TimeLineAdapter(List<VisitRecords.DataBean.RecordsBean> recordsBeans) {
+    public TimeLineAdapter(List<VisitRecords.DataBean.RecordsBean> recordsBeans, Context context) {
         this.recordsBeans = recordsBeans;
+        this.context = context;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class TimeLineAdapter extends BaseAdapter {
         View view;
         ViewHolder viewHolder;
         if (convertView == null) {
-            view = LayoutInflater.from(InitApplication.getContext()).inflate(R.layout.time_line_list_item, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.time_line_list_item, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.tvTimeLine = view.findViewById(R.id.tv_time_line);
             viewHolder.tvPurpose = view.findViewById(R.id.tv_purpose);

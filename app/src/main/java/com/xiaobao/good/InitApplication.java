@@ -9,6 +9,7 @@ import com.xiaobao.good.retrofit.RetrofitUtils;
 public class InitApplication extends Application {
     private static Context context;
 
+
     @Override
     public void onCreate() {
         super.onCreate();

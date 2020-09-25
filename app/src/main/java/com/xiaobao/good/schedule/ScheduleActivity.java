@@ -1,6 +1,5 @@
 package com.xiaobao.good.schedule;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.xiaobao.good.AudioRecordDetailActivity;
+import com.xiaobao.good.BaseActivity2;
 import com.xiaobao.good.ClientActivity;
 import com.xiaobao.good.R;
 import com.xiaobao.good.common.StringUtils;
@@ -38,7 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ScheduleActivity extends Activity {
+public class ScheduleActivity extends BaseActivity2 {
 
     @OnClick(R.id.iv_head_img)
     public void clickHead() {
@@ -225,7 +225,7 @@ public class ScheduleActivity extends Activity {
                             recordsBeans = response.body().getData().getRecords();
                             LogUtil.i(TAG, "recordsBeans>>>>" + recordsBeans);
                             if (!recordsBeans.isEmpty()) {
-                                listTimeLine.setAdapter(new TimeLineAdapter(recordsBeans));
+                                listTimeLine.setAdapter(new TimeLineAdapter(recordsBeans,ScheduleActivity.this));
                                 tvVisitCount.setText(recordsBeans.size() + "");
                                 tvVisitTime.setText(recordsBeans.get(0).getVisit_time());
                             } else {

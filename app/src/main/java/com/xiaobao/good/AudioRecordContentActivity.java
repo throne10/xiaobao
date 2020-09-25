@@ -1,6 +1,5 @@
 package com.xiaobao.good;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -18,7 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AudioRecordContentActivity extends Activity {
+public class AudioRecordContentActivity extends BaseActivity2 {
     @BindView(R.id.tv_record_content)
     TextView tvRecordContent;
 

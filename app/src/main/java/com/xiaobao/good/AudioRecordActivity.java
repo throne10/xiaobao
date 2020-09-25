@@ -1,6 +1,5 @@
 package com.xiaobao.good;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -47,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AudioRecordActivity extends Activity {
+public class AudioRecordActivity extends BaseActivity2 {
 
     private static String TAG = "audio_record";
 

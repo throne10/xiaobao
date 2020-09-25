@@ -1,6 +1,5 @@
 package com.xiaobao.good.sign;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.google.gson.Gson;
 import com.xiaobao.good.AudioRecordActivity;
+import com.xiaobao.good.BaseActivity2;
 import com.xiaobao.good.R;
 import com.xiaobao.good.common.StringUtils;
 import com.xiaobao.good.common.eventbus.LocationInfo;
@@ -32,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SignInActivity extends Activity {
+public class SignInActivity extends BaseActivity2 {
     @BindView(R.id.sp_purpose)
     Spinner spPurpose;
     @BindView(R.id.bt_record)

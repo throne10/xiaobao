@@ -1,22 +1,24 @@
 package com.xiaobao.good.wechat;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.xiaobao.good.InitApplication;
 import com.xiaobao.good.R;
 
 import java.util.List;
 
 public class ChatListAdapter extends BaseAdapter {
+    private  Context context;
     List<String> chats;
 
     // 适配器的构造函数，把要适配的数据传入这里
-    public ChatListAdapter(List<String> chats) {
+    public ChatListAdapter(List<String> chats, Context context) {
         this.chats = chats;
+        this.context = context;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class ChatListAdapter extends BaseAdapter {
         View view;
         ViewHolder viewHolder;
         if (convertView == null) {
-            view = LayoutInflater.from(InitApplication.getContext()).inflate(R.layout.wechat_list_item, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.wechat_list_item, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.tvChat = view.findViewById(R.id.tv_chat);
             view.setTag(viewHolder);

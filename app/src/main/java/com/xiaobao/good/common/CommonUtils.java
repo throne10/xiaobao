@@ -23,6 +23,9 @@ public class CommonUtils {
      * @param filePathList
      */
     public static void clearFiles(String[] filePathList, String h) {
+        if (filePathList == null) {
+            return;
+        }
         for (String s : filePathList) {
             Log.i("yxd", "path>>>" + h + "/" + s);
             File file = new File(h + "/" + s);

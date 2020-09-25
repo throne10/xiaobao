@@ -3,6 +3,8 @@ package com.xiaobao.good.wechat;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -74,7 +76,16 @@ public class WechatRecordActivity extends Activity {
     private int giveVisitId;
     private int employeeId;
     private int clientId;
-
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        if (res.getConfiguration().fontScale != 1) {//非默认值
+            Configuration newConfig = new Configuration();
+            newConfig.setToDefaults();//设置默认
+            res.updateConfiguration(newConfig, res.getDisplayMetrics());
+        }
+        return res;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +132,7 @@ public class WechatRecordActivity extends Activity {
             Toast.makeText(this, "请求失败，请检查网络后重试。", Toast.LENGTH_SHORT).show();
         } else {
             allChat.addAll(result);
-            lvChats.setAdapter(new ChatListAdapter(allChat));
+            lvChats.setAdapter(new ChatListAdapter(allChat,this));
             b = new StringBuffer();
             for (String s : allChat) {
                 b.append(s).append("<br>");

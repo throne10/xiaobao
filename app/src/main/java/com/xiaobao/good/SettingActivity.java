@@ -1,6 +1,5 @@
 package com.xiaobao.good;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +10,7 @@ import com.xiaobao.good.common.CommonUtils;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SettingActivity extends Activity {
+public class SettingActivity extends BaseActivity2 {
     @OnClick(R.id.bt_back)
     public void back() {
         finish();
