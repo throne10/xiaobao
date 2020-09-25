@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.gson.Gson;
 import com.xiaobao.good.ClientActivity;
 import com.xiaobao.good.R;
+import com.xiaobao.good.common.StringUtils;
 import com.xiaobao.good.common.eventbus.ClientUpdate;
 import com.xiaobao.good.log.LogUtil;
 import com.xiaobao.good.retrofit.RetrofitUtils;
@@ -197,7 +198,16 @@ public class ClientFragment extends Fragment
             tvLastVisitClient.setText(client.getClient().getClient_name());
             tvLastVisitTime.setText(client.getVisit_time());
             tvVisitTarget.setText(client.getPurpose());
-            tvVisitAddress.setText(client.getSign_address());
+
+            String address = client.getSign_address();
+            try {
+                if (StringUtils.isNotEmpty(address)) {
+                    address = address.replaceFirst("中国", "");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            tvVisitAddress.setText(address);
         } catch (Exception e) {
             LogUtil.e(TAG, "initData e > " + e.toString());
         }
