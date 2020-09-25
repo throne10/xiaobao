@@ -72,7 +72,7 @@
                         android:paddingLeft="15dp"
                         android:text="新闻123123123123123"
                         android:textColor="#FFFFFF"
-                        android:textSize="@dimen/text_size_18" />
+                        android:textSize="@dimen/text_size_16" />
 
                     <TextView
                         android:id="@+id/tv_phone_no"
@@ -81,8 +81,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:drawableLeft="@mipmap/phone_icon"
-                        android:drawablePadding="8dp"
-                        android:paddingLeft="10dp"
+                        android:drawablePadding="6dp"
+                        android:paddingLeft="8dp"
                         android:singleLine="true"
                         android:ems="5"
                         android:text="19383223222"
