@@ -82,7 +82,7 @@ public class RecordFragment extends Fragment {
                             }
                         }
 
-                        return false;
+                        return true;
                     }
                 });
 
