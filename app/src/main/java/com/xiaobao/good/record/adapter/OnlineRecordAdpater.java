@@ -50,6 +50,8 @@ public class OnlineRecordAdpater extends BaseAdapter {
     private Handler mHandler = new Handler();
     int selectItem = -1;
 
+    private int playingPosition = -1;
+
     public int getSelectItem() {
         return selectItem;
     }
@@ -221,6 +223,7 @@ public class OnlineRecordAdpater extends BaseAdapter {
                         Button b = (Button) v;
                         if (b.getText().equals("播放")) {
 
+
                             if (mMediaPlayer != null) {
                                 if (mMediaPlayer.isPlaying()) {
                                     toast("正在播放，请勿再次播放");
@@ -228,6 +231,9 @@ public class OnlineRecordAdpater extends BaseAdapter {
                                 }
                             }
                             mMediaPlayer = new MediaPlayer();
+
+                            playingPosition = position;
+                            holder.play.setText("停止");
 
                             try {
                                 mMediaPlayer.setDataSource(recordDetailItem.getFilePath());
@@ -264,9 +270,20 @@ public class OnlineRecordAdpater extends BaseAdapter {
                                 @Override
                                 public void onCompletion(MediaPlayer mp) {
                                     stopPlaying(holder);
+                                    playingPosition = -1;
                                 }
                             });
 
+                        } else if (b.getText().equals("停止")) {
+
+
+                            if (mMediaPlayer != null) {
+                                mMediaPlayer.stop();
+                            }
+
+                            playingPosition = -1;
+
+                            b.setText("播放");
                         }
 
                     }
@@ -282,6 +299,12 @@ public class OnlineRecordAdpater extends BaseAdapter {
                 holder.rl_btshow.setVisibility(View.GONE);
                 holder.seekbar.setVisibility(View.GONE);
             }
+        }
+
+        if (playingPosition == position) {
+
+            holder.play.setText("停止");
+
         }
 
         Log.i(TAG, "elpased :" + recordDetailItem.getFile_elpased());
