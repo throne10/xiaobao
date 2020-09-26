@@ -70,6 +70,8 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
     private int employeeId;
     private List<VisitRecords.DataBean.RecordsBean> recordsBeans;
     private Context context;
+    private String name;
+
     @Override
     public Resources getResources() {
         Resources res = super.getResources();
@@ -106,7 +108,7 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
         clientId = getIntent().getIntExtra("clientId", 0);
         employeeId = getIntent().getIntExtra("employeeId", 0);
         visit_id = getIntent().getIntExtra("visitId", -1);
-
+        name = getIntent().getStringExtra("name");
         recordsBean = new Gson().fromJson(s, VisitRecords.DataBean.RecordsBean.class);
 
         initViewPager(0);
@@ -294,6 +296,7 @@ public class AudioRecordDetailActivity extends FragmentActivity implements View.
                 Intent intent = new Intent(AudioRecordDetailActivity.this, AudioRecordActivity.class);
                 intent.putExtra("visitId", visit_id);
                 intent.putExtra("location", add);
+                intent.putExtra("name", name);
                 startActivity(intent);
 
                 finish();

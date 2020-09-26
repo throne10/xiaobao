@@ -33,6 +33,8 @@ public class AudioRecorder {
     //44100是目前的标准，但是某些设备仍然支持22050，16000，11025
     //采样频率一般共分为22.05KHz、44.1KHz、48KHz三个等级
     private final static int AUDIO_SAMPLE_RATE = 44100;
+
+    private final static int[] AUDIO_SAMPLE_RATES = new int[]{8000, 11025, 16000, 22050, 44100};
     //声道 单声道
     private final static int AUDIO_CHANNEL = AudioFormat.CHANNEL_IN_STEREO;
     //编码
@@ -108,6 +110,15 @@ public class AudioRecorder {
         status = Status.STATUS_READY;
     }
 
+    public void getValidSampleRates() {
+        for (int rate : new int[]{8000, 11025, 16000, 22050, 44100}) {  // add the rates you wish to check against
+            int bufferSize = AudioRecord.getMinBufferSize(rate, AudioFormat.CHANNEL_CONFIGURATION_DEFAULT, AudioFormat.ENCODING_PCM_16BIT);
+            if (bufferSize > 0) {
+                // buffer size is valid, Sample rate supported
+
+            }
+        }
+    }
 
     /**
      * 开始录音
@@ -280,7 +291,7 @@ public class AudioRecorder {
 
             String mp3file = mp3Path + "/" + fileName.replace(".pcm", ".mp3");
             Log.i("AudioRecorder", "pcmName>>>" + pcmName + "   mp3file>>>" + mp3file);
-            Mp3Converter.init(44100, 1, 1, 22050, 128 * 1024, 0);
+            Mp3Converter.init(AUDIO_SAMPLE_RATE, 1, 1, AUDIO_SAMPLE_RATE/2, 128 * 1024, 7);
             File file = new File(pcmName);
             long length = file.length();
             Log.i("AudioRecorder", "pcmName length>>>" + length);

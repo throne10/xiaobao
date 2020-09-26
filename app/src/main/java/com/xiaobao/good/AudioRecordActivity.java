@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.xiaobao.good.common.CommonUtils;
+import com.xiaobao.good.common.StringUtils;
 import com.xiaobao.good.db.AbstractAppDatabase;
 import com.xiaobao.good.db.RecordHistoryBean;
 import com.xiaobao.good.db.dao.RecordHistoryDao;
@@ -116,7 +117,11 @@ public class AudioRecordActivity extends BaseActivity2 {
 
     @OnClick(R.id.bt_pause_play)
     public void pauseClick() {
-        if (nowStus == Status.RECORDING) {
+        if (nowStus == Status.NULL) {
+            nowStus = Status.RECORDING;
+            doNewRecord();
+            pause_play.setText("暂停");
+        } else if (nowStus == Status.RECORDING) {
             pause_play.setText("录音");
             nowStus = Status.PAUSE_RECORDING;
             base = SystemClock.elapsedRealtime();
@@ -383,6 +388,7 @@ public class AudioRecordActivity extends BaseActivity2 {
 
 
     public enum Status {
+        NULL(true),
         RECORDING(false),
         PAUSE_RECORDING(false),
         RECORD_STOP(false),
@@ -429,11 +435,20 @@ public class AudioRecordActivity extends BaseActivity2 {
                 addr = getIntent().getStringExtra("location");
             }
 
+            String address = addr;
+            try {
+                if (StringUtils.isNotEmpty(address)) {
+                    address = address.replaceFirst("中国", "");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             visitId = getIntent().getIntExtra("visitId", -1);
 
             String name = getIntent().getStringExtra("name");
 
-            tvLocationData.setText(addr);
+            tvLocationData.setText(address);
             Log.i("yxd123", name);
             btName.setText(name);
         } catch (Exception e) {
@@ -443,9 +458,7 @@ public class AudioRecordActivity extends BaseActivity2 {
 
                 register(this);
 
-        nowStus = Status.RECORDING;//默认进入后开始录音
-
-        doNewRecord();
+        nowStus = Status.NULL;//默认进入后开始录音
 
 
     }

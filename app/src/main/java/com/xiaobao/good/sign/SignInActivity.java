@@ -49,6 +49,7 @@ public class SignInActivity extends BaseActivity2 {
     private String name = "unknown";
     private int clientId;
     private int employeeId;
+    private LocationClient mClient;
 
     @OnClick(R.id.bt_back)
     public void back() {
@@ -66,11 +67,15 @@ public class SignInActivity extends BaseActivity2 {
 
     @OnClick(R.id.bt_sign)
     public void sign() {
+        if (isSign) {
+            Toast.makeText(context, "您已签到成功。", Toast.LENGTH_LONG).show();
+        }
         if (StringUtils.isEmpty(addr)) {
             Toast.makeText(context, "定位失败，请查看gps是否打开", Toast.LENGTH_LONG).show();
             startLocation();
             return;
         }
+
         Visit visit = new Visit();
         visit.setSign_address(addr);
         visit.setClient_id(clientId);
@@ -112,11 +117,25 @@ public class SignInActivity extends BaseActivity2 {
             if (StringUtils.isEmpty(addr)) {
                 Toast.makeText(context, "定位失败，请查看gps是否打开", Toast.LENGTH_LONG).show();
             }
+
+            try {
+                mClient.stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             Toast.makeText(context, "请先签到。", Toast.LENGTH_LONG).show();
         }
     }
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            mClient.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +154,7 @@ public class SignInActivity extends BaseActivity2 {
     }
 
     private void startLocation() {
-        LocationClient mClient = new LocationClient(context);
+         mClient = new LocationClient(context);
         LocationClientOption mOption = new LocationClientOption();
         mOption.setScanSpan(0);
         mOption.setCoorType(coorType);
