@@ -40,7 +40,12 @@ import retrofit2.Response;
 
 public class OnlineRecordAdpater extends BaseAdapter {
     private static final String TAG = "OnlineRecordAdpater";
-
+    private class lasMediaModel {
+        ViewHolder lastViewHolder = null;
+        String lastPlayMediaUrl = "";
+        int playingPosition = -1;
+    }
+    private lasMediaModel lasMediaModel = new lasMediaModel();
     ProgressDialog dialog;
     List<RecordDetailItem> list;
 
@@ -50,7 +55,7 @@ public class OnlineRecordAdpater extends BaseAdapter {
     private Handler mHandler = new Handler();
     int selectItem = -1;
 
-    private int playingPosition = -1;
+    //private int playingPosition = -1;
 
     public int getSelectItem() {
         return selectItem;
@@ -119,6 +124,15 @@ public class OnlineRecordAdpater extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
+        if(lasMediaModel.playingPosition==position){
+            holder.play.setText("暂停");
+        }
+        else {
+            holder.play.setText("播放");
+        }
+
+
+        lasMediaModel.lastViewHolder = holder;
 
         String[] nameSplit = recordDetailItem.getFilePath().split("/");
         String nameShow = nameSplit[nameSplit.length - 1];
@@ -214,28 +228,40 @@ public class OnlineRecordAdpater extends BaseAdapter {
                     }
                 });
 
-        holder.play.setOnClickListener(
+            holder.play.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-
                         Button b = (Button) v;
                         if (b.getText().equals("播放")) {
-
-
                             if (mMediaPlayer != null) {
-                                if (mMediaPlayer.isPlaying()) {
-                                    toast("正在播放，请勿再次播放");
-                                    return;
+//                                if (mMediaPlayer.isPlaying()) {
+//                                    toast("正在播放，请勿再次播放");
+//                                    return;
+//                                }
+                                if(lasMediaModel.lastPlayMediaUrl.equals(recordDetailItem.getFilePath())){
+                                    if (mMediaPlayer.getCurrentPosition()!=0) {
+                                        mMediaPlayer.start();
+                                        lasMediaModel.playingPosition = position;
+                                        holder.play.setText("暂停");
+                                        return;
+                                    }
+                                }
+                                else{
+                                    mMediaPlayer.stop();
+//                                    playingPosition = -1;
+                                    lasMediaModel.playingPosition = -1;
+                                    lasMediaModel.lastViewHolder.play.setText("播放");
                                 }
                             }
                             mMediaPlayer = new MediaPlayer();
 
-                            playingPosition = position;
-                            holder.play.setText("停止");
+//                            playingPosition = position;
+                            lasMediaModel.playingPosition = position;
+                            holder.play.setText("暂停");
 
                             try {
+                                lasMediaModel.lastPlayMediaUrl = recordDetailItem.getFilePath();
                                 mMediaPlayer.setDataSource(recordDetailItem.getFilePath());
                                 mMediaPlayer.prepareAsync();
 //                        Log.i(TAG, "getDuration:" + mMediaPlayer.getDuration());
@@ -270,26 +296,26 @@ public class OnlineRecordAdpater extends BaseAdapter {
                                 @Override
                                 public void onCompletion(MediaPlayer mp) {
                                     stopPlaying(holder);
-                                    playingPosition = -1;
+                                    lasMediaModel.playingPosition = -1;
+//                                    playingPosition = -1;
                                 }
                             });
 
                         } else if (b.getText().equals("停止")) {
-
-
                             if (mMediaPlayer != null) {
                                 mMediaPlayer.stop();
                             }
-
-                            playingPosition = -1;
-
+                            lasMediaModel.playingPosition = -1;
+//                            playingPosition = -1;
                             b.setText("播放");
                         }
-
+                        else if (b.getText().equals("暂停")) {
+                            mMediaPlayer.pause();
+                            b.setText("播放");
+                        }
                     }
                 });
         if (selectItem >= 0) {
-
             if (position == selectItem) {
                 holder.rl_seekShow.setVisibility(View.VISIBLE);
                 holder.rl_btshow.setVisibility(View.VISIBLE);
@@ -301,11 +327,9 @@ public class OnlineRecordAdpater extends BaseAdapter {
             }
         }
 
-        if (playingPosition == position) {
-
-            holder.play.setText("停止");
-
-        }
+//        if (playingPosition == position) {
+//            holder.play.setText("暂停");
+//        }
 
         Log.i(TAG, "elpased :" + recordDetailItem.getFile_elpased());
         long minutes = TimeUnit.MILLISECONDS.toMinutes(recordDetailItem.getFile_elpased());
