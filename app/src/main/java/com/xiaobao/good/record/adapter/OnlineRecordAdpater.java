@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.xiaobao.good.retrofit.result.VoiceContent;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -147,21 +148,39 @@ public class OnlineRecordAdpater extends BaseAdapter {
                         /** 根据type,展示详情，还是上传 */
                         if (recordDetailItem.getType().equals("0")) {
                             /** 详情 */
-                            Intent intent = new Intent(context, AudioRecordContentActivity.class);
 
-                            intent.putExtra(
-                                    "voiceId", Integer.parseInt(recordDetailItem.getExtra()));
-                            /** 传参 */
-                            context.startActivity(intent);
+                            int voiceId = Integer.parseInt(recordDetailItem.getExtra());
+                            Call<VoiceContent> voiceContentCall = RetrofitUtils.getService().getVoiceContent(voiceId);
+                            voiceContentCall.enqueue(new Callback<VoiceContent>() {
+                                @Override
+                                public void onResponse(Call<VoiceContent> call, Response<VoiceContent> response) {
+                                    if (response.isSuccessful()) {
+                                        String getVoice_content = response.body().getData().getVoice_content();
+                                        if(getVoice_content!=null){
+                                            Intent intent = new Intent(context, AudioRecordContentActivity.class);
+                                            intent.putExtra(
+                                                "voiceCont", getVoice_content);
+                                            /** 传参 */
+                                            context.startActivity(intent);
+                                        }
+                                        else {
+                                            Toast.makeText(context, "正在解析中，请等待！", Toast.LENGTH_LONG).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(context, "请求语音内容失败。", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<VoiceContent> call, Throwable t) {
+                                    Toast.makeText(context, "请求语音内容失败。", Toast.LENGTH_LONG).show();
+                                }
+                            });
                         } else {
-
                             dialog = ProgressDialog.show(context, "提示", "正在提交中", false, false);
-
-
                             File file = new File(recordDetailItem.getFilePath());
-
                             Log.i(TAG, "file :" + file);
                             Log.i(TAG, "visit_id :" + visitId);
+
 
                             RequestBody fileRQ =
                                     RequestBody.create(
@@ -177,6 +196,8 @@ public class OnlineRecordAdpater extends BaseAdapter {
                                             .build();
                             Call<RecordUploadResult> uploadCall =
                                     RetrofitUtils.getService().uploadVoice(body);
+
+
                             uploadCall.enqueue(
                                     new Callback<RecordUploadResult>() {
                                         @Override
@@ -218,10 +239,15 @@ public class OnlineRecordAdpater extends BaseAdapter {
                                         @Override
                                         public void onFailure(
                                                 Call<RecordUploadResult> call, Throwable t) {
+
+
+                                            Log.i(
+                                                    TAG,
+                                                    t.getMessage());
                                             if (dialog != null) {
                                                 dialog.dismiss();
                                             }
-                                            toast("上传失败");
+                                            toast("上传超时");
                                         }
                                     });
                         }

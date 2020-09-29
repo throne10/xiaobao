@@ -308,10 +308,8 @@ public class AudioRecordActivity extends BaseActivity2 {
                     if (dialog != null) {
                         dialog.dismiss();
                     }
-                    toast("上传失败");
+                    toast("上传超时");
                     nowStus = Status.MP3DONE;
-
-
                 }
             });
         });

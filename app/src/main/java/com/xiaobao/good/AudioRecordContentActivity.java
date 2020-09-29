@@ -21,7 +21,7 @@ public class AudioRecordContentActivity extends BaseActivity2 {
     @BindView(R.id.tv_record_content)
     TextView tvRecordContent;
 
-    private int voiceId;
+    private String voiceCont;
     private Context context;
 
     @OnClick(R.id.bt_back)
@@ -35,22 +35,7 @@ public class AudioRecordContentActivity extends BaseActivity2 {
         setContentView(R.layout.activity_audio_record_content);
         ButterKnife.bind(this);
         context = this;
-        voiceId = getIntent().getIntExtra("voiceId", 32);
-        Call<VoiceContent> voiceContentCall = RetrofitUtils.getService().getVoiceContent(voiceId);
-        voiceContentCall.enqueue(new Callback<VoiceContent>() {
-            @Override
-            public void onResponse(Call<VoiceContent> call, Response<VoiceContent> response) {
-                if (response.isSuccessful()) {
-                    tvRecordContent.setText(response.body().getData().getVoice_content());
-                } else {
-                    Toast.makeText(context, "请求语音内容失败。", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<VoiceContent> call, Throwable t) {
-                Toast.makeText(context, "请求语音内容失败。", Toast.LENGTH_LONG).show();
-            }
-        });
+        voiceCont = getIntent().getStringExtra("voiceCont");
+        tvRecordContent.setText(voiceCont);
     }
 }
