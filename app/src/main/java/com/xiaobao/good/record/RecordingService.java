@@ -103,9 +103,6 @@ public class RecordingService extends Service {
 
     @Override
     public void onDestroy() {
-        if (audioRecorder != null) {
-            audioRecorder.release();
-        }
         stopForeground(true);// 停止前台服务--参数：表示是否移除之前的通知
         super.onDestroy();
     }
