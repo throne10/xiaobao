@@ -305,13 +305,12 @@ public class AudioRecordActivity extends BaseActivity2 {
 
                 @Override
                 public void onFailure(Call<RecordUploadResult> call, Throwable t) {
+                    Log.i(TAG, "Throwable>>>" + t);
                     if (dialog != null) {
                         dialog.dismiss();
                     }
                     toast("上传失败");
                     nowStus = Status.MP3DONE;
-
-
                 }
             });
         });
