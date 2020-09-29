@@ -299,6 +299,11 @@ public class AudioRecorder {
             Runnable runnable = () -> {
                 RecordItem item;
                 while (true) {
+                    try {
+                        Thread.sleep(1000L);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     long bytes = Mp3Converter.getConvertBytes();
                     Log.i("AudioRecorder", "convert bytes>>>" + bytes);
                     if (bytes == -1) {
@@ -317,11 +322,7 @@ public class AudioRecorder {
                         EventBus.getDefault().post(
                                 item);
                     }
-                    try {
-                        Thread.sleep(1000L);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
                 }
             };
             new Thread(runnable).start();
