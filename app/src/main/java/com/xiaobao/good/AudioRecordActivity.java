@@ -305,6 +305,7 @@ public class AudioRecordActivity extends BaseActivity2 {
 
                 @Override
                 public void onFailure(Call<RecordUploadResult> call, Throwable t) {
+                    Log.i(TAG, "Throwable>>>" + t);
                     if (dialog != null) {
                         dialog.dismiss();
                     }

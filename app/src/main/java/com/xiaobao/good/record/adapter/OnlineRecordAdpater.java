@@ -1,7 +1,6 @@
 package com.xiaobao.good.record.adapter;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -239,8 +238,6 @@ public class OnlineRecordAdpater extends BaseAdapter {
                                         @Override
                                         public void onFailure(
                                                 Call<RecordUploadResult> call, Throwable t) {
-
-
                                             Log.i(
                                                     TAG,
                                                     t.getMessage());
