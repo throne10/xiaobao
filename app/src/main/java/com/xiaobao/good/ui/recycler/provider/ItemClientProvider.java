@@ -36,7 +36,7 @@ public class ItemClientProvider extends ViewHolderProvider<ItemClient, RecyclerV
         viewHolder.setTVText(R.id.tv_type, type);
         TextView tvType = viewHolder.getViewById(R.id.tv_type);
         if ("A".equalsIgnoreCase(type)) {
-            tvType.setTextColor(Color.BLUE);
+            tvType.setTextColor(Color.parseColor("#2496d5"));
         } else if ("P".equalsIgnoreCase(type)) {
             tvType.setTextColor(Color.YELLOW);
         } else if ("C".equalsIgnoreCase(type)) {
